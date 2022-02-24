@@ -1,6 +1,6 @@
 let lines = [];
 let queue = [];
-response = {out: "", err: ""};
+response = {out: "", err: "", log: ""};
 let firstLine = true;
 
 let lastRunLine = "";

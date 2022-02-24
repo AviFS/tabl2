@@ -15,19 +15,21 @@ function _onopen (event) {
 
 function _onmessage(event) {
     if (event.data == delimiter) {
-        let children = document.getElementById('right').children;
-        children[queue[0]].innerHTML = show(queue[0], response);
+        show(queue[0], response);
 
-        response = {out: "", err: ""};
+        response = {out: "", err: "", log: ""};
         queue.shift();
     } 
 
     else if (isIgnore(event.data)) {return;}
 
     else {
-        if (event.data.substr(0,5) == "err: " || isError(event.data)) {
+        if (event.data.substr(0,5) == "err: ") {
             response.err += event.data.substr(5) + "\n";
         } 
+        else if (isLog(event.data)) {
+            response.log += event.data.substr(5) + "\n";
+        }
         else if (event.data.substr(0,5) == "out: ") {
             response.out += event.data.substr(5) + "\n";
         }
@@ -36,16 +38,26 @@ function _onmessage(event) {
 }
 
 function show(lineNum, response) {
-    return response.out;
+    let lineElement = document.getElementById('right').children[queue[0]];
+    if (response.log.length != 0) {
+        // lineElement.innerHTML = "? ";
+        // don't change anything a la numi
+        return;
+    }
+    lineElement.innerHTML = response.out;
 }
 
 
-function isError(output) {
-    return output.includes('error') || output.includes('undefined'); // || output.includes('unknown');
+function isLog(output) {
+    return output.includes('error') ||
+    output.includes('undefined') ||
+    output.includes('cannot') ||
+    output.includes('Unrecognized') ||
+    output.includes('parse') ||
+    output.includes('missing'); // || output.includes('unknown');
 }
 
 function isIgnore(output) {
-    return false;
     return `
     out: Frink - Copyright 2000-2022 Alan Eliasen, eliasen@mindspring.com.
     `.includes(output);

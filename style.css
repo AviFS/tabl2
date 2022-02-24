@@ -1,0 +1,53 @@
+body, #left {
+    background-color: rgb(32,36,47);
+    color: rgb(204,202,194);
+    /* font-family: 'Courier New', Courier, monospace */
+}
+
+/* Make right side show new lines between divs, even when a div is empty */
+.row::after {
+    content: "\A";
+    white-space: pre;
+}
+
+#right {
+    text-align: right;
+}
+
+#left {
+    resize: none;
+    border: none;
+}
+
+#left, #right {
+    font-family: monospace;
+    font-size: 15px;
+    line-height: 180%;
+    padding: 0px;
+    margin: 0px;
+}
+
+.child {
+    /* min-width: 20px;
+    min-height: 200px; */
+    /* border: 1px grey solid; */
+}
+
+#box {
+    border: 1px solid white;
+    border-radius: 5px;
+    display:flex;
+    padding: 1em;
+    max-width: 55em;
+    min-height: 40em;
+    margin: auto;
+}
+
+#left {
+    flex: 2;
+    outline: none;
+}
+
+#right {
+    flex: 1;
+}

@@ -1,0 +1,144 @@
+let lang = "apl";
+
+let lines = [];
+let queue = [];
+response = {out: "", err: ""};
+let firstLine = true;
+let ws = new WebSocket('ws://127.0.0.1:8000/');
+
+let lastRunLine = "";
+
+
+function init() {
+    document.addEventListener("keydown", (e) => {
+        if (e.key === 'e' && e.metaKey) {
+            console.log("line: " + getLineNumber());
+        }
+    });
+}
+
+function linesUpdate() {
+    // brute force right now
+    // make it update `lines` array dynamically and more cleverly
+    lines = document.getElementById('left').value.split("\n");
+}
+
+function getLine(lineNum) {
+    // this is also a dumb function right now, but might be dynamically smart later
+    return lineNum < lines.length? lines[lineNum]: "";
+}
+
+function getLineNumber() {
+    let textarea = document.getElementById('left');
+    return textarea.value.substr(0, textarea.selectionStart).split("\n").length-1;
+}
+
+
+ws.onopen = function(event) {
+    if (lang == 'frink') {
+        queue.push(0);
+        queue.push(0);
+        ws.send("showApproximations[false]")
+        ws.send("setPrecision[4]")
+    }
+}
+
+function input() {
+    linesUpdate();
+    let lineNum = getLineNumber();
+
+    // there should be a smarter way to do this so we don't always have to run the previous line
+    // but for now, if they hit return in the middle of line 5, it'll register the linenumber of the edit
+    // as line 6, because that's where the cursor now is. a hacky way around this is just to always run the line above jsut in case
+    if (lineNum != 0) {
+        lineNum--;
+    }
+    // end hack
+
+    // if we're on a new line, add a new div
+    if (document.getElementById('right').children.length < lines.length) {
+        document.getElementById('right').innerHTML += "<div class='row'></div>";
+    }
+
+    // safety check
+    console.assert(lineNum < document.getElementById('right').children.length)
+
+    let children = document.getElementById('right').children;
+    for (let i=lineNum; i<children.length; i++) {
+        let line = getLine(i);
+        if (line == "") {
+            children[i].innerHTML = "";
+        }
+        else {
+            // children[i].innerHTML = run(line);
+            ws.send(line);
+        }
+        ws.send('666666')
+        // TODO: this should really push a pair queue.push((lineNum, lineContent))
+        queue.push(i);
+    }
+    // console.log("input: ", queue);
+}
+
+function run(inp) {
+    return inp.split('').reverse().join('');
+    // return inp;
+}
+
+function delimiter() {
+    switch (lang) {
+        case 'apl': return "out: 666666"
+        case 'frink': return "out: 666666"
+        default: console.error(lang);
+    }
+}
+
+
+
+ws.onmessage = function(event) {
+    // console.log("_" + (isFirstError(event.data)? 1:0) + "_ " + event.data)
+    // console.log(event.data)
+
+    if (event.data == delimiter(lang)) {
+        let children = document.getElementById('right').children;
+        children[queue[0]].innerHTML = show(queue[0], response);
+
+        response = {out: "", err: ""};
+        queue.shift();
+    } 
+
+    else if (isIgnore(event.data)) {return;}
+
+    else {
+        if (event.data.substr(0,5) == "err: " || isError(event.data)) {
+            response.err += event.data.substr(5) + "\n";
+        } 
+        else if (event.data.substr(0,5) == "out: ") {
+            response.out += event.data.substr(5) + "\n";
+        }
+        else {console.log(`-${event.data.substr(0,5)}-`); outputPrefaceError();}
+    }
+}
+
+function show(lineNum, response) {
+    // console.log(response.out)
+    return response.out;
+}
+
+
+function outputPrefaceError() {
+    console.error("This shouldn't happen. It should either be prefaced with 'out: ' or 'err: '.")
+}
+
+function isError(output) {
+    // return output.includes('error') || output.includes('undefined'); // || output.includes('unknown');
+    return false;
+}
+
+function isIgnore() {
+    return false;
+}
+
+// function isBlank(output) {
+//     return output.includes('(')
+// }

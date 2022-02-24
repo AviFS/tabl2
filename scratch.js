@@ -1,9 +1,13 @@
 let lines = [];
 let queue = [];
-response = {out: "", err: "", log: ""};
+let streams = {stdout: "", stderr: ""};
 let firstLine = true;
 
 let lastRunLine = "";
+
+let ws = new WebSocket('ws://127.0.0.1:8000/');
+ws.onopen = _onopen;
+ws.onmessage = _onmessage;
 
 
 function init() {
@@ -73,7 +77,28 @@ function outputPrefaceError() {
     console.error("This shouldn't happen. It should either be prefaced with 'out: ' or 'err: '.")
 }
 
-// function run(inp) {
-//     return inp.split('').reverse().join('');
-//     // return inp;
-// }
+function _onopen (event) {
+    for (const cmd of cmds) {
+        ws.send(cmd);
+    }
+}
+
+function _onmessage(event) {
+    if (event.data == delimiter) {
+        show(queue[0], streams);
+        streams = {stdout: "", stderr: ""};
+        queue.shift();
+        return;
+    } 
+    console.log(event.data.substr(0,5) == "out: ")
+    switch (event.data.substr(0,5)) {
+        case "err: ":
+            streams.stderr += event.data.substr(5) + "\n";
+            break;
+        case "out: ":
+            streams.stdout += event.data.substr(5) + "\n";
+            break;
+        default:
+            outputPrefaceError();
+    }
+}

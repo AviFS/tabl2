@@ -8,15 +8,12 @@ ws.onmessage = _onmessage;
 delimiter = "out: 666666"
 
 function _onopen (event) {
-    queue.push(0);
-    queue.push(0);
     ws.send("showApproximations[false]")
     ws.send("setPrecision[4]")
 }
 
 
 function _onmessage(event) {
-    console.log(event.data)
     if (event.data == delimiter) {
         let children = document.getElementById('right').children;
         children[queue[0]].innerHTML = show(queue[0], response);

@@ -1,10 +1,7 @@
-let lang = "apl";
-
 let lines = [];
 let queue = [];
 response = {out: "", err: ""};
 let firstLine = true;
-let ws = new WebSocket('ws://127.0.0.1:8000/');
 
 let lastRunLine = "";
 
@@ -15,6 +12,7 @@ function init() {
             console.log("line: " + getLineNumber());
         }
     });
+
 }
 
 function linesUpdate() {
@@ -33,15 +31,6 @@ function getLineNumber() {
     return textarea.value.substr(0, textarea.selectionStart).split("\n").length-1;
 }
 
-
-ws.onopen = function(event) {
-    if (lang == 'frink') {
-        queue.push(0);
-        queue.push(0);
-        ws.send("showApproximations[false]")
-        ws.send("setPrecision[4]")
-    }
-}
 
 function input() {
     linesUpdate();
@@ -80,65 +69,11 @@ function input() {
     // console.log("input: ", queue);
 }
 
-function run(inp) {
-    return inp.split('').reverse().join('');
-    // return inp;
-}
-
-function delimiter() {
-    switch (lang) {
-        case 'apl': return "out: 666666"
-        case 'frink': return "out: 666666"
-        default: console.error(lang);
-    }
-}
-
-
-
-ws.onmessage = function(event) {
-    // console.log("_" + (isFirstError(event.data)? 1:0) + "_ " + event.data)
-    // console.log(event.data)
-
-    if (event.data == delimiter(lang)) {
-        let children = document.getElementById('right').children;
-        children[queue[0]].innerHTML = show(queue[0], response);
-
-        response = {out: "", err: ""};
-        queue.shift();
-    } 
-
-    else if (isIgnore(event.data)) {return;}
-
-    else {
-        if (event.data.substr(0,5) == "err: " || isError(event.data)) {
-            response.err += event.data.substr(5) + "\n";
-        } 
-        else if (event.data.substr(0,5) == "out: ") {
-            response.out += event.data.substr(5) + "\n";
-        }
-        else {console.log(`-${event.data.substr(0,5)}-`); outputPrefaceError();}
-    }
-}
-
-function show(lineNum, response) {
-    // console.log(response.out)
-    return response.out;
-}
-
-
 function outputPrefaceError() {
     console.error("This shouldn't happen. It should either be prefaced with 'out: ' or 'err: '.")
 }
 
-function isError(output) {
-    // return output.includes('error') || output.includes('undefined'); // || output.includes('unknown');
-    return false;
-}
-
-function isIgnore() {
-    return false;
-}
-
-// function isBlank(output) {
-//     return output.includes('(')
+// function run(inp) {
+//     return inp.split('').reverse().join('');
+//     // return inp;
 // }

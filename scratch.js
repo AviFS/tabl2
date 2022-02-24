@@ -5,6 +5,8 @@ let firstLine = true;
 
 let lastRunLine = "";
 
+let lang = frink;
+
 let ws = new WebSocket('ws://127.0.0.1:8000/');
 ws.onopen = _onopen;
 ws.onmessage = _onmessage;
@@ -16,7 +18,6 @@ function init() {
             console.log("line: " + getLineNumber());
         }
     });
-
 }
 
 function linesUpdate() {
@@ -78,14 +79,14 @@ function outputPrefaceError() {
 }
 
 function _onopen (event) {
-    for (const cmd of cmds) {
+    for (const cmd of lang.cmds) {
         ws.send(cmd);
     }
 }
 
 function _onmessage(event) {
-    if (event.data == delimiter) {
-        show(queue[0], streams);
+    if (event.data == lang.delimiter) {
+        lang.show(queue[0], streams);
         streams = {stdout: "", stderr: ""};
         queue.shift();
         return;

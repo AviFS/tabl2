@@ -8,8 +8,12 @@ ws.onmessage = _onmessage;
 delimiter = "out: 666666"
 
 function _onopen (event) {
-    ws.send("showApproximations[false]")
-    ws.send("setPrecision[4]")
+    // ws.send("showApproximations[false]")
+    ws.send("rationalAsFloat[true]")
+
+    ws.send("setPrecision[10]")
+
+    ws.send("showDimensionName[false]")
 }
 
 

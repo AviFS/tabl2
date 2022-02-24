@@ -5,7 +5,7 @@ let firstLine = true;
 
 let lastRunLine = "";
 
-let lang = frink;
+let lang = Frink;
 
 let ws = new WebSocket('ws://127.0.0.1:8000/');
 ws.onopen = _onopen;
@@ -91,7 +91,7 @@ function _onmessage(event) {
         queue.shift();
         return;
     } 
-    console.log(event.data.substr(0,5) == "out: ")
+
     switch (event.data.substr(0,5)) {
         case "err: ":
             streams.stderr += event.data.substr(5) + "\n";

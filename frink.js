@@ -1,26 +1,26 @@
-let frink = {
-    delimiter: "out: 666666",
-    cmds: [
+class Frink {
+    static delimiter = "out: 666666";
+    static cmds = [
         // "showApproximations[false]",
         "rationalAsFloat[true]",
         "setPrecision[10]",
         "showDimensionName[false]",
-    ],
+    ];
 
-    parseResponse: function (streams) {
-        data = {"out": "", "err": "", "log": ""}
+    static parseResponse(streams) {
+        let data = {"out": "", "err": "", "log": ""}
         for (const line of streams.stdout.split("\n")) {
             // if (isIgnore(line)) { data.ignored += line; }
-            if (frink.isIgnore(line)) { }
-            else if (frink.isLog(line)) { data.log += line; }
+            if (Frink.isIgnore(line)) { }
+            else if (Frink.isLog(line)) { data.log += line; }
             else { data.out += line; }
         }
         data.err = streams.stderr;
         return data;
-    },
+    }
 
-    show: function(lineNum, streams) {
-        let data = frink.parseResponse(streams);
+    static show(lineNum, streams) {
+        let data = Frink.parseResponse(streams);
         console.log(data)
 
         let lineElement = document.getElementById('right').children[queue[0]];
@@ -31,24 +31,23 @@ let frink = {
         }
         console.log(data.out)
         lineElement.innerHTML = data.out;
-    },
+    }
 
 
-    isLog: function(output) {
+   static isLog(output) {
         return output.includes('error') ||
         output.includes('undefined') ||
         output.includes('cannot') ||
         output.includes('Unrecognized') ||
         output.includes('parse') ||
         output.includes('missing'); // || output.includes('unknown');
-    },
+    }
 
-    isIgnore: function(output) {
+    static isIgnore(output) {
         return output == "Frink - Copyright 2000-2022 Alan Eliasen, eliasen@mindspring.com.";
-    },
+    }
 
-    isBlank: function(output) {
+    static isBlank(output) {
         return output.includes('(')
     }
 }
-console.log(frink)

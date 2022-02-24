@@ -1,6 +1,6 @@
 let lines = [];
 let queue = [];
-let streams = {stdout: "", stderr: ""};
+let response = {stdout: "", stderr: ""};
 let firstLine = true;
 
 let lastRunLine = "";
@@ -67,7 +67,7 @@ function input() {
             // children[i].innerHTML = run(line);
             ws.send(line);
         }
-        ws.send('666666')
+        ws.send(lang.delimiter_in)
         // TODO: this should really push a pair queue.push((lineNum, lineContent))
         queue.push(i);
     }
@@ -85,21 +85,30 @@ function _onopen (event) {
 }
 
 function _onmessage(event) {
-    if (event.data == lang.delimiter) {
-        lang.show(queue[0], streams);
-        streams = {stdout: "", stderr: ""};
+    if (event.data == lang.delimiter_out) {
+        lang.show(queue[0], lang.reformat(response));
+        response = {stdout: "", stderr: ""};
         queue.shift();
         return;
     } 
 
     switch (event.data.substr(0,5)) {
         case "err: ":
-            streams.stderr += event.data.substr(5) + "\n";
+            response.stderr += event.data.substr(5) + "\n";
             break;
         case "out: ":
-            streams.stdout += event.data.substr(5) + "\n";
+            response.stdout += event.data.substr(5) + "\n";
             break;
         default:
             outputPrefaceError();
     }
+}
+
+
+function lineElement(queue) {
+    return document.getElementById('right').children[queue[0]];
+}
+
+function updateLine(data) {
+    document.getElementById('right').children[queue[0]].innerHTML = data;
 }

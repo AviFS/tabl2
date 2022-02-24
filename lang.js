@@ -12,20 +12,10 @@ class Lang {
     static show(lineNum, response) {
         // console.log(response);
         if (response.err.length != 0) {
-            // lineElement.innerHTML = "? ";
-            // don't change anything a la numi
+            if (!show.patient) { updateLine(show.errorString); }
+            // when patient don't change anything a la numi
             return;
         }
         updateLine(response.out)
     }
-// rename parseResponse() to reformat()
-
-// and by default here have it be
-// function reformat(response) { return response; }
-
-// and in scratch.js change it from:
-//         lang.show(queue[0], streams);
-// to:
-//         lang.show(queue[0], reformat(streams));
-
 }

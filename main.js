@@ -5,16 +5,16 @@ let firstLine = true;
 
 let lastRunLine = "";
 
-let lang = Frink;
+let lang = Cat;
 let show = {
     patient: true,
     errorString: "*"
 }
 
+
 let ws = new WebSocket('ws://127.0.0.1:8000/');
 ws.onopen = _onopen;
 ws.onmessage = _onmessage;
-
 
 function init() {
     document.addEventListener("keydown", (e) => {
@@ -22,4 +22,7 @@ function init() {
             console.log("line: " + getLineNumber());
         }
     });
+
+    testWebSocket();
+
 }

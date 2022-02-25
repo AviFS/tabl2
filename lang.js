@@ -10,7 +10,8 @@ class Lang {
     }
 
     static show(lineNum, response) {
-        // console.log(response);
+        // console.log(lineNum+": ",response);
+        console.log(response);
         if (response.err.length != 0) {
             if (!show.patient) { updateLine(show.errorString); }
             // when patient don't change anything a la numi

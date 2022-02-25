@@ -90,3 +90,39 @@ function lineElement(queue) {
 function updateLine(data) {
     document.getElementById('right').children[queue[0]].innerHTML = data;
 }
+
+function testWebSocket() {
+
+    let ws = new WebSocket('ws://127.0.0.1:8000/');
+
+    ws.onopen = function(event) {
+        console.debug("Passed: Opened connection")
+        ws.send(lang.delimiter_in);
+    }
+
+    ws.onclose = function(event) {
+        // this is not necessary
+        console.debug("Passed: Closed connection")
+    }
+
+   ws.onmessage = function (event) {
+       if (event.data != lang.delimiter_out) {
+           console.error([
+                `Failed: Delimiter Test`,
+                `   Got       '${lang.delimiter_in}' -> '${event.data}'`,
+                `   Expected  '${lang.delimiter_in}' -> '${lang.delimiter_out}'`,
+           ].join('\n'))
+        }
+        else {
+            console.log("Passed: Delimiter Test");
+        }
+        ws.close();
+    }
+
+//         console.error(`\
+// Failed: Delimiter Test
+//     Input        '${lang.delimiter_in}'
+//     Output       '${event.data}'
+//     Expected     '${lang.delimiter_out}'
+// `)
+}

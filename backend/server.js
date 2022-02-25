@@ -3,16 +3,16 @@ import { WebSocketServer, WebSocket } from 'ws';
 let front = new WebSocketServer({ port: 8001 });
 let run = new WebSocket('ws://127.0.0.1:8000/');
 
-let delimiter_in = "666666"
+let delimiter_in = "?"
 let delimiter_out = "out: 666666"
 
-let response = {out: "", err: ""}
+let response = {stdout: "", stderr: ""}
 
 let globals = {};
 
 front.on('connection', function connection(ws) {
   globals.ws = ws;
-  ws.send('Connected');
+//   ws.send('out: Connected');
 
   ws.on('message', async function message(msg) {
     // added the aync sleep because i was still every now and then getting the err in the next one
@@ -29,8 +29,9 @@ front.on('connection', function connection(ws) {
     // {"out":"2\n","err":"""}
 
     // ws.send('!'+data);
+    // console.log(String(msg))
     run.send(msg);
-    await new Promise(resolve => setTimeout(resolve, 1));
+    await new Promise(resolve => setTimeout(resolve, 100));
     run.send(delimiter_in)
   });
 });
@@ -41,25 +42,27 @@ front.on('close', function close() {
 
 run.on('message', function message(data) {
     let event = {"data": String(data)};
-        if (event.data == delimiter_out) {
-            // console.log('---')
+    // console.log(event.data)
+        if (event.data.includes('parse')) {
+        // if (event.data == delimiter_out) {
+            console.log('---')
             // console.log(response)
         globals.ws.send(JSON.stringify(response));
 
-        response = {out: "", err: ""};
+        response = {stdout: "", stderr: ""};
         return;
     } 
     else {
-        // console.log(event.data);
+        console.log(event.data);
     }
     // else {console.log(1)}
 
     switch (event.data.substring(0,5)) {
         case "err: ":
-            response.err += event.data.substring(5) + "\n";
+            response.stderr += event.data.substring(5) + "\n";
             break;
         case "out: ":
-            response.out += event.data.substring(5) + "\n";
+            response.stdout += event.data.substring(5) + "\n";
             break;
         default:
             outputPrefaceError();

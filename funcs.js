@@ -43,12 +43,15 @@ function input() {
         }
         else {
             // children[i].innerHTML = run(line);
-            ws.send(line);
+            let newLine = false;
+            newLine ? ws.send(line+"\n"): ws.send(line);
+            console.log(i+": ", line)
         }
-        ws.send(lang.delimiter_in)
+            queue.push(i);
+        // ws.send(lang.delimiter_in)
         // TODO: this should really push a pair queue.push((lineNum, lineContent))
-        queue.push(i);
     }
+    console.log("in: ",queue)
     // console.log("input: ", queue);
 }
 
@@ -63,31 +66,19 @@ function _onopen (event) {
 }
 
 function _onmessage(event) {
-    if (event.data == lang.delimiter_out) {
-        lang.show(queue[0], lang.reformat(response));
-        response = {stdout: "", stderr: ""};
-        queue.shift();
-        return;
-    } 
-
-    switch (event.data.substr(0,5)) {
-        case "err: ":
-            response.stderr += event.data.substr(5) + "\n";
-            break;
-        case "out: ":
-            response.stdout += event.data.substr(5) + "\n";
-            break;
-        default:
-            outputPrefaceError();
-    }
+    console.log("out: ", queue)
+    let response = JSON.parse(event.data)
+    lang.show(queue[0], lang.reformat(response));
+    queue.shift();
 }
-
 
 function lineElement(queue) {
     return document.getElementById('right').children[queue[0]];
 }
 
 function updateLine(data) {
+    console.log(queue);
+    // console.log()
     document.getElementById('right').children[queue[0]].innerHTML = data;
 }
 

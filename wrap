@@ -7,16 +7,16 @@ head=${@:1:-1}
 
 cmd="$head 2> >(~/wstd/exec/err) 1> >(~/wstd/exec/out)"
 
-if [ $last = "-c" ]
+if [ $last = "-i" ]
 then
     eval $cmd
 elif [ $last = "-w" ]
 then
     eval "websocketd --port=$PORT --devconsole bash -c '$cmd'"
 else
-    echo "missing [-c | -w] flag"
+    echo "missing [-i | -w] flag"
 fi
-
+ 
 # bash -c $cmd
 # echo $cmd
 # eval "websocketd --port=$PORT --devconsole bash -c '$cmd'"

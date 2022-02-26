@@ -44,7 +44,7 @@ function input() {
         else {
             // children[i].innerHTML = run(line);
             let newLine = false;
-            newLine ? ws.send(line+"\n"): ws.send(line);
+            newLine ? send(ws, line+"\n", line=i): send(ws, line, line=i);
             // console.log(i+": ", line)
         }
             queue.push(i);
@@ -62,34 +62,42 @@ function outputPrefaceError() {
 
 function _onopen (event) {
     for (const cmd of lang.cmds) {
-        ws.send(cmd);
+        send(ws, cmd, line=0);
     }
 }
 
 function _onmessage(event) {
-    console.log("out: ", queue)
+    // console.log("out: ", queue)
     let response = JSON.parse(event.data)
+    console.log(response)
     lang.show(queue[0], lang.reformat(response));
     queue.shift();
 }
 
 function lineElement(queue) {
+    console.error("outmoded")
     return document.getElementById('right').children[queue[0]];
 }
 
-function updateLine(data) {
-    console.log(queue);
+function updateLine(line, data) {
+    console.log("ddd",line)
+    console.log("eee", document.getElementById('right').children.length)
+    // console.log(queue);
     // console.log()
-    document.getElementById('right').children[queue[0]].innerHTML = data;
+    document.getElementById('right').children[line].innerHTML = data;
 }
 
+function send(ws, data, line=0) {
+    line = String(line).padStart(3, '0');
+    ws.send(`${line}: ${data}`);
+}
 function testWebSocket() {
 
     let ws = new WebSocket('ws://127.0.0.1:8000/');
 
     ws.onopen = function(event) {
         console.debug("Passed: Opened connection")
-        ws.send(lang.delimiter_in);
+        send(ws, lang.delimiter_in, line=0);
     }
 
     ws.onclose = function(event) {

@@ -45,13 +45,14 @@ function input() {
             // children[i].innerHTML = run(line);
             let newLine = false;
             newLine ? ws.send(line+"\n"): ws.send(line);
-            console.log(i+": ", line)
+            // console.log(i+": ", line)
         }
             queue.push(i);
         // ws.send(lang.delimiter_in)
         // TODO: this should really push a pair queue.push((lineNum, lineContent))
+    console.log(line);
     }
-    console.log("in: ",queue)
+    // console.log("in: ",queue)
     // console.log("input: ", queue);
 }
 

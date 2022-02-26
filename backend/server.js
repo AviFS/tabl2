@@ -15,6 +15,7 @@ front.on('connection', function connection(ws) {
 //   ws.send('out: Connected');
 
   ws.on('message', async function message(msg) {
+      console.log("in: "+msg)
     // added the aync sleep because i was still every now and then getting the err in the next one
     // was something getting this:
     // ?
@@ -30,9 +31,9 @@ front.on('connection', function connection(ws) {
 
     // ws.send('!'+data);
     // console.log(String(msg))
-    run.send(msg);
-    await new Promise(resolve => setTimeout(resolve, 100));
+    run.send(msg+'\n');
     run.send(delimiter_in)
+    // await new Promise(resolve => setTimeout(resolve, 10));
   });
 });
 
@@ -42,10 +43,10 @@ front.on('close', function close() {
 
 run.on('message', function message(data) {
     let event = {"data": String(data)};
-    // console.log(event.data)
-        if (event.data.includes('parse')) {
+    console.log("out: "+event.data)
+        if (event.data.includes('illegal')) {
         // if (event.data == delimiter_out) {
-            console.log('---')
+            // console.log('---')
             // console.log(response)
         globals.ws.send(JSON.stringify(response));
 
@@ -53,7 +54,7 @@ run.on('message', function message(data) {
         return;
     } 
     else {
-        console.log(event.data);
+        // console.log(event.data);
     }
     // else {console.log(1)}
 

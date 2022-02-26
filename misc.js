@@ -13,12 +13,14 @@ class Vyxal extends Lang {
 
     static reformat(response) {
         function pprintState(state) {
-            console.log(state)
+            // console.log(state)
             // return state.join(' ');
-            return JSON.stringify(state);
+
+            // return JSON.stringify(state);
+            return state;
         }
         let data =  {"line": response.line, "out": pprintState(response.state), "err": response.err}
-        console.log(4,data)
+        // console.log(4,data)
         return data;
     }
 

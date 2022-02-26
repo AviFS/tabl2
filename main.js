@@ -5,8 +5,8 @@ let firstLine = true;
 
 let lastRunLine = "";
 
-// let lang = Cat;
-let lang = Vyxal;
+let lang = Cat;
+// let lang = Vyxal;
 let show = {
     patient: true,
     errorString: "*"

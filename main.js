@@ -1,29 +1,11 @@
-let lines = [];
-let queue = [];
-let response = {stdout: "", stderr: ""};
-let firstLine = true;
+let ws = new WebSocket('ws://127.0.0.1:8000/');
+ws.send
 
-let lastRunLine = "";
-
-let lang = Cat;
-// let lang = Vyxal;
-let show = {
-    patient: true,
-    errorString: "*"
+function run() {
+    let text = document.getElementById('text').value;
+    ws.send(text);
 }
 
-
-let ws = new WebSocket('ws://127.0.0.1:8001/');
-ws.onopen = _onopen;
-ws.onmessage = _onmessage;
-
-function init() {
-    document.addEventListener("keydown", (e) => {
-        if (e.key === 'e' && e.metaKey) {
-            console.log("line: " + getLineNumber());
-        }
-    });
-
-    testWebSocket();
-
+ws.onmessage = function onmessage(event) {
+    document.getElementById('result').innerText = event.data;
 }

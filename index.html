@@ -8,8 +8,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>tabl</title>
 </head>
-<body>
-    stuff
+<body onload="init()">
+    lang: <input type="text" id="lang" onfocusout="setLang()">
+    <br><br>
+    <br><br>
+    <br><br>
     <input type="text" id='text'></input>
     <button id="run" onclick="run()">Run</button>
     

@@ -1,7 +1,2 @@
-backend/node_modules/
-backend/package.json
-backend/package-lock.json
-
-tst.*
-test/
-old/*
+node_modules/
+package-lock.json

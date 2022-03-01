@@ -1,6 +1,7 @@
 import sys
 import types
 import re
+from typing import Type
 import sympy
 
 import vyxal.encoding
@@ -14,8 +15,11 @@ from builtins import input as __input
 
 import json
 
+def error(msg):
+    data = Data()
+    data.console_error = msg
+    __print(data.format())
 class Data:
-    
     def __init__(self):
         self.line = 0
         self.disp = "" 
@@ -28,15 +32,17 @@ class Data:
         self.console_warn = ""
         self.console_error = ""
 
-        self.debug_line = 0
+        # self.debug_line = 0
         self.debug_code = ""
         # self.debug_input = ""
+        # self.debug_reset = False
     
     def parse(self, data):
-        line, code = data[:3], data[5:]
+        data = json.loads(data)
+        line, code, inp, reset, state = data['line'], data['code'], data['input'], data['reset'], data['state']
         self.line = int(line) # takes care of leading zeroes
         self.debug_code = code
-        return line, code
+        return line, code, inp, reset, state
     
     def log(self, msg):
         self.console_log += msg
@@ -66,24 +72,26 @@ class Data:
         }
         return json.dumps(data)
 
-data = Data()
-data.parse('021:\' 1\ \n " 2 ""3+,')
-print(data.format())
-
-# if len(sys.argv) < 2:
-#     data.log += "sys.argv.length == 1"
-#     data.log += "defaulting to empty input"
-#     inp = []
-# else:
-#     inp = sys.argv[1].split(',')
-
 inp = []
 def input(prompt):
     return inp.pop()
 
+def pprint(data, stack):
+    acc = []
+    for item in stack:
+        if isinstance(item, sympy.Basic):
+            acc.append(str(item))
+        elif isinstance(item, (list, dict, int)):
+            acc.append(json.dumps(item))
+        elif isinstance(item, str):
+            acc.append(json.dumps(item))
+        else:
+            data.console_warn += f"server: type {type(item)} not handled"
+            acc.append(json.dumps(str(item)))
 
+    return ' '.join(acc)
 
-def mod_repl():
+def repl(disable_json = False, multiline=False):
 
     ctx, stack = Context(), []
     # ctx.online = True
@@ -92,7 +100,22 @@ def mod_repl():
 
     while True:
         data = Data()
-        line, code = data.parse(__input())
+        if disable_json:
+            code = __input()
+        else:
+            try:
+                line, code, inp, reset, state = data.parse(__input())
+            except (TypeError, KeyError, json.decoder.JSONDecodeError):
+                data.error("Server: Invalid JSON")
+                __print(data.format())
+                continue
+        
+        if reset:
+            data.isError = True
+            stack = []
+        
+        if state:
+            stack = state
 
         vyxal.__builtins__["input"] = input
         vyxal.__builtins__["print"] = data.print
@@ -101,22 +124,15 @@ def mod_repl():
             exec(transpile(code))
         except Exception as e:
             data.console_error += str(e)
+            data.isError = True
     
-        for item in stack:
-            if isinstance(item, sympy.Basic):
-                data.state.append(str(item))
-            elif isinstance(item, (list, dict)):
-                data.state.append(json.dumps(item))
-            elif isinstance(item, str):
-                data.state.append(json.dumps(item))
-            else:
-                data.console_warn += f"server: type {type(item)} not handled"
-                data.state.append(json.dumps(str(item)))
+        data.state = stack
+        data.disp = pprint(data, stack)
 
-        data.disp = ' '.join(data.state)
         __print(data.format())
-        stack = []
 
+        if multiline:
+            stack = []
 
-# __print(f"in: {inp}")
-mod_repl()
+if __name__ == "__main__":
+    repl()

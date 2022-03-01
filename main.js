@@ -10,9 +10,9 @@ function setLang() {
     // ws = new WebSocket('ws://54.153.39.161:8000/'+lang);
     // ws = new WebSocket('ws://127.0.0.1:8001/'+lang);
     // ws = new WebSocket('ws://localhost:8000/cat');
-    ws = new WebSocket('ws://127.0.0.1:8002/');
+    ws = new WebSocket('ws://127.0.0.1:8003/');
 
-    ws.onmessage = _onmessage;
+    ws.onmessage = simple_onmessage;
 }
 
 
@@ -55,7 +55,7 @@ function send(ws, data) {
         state: data.hasOwnProperty('state')? data.state: [],
     })
     ws.send(data);
-    console.log(data);
+    // console.log(data);
 }
 
 
@@ -105,6 +105,11 @@ function _onmessage(event) {
     // console
     console1(data);
 
+}
+
+function simple_onmessage(event) {
+    let data = JSON.parse(event.data);
+    updateLine(data.line, data.disp)
 }
 ////////////////////////////////
 ////////   helper  /////////////

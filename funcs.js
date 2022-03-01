@@ -1,5 +1,5 @@
 function updateLine(line, data) {
-    console.log(line, data)
+    // console.log(line, data)
     document.getElementById('right').children[line].innerHTML = data;
 }
 function getLineNumber() {

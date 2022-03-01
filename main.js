@@ -2,7 +2,14 @@ let ws;
 
 function init() {
     lines = [];
-    ws = new WebSocket('ws://127.0.0.1:8003/');
+    // ws = new WebSocket('ws://54.153.39.161:8003/');
+    ws = new WebSocket('ws://127.0.0.1:8003');
+    ws.onopen = function(event) {
+        console.log('connected')
+    }
+    ws.onclose = function(event) {
+        console.log('close')
+    }
     ws.onmessage = simple_onmessage;
 }
 
@@ -51,6 +58,7 @@ function errorCallback(data) {
 
 let timer;
 function simple_onmessage(event) {
+    console.log(event.data)
     clearTimeout(timer);
     let data = JSON.parse(event.data);
 

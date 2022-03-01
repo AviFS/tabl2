@@ -1,8 +1,22 @@
+@font-face {
+    font-family: 'APL';
+    src: url('APL386.ttf');
+}
+* {
+    /* font-family: 'APL'; */
+    font-family: monospace;
+    font-weight: unset;
+}
+
 body, #left {
-    background-color: rgb(32,36,47);
+    /* background-color: rgb(32,36,47); */
+    background-color: hsla(224, 19%, 15%, 1);
     color: rgb(204,202,194);
     /* font-family: 'Courier New', Courier, monospace */
 }
+
+#right               { color: #95E6CB; }
+#left                { color: #73D0FF; }
 
 /* Make right side show new lines between divs, even when a div is empty */
 .row::after {
@@ -20,7 +34,7 @@ body, #left {
 }
 
 #left, #right {
-    font-family: monospace;
+    /* font-family: monospace; */
     font-size: 15px;
     line-height: 180%;
     padding: 0px;
@@ -41,6 +55,11 @@ body, #left {
     max-width: 55em;
     min-height: 40em;
     margin: auto;
+    /* box-shadow: 3px 4px hsla(224, 19%, 13%, 1); */
+}
+
+#box, #left, #right {
+    /* background-color: hsla(224, 25%, 16%, 1); */
 }
 
 #left {

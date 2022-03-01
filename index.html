@@ -9,13 +9,14 @@
     <title>tabl</title>
 </head>
 <body onload="init()">
-    lang: <input type="text" id="lang" onfocusout="setLang()">
-    <br><br>
-    <br><br>
+    lang: <input type="text" id="lang" onfocusout="setLang()" value="cat">
     <br><br>
     <input type="text" id='text'></input>
     <button id="run" onclick="run()">Run</button>
     
-    <div id="result"></div>
+    <div id="out"></div>
+
+    <br>
+    <div id="disp"></div>
 </body>
 </html>

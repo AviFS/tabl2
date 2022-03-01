@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="style-old.css"></link>
+</head>
+<body onload="init();">
+    <div id="theme-list" style="color:rgb(160, 160, 160); float: right;">
+      langs = [<a
+      onclick="setInterp('brainfuck');" href="#brainfuck">brainfuck</a>, <a
+      onclick="setInterp('slashes');" href="#slashes">///</a>, <a
+      onclick="setInterp('js');" href="#js">js</a>, <a
+      onclick="setInterp('muck');" href="#muck">muck</a>, <a
+      onclick="setInterp('underload');" href="#underload">underload</a
+      >]
+      <!-- <a onclick="changeStyle('kazimir-malevich');" href="#kazimir-malevich">kazimir-malevich</a>,
+      <a onclick="changeStyle('new-moon');" href="#new-moon">new-moon</a>,
+      <a onclick="changeStyle('nord');" href="#nord">nord</a>] -->
+    </div><br>
+    <h2 id="title"></h2>
+    <input type="text" id="progInp" oninput='onInput();'>
+    <input type="text" id="progOut" readonly>
+
+    <div id='evaluator'>
+    <div id='left'>
+        <textarea id="input" name="" rows=32 oninput='onInput();'></textarea>
+    </div>
+    <div id='right'>
+        <textarea id="output" name="" rows=32 readonly></textarea >
+    </div>
+    </div>
+</body>
+</html>
+
+<!--
+body 
+  evaluator 
+    left 
+      input 
+    right 
+      output 
+-->

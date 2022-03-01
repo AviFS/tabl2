@@ -1,22 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="main.js"></script>
-    <link rel="stylesheet" href="style.css">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>tabl</title>
+    
+    <script src="funcs.js"></script>
+    <script src="main.js"></script>
+
+    <link rel="stylesheet" href="style.css">
+    <title>Run 2</title>
 </head>
 <body onload="init()">
-    lang: <input type="text" id="lang" onfocusout="setLang()" value="cat">
-    <br><br>
-    <input type="text" id='text'></input>
-    <button id="run" onclick="run()">Run</button>
-    
-    <div id="out"></div>
-
-    <br>
-    <div id="disp"></div>
+   <!-- Todo: Figure out what the name attribute in textarea does.
+   Emmet prepopulated it in there so it might be important later. -->
+   <div id='out'></div>
+   <div id='box'>
+       <!-- contenteditable div is preferable, but it has very weird behavior with making new lines and adding <br> and <div></div> nodes inconsistently nested
+       contenteditable div fixes the scrolling issue when you get to the bottom, instead growing dynamically
+       however i'd have to rewrite getLineNumber() and getLine() which i wasn't able to do because of it's weird behavior -->
+       <textarea id='left' class="child" oninput="input()"></textarea>
+       <div id='right' class="child"></div>
+   </div>
 </body>
 </html>

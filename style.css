@@ -1,18 +1,10 @@
-* {
+body, #left {
     background-color: rgb(32,36,47);
     color: rgb(204,202,194);
     /* font-family: 'Courier New', Courier, monospace */
-    font-family: monospace;
-    /* border: 1px white solid; */
 }
 
-/* body, #left {
-    background-color: rgb(32,36,47);
-    color: rgb(204,202,194);
-    font-family: 'Courier New', Courier, monospace
-}
-
-Make right side show new lines between divs, even when a div is empty
+/* Make right side show new lines between divs, even when a div is empty */
 .row::after {
     content: "\A";
     white-space: pre;
@@ -36,9 +28,9 @@ Make right side show new lines between divs, even when a div is empty
 }
 
 .child {
-    min-width: 20px;
-    min-height: 200px;
-    border: 1px grey solid;
+    /* min-width: 20px;
+    min-height: 200px; */
+    /* border: 1px grey solid; */
 }
 
 #box {
@@ -58,4 +50,4 @@ Make right side show new lines between divs, even when a div is empty
 
 #right {
     flex: 1;
-} */
+}

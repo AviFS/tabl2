@@ -67,8 +67,14 @@ function input() {
     }
 
     let children = document.getElementById('right').children;
-    send(ws, {reset: true})
-    for (let i=0; i<children.length; i++) {
+    // send(ws, {reset: true})
+
+    let currentLine = getLineNumber();
+
+    // until we have a better solution
+    if (currentLine != 0) { currentLine--; }
+
+    for (let i=currentLine; i<children.length; i++) {
         let code = getLine(i);
         if (code == "" || code[0] == '#') {
             children[i].innerHTML = "";
@@ -83,7 +89,7 @@ function input() {
     // ws.send('000: '+document.getElementById('left').innerText)
 
 function _onmessage(event) {
-    // console.log(event.data)
+    console.log(event.data)
     let data = JSON.parse(event.data);
     // console.log(data)
 
@@ -108,6 +114,7 @@ function _onmessage(event) {
 }
 
 function simple_onmessage(event) {
+    console.log(event.data)
     let data = JSON.parse(event.data);
     updateLine(data.line, data.disp)
 }

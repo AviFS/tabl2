@@ -16,6 +16,9 @@ function getLine(lineNum) {
     // this is also a dumb function right now, but might be dynamically smart later
     return lineNum < lines.length? lines[lineNum]: "";
 }
+function dim(line) {
+    document.getElementById('right').children[line].classList.add('dim');
+}
 
 function init() {
     lines = [];
@@ -75,16 +78,18 @@ function errorCallback(data) {
 
 let timer;
 function simple_onmessage(event) {
-    console.log(event.data)
-    clearTimeout(timer);
     let data = JSON.parse(event.data);
 
+    console.log(event.data)
+    clearTimeout(timer);
 
     if (!data.isError) {
+        document.getElementById('right').children[data.line].classList.remove('dim');
         updateLine(data.line, data.disp)
     }
     else {
         // updateLine(data.line, "*")
+        dim(data.line);
         timer = setTimeout(errorCallback, 1000, data)
     }
 }

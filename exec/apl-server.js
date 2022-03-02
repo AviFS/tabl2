@@ -2,6 +2,7 @@ import { WebSocketServer, WebSocket } from 'ws';
 
 let front = new WebSocketServer({ port: 8003 });
 let run = new WebSocket('ws://127.0.0.1:8000/');
+// let run = new WebSocket('ws://54.153.39.161:8000/');
 
 let delimiter_in = "666666"
 let delimiter_out = "out: 666666"
@@ -31,7 +32,9 @@ run.on('message', function message(data) {
     // console.log(event.data)
     if (event.data == delimiter_out) {
         num = 0
+        console.log(response.disp)
         let lines = response.disp.split('\n');
+        console.log(lines);
         let line = parseInt(lines[0]);
         let disp = lines.slice(1,-1).join('\n');
 
@@ -58,6 +61,7 @@ run.on('message', function message(data) {
 });
 
 function pprintError(line, error) {
+    // console.log(error == undefined);
     if (error.includes("Dyalog") || error.includes("dyalog")) { return ""; }
     let acc = []
     let lines = error.split('\n');

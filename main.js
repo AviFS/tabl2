@@ -80,7 +80,6 @@ let timer;
 function simple_onmessage(event) {
     let data = JSON.parse(event.data);
 
-    console.log(event.data)
     clearTimeout(timer);
 
     if (!data.isError) {

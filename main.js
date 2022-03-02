@@ -61,7 +61,7 @@ function input() {
     // until we have a better solution
     if (currentLine != 0) { currentLine--; }
 
-    for (let i=currentLine; i<children.length; i++) {
+    for (let i=0; i<children.length; i++) {
         let code = getLine(i);
         if (code == "" || code[0] == '#') {
             children[i].innerHTML = "";

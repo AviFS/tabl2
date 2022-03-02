@@ -1,18 +1,26 @@
 @font-face {
     font-family: 'APL';
-    src: url('APL386.ttf');
+    src: url('fonts/APL386.ttf');
 }
 * {
     /* font-family: 'APL'; */
-    font-family: monospace;
-    font-weight: unset;
+    font-family: Menlo, Consolas, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;
 }
+
+html, body {
+    height: 100%;
+    /* overflow: hidden; */
+}
+
+/* <hide scrollbars> */
+*::-webkit-scrollbar { display: none; }
+* { -ms-overflow-style: none; scrollbar-width: none; }
+/* </hide scrollbars> */
 
 body, #left {
     /* background-color: rgb(32,36,47); */
     background-color: hsla(224, 19%, 15%, 1);
     color: rgb(204,202,194);
-    /* font-family: 'Courier New', Courier, monospace */
 }
 
 #right               { color: #95E6CB; }
@@ -35,6 +43,8 @@ body, #left {
 
 #left, #right {
     /* font-family: monospace; */
+    /* font-size: 15px; */
+    /* font-size: 22.5px; */
     font-size: 15px;
     line-height: 180%;
     padding: 0px;
@@ -49,12 +59,19 @@ body, #left {
 
 #box {
     border: 1px solid white;
-    border-radius: 5px;
+    border-bottom: 0px;
+    border-radius: 5px 5px 0px 0px;
     display:flex;
-    padding: 1em;
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-top: 1em;
+    /* padding-top: .8em; */
     max-width: 55em;
-    min-height: 40em;
+    /* min-height: 60em; */
+    min-height: 100%;
     margin: auto;
+    margin-top: 20px;
+
     /* box-shadow: 3px 4px hsla(224, 19%, 13%, 1); */
 }
 

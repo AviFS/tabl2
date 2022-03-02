@@ -22,8 +22,8 @@ function dim(line) {
 
 function init() {
     lines = [];
-    ws = new WebSocket('ws://54.153.39.161:8003/');
-    // ws = new WebSocket('ws://127.0.0.1:8003');
+    ws = new WebSocket('ws://54.153.39.161:8004/');
+    // ws = new WebSocket('ws://127.0.0.1:8004');
     ws.onopen = function(event) {
         console.log('connected')
     }
@@ -35,9 +35,13 @@ function init() {
 
 function send(ws, data) {
     data = JSON.stringify({
-        line: data.line,
-        code: data.code
+        line: data.hasOwnProperty('line')? data.line: 0,
+        code: data.hasOwnProperty('code')? data.code: "",
+        input: data.hasOwnProperty('input')? data.input: "",
+        reset: data.hasOwnProperty('reset')? data.reset: false,
+        state: data.hasOwnProperty('state')? data.state: [],
     })
+
     ws.send(data);
 }
 
@@ -50,7 +54,7 @@ function input() {
     }
 
     let children = document.getElementById('right').children;
-    // send(ws, {reset: true})
+    send(ws, {reset: true})
 
     let currentLine = getLineNumber();
 

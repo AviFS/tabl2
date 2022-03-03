@@ -13,7 +13,7 @@
 <body onload="init()">
 
    <div id="inout">
-       <div id='input' contenteditable="true" oninput="input()"></div>
+       <div id='input' contenteditable="true" oninput="input(code=false)"></div>
        <div id='output'> </div>
    </div>
 
@@ -24,7 +24,7 @@
        <!-- contenteditable div is preferable, but it has very weird behavior with making new lines and adding <br> and <div></div> nodes inconsistently nested
        contenteditable div fixes the scrolling issue when you get to the bottom, instead growing dynamically
        however i'd have to rewrite getLineNumber() and getLine() which i wasn't able to do because of it's weird behavior -->
-       <textarea id='left' class="child" oninput="input()"></textarea>
+       <textarea id='left' class="child" oninput="input(code=true)"></textarea>
        <div id='right' class="child"></div>
    </div>
 </body>

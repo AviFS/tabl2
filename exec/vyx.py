@@ -33,15 +33,19 @@ class Data:
         self.console_error = ""
 
         # self.debug_line = 0
-        self.debug_code = ""
+        # self.debug_code = ""
         # self.debug_input = ""
         # self.debug_reset = False
-    
+        self.debug = {}
+
+        self.inp = []
+
     def parse(self, data):
         data = json.loads(data)
         line, code, inp, reset, state = data['line'], data['code'], data['input'], data['reset'], data['state']
+        self.inp = inp.strip().split(' ')
         self.line = int(line) # takes care of leading zeroes
-        self.debug_code = code
+        self.debug = {"line": line, "code": code, "input": inp, "reset": reset, "state": state}
         return line, code, inp, reset, state
     
     def log(self, msg):
@@ -70,15 +74,13 @@ class Data:
                 "warn": self.console_warn,
                 "error": self.console_error,
             },
-            "debug": {
-                "code": self.debug_code,
-            },
+            "debug": self.debug,
         }
         return json.dumps(data)
 
-inp = []
-def input(prompt):
-    return inp.pop()
+    inp = []
+    def input(self, prompt):
+        return self.inp.pop()
 
 # def pprint(data, stack):
 #     acc = []
@@ -131,7 +133,7 @@ def repl(disable_json = False, multiline=False):
         if state:
             stack = state
 
-        vyxal.__builtins__["input"] = input
+        vyxal.__builtins__["input"] = data.input
         vyxal.__builtins__["print"] = data.output_print
 
         try:

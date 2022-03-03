@@ -22,8 +22,8 @@ function dim(line) {
 
 function init() {
     lines = [];
-    ws = new WebSocket('ws://54.153.39.161:8004/');
-    // ws = new WebSocket('ws://127.0.0.1:8004');
+    // ws = new WebSocket('ws://54.153.39.161:8004/');
+    ws = new WebSocket('ws://127.0.0.1:8004');
     ws.onopen = function(event) {
         console.log('connected')
     }
@@ -41,12 +41,13 @@ function send(ws, data) {
         reset: data.hasOwnProperty('reset')? data.reset: false,
         state: data.hasOwnProperty('state')? data.state: [],
     })
+    console.log(data)
 
     ws.send(data);
 }
 
 
-function input() {
+function input(code=true) {
     linesUpdate()
     // if we're on a new line, add a new div
     if (document.getElementById('right').children.length < lines.length) {
@@ -54,9 +55,18 @@ function input() {
     }
 
     let children = document.getElementById('right').children;
-    send(ws, {reset: true})
 
-    send(ws, {code: document.getElementById('input').innerText});
+    let input = document.getElementById('input').innerText;
+
+    // this shouldn't be necessary, for most langs, but just to save a nasty bug down the line
+    // without this, if you enter input, but you have no code, nothing runs
+    // that's just what we want... except for langs where input alone can create output
+    if (code == false && document.getElementById('left').value.trim() == "") {
+        send(ws, {line: 0, code: code, input: input});
+        return;
+    }
+
+    send(ws, {reset: true})
 
     let currentLine = getLineNumber();
 
@@ -69,8 +79,8 @@ function input() {
             children[i].innerHTML = "";
             continue;
         }
-        let data = { line: i, code: code, input: "", reset: false };
-        send(ws, {line: i, code: code, input: "", state: []})
+        let data = { line: i, code: code, input: input, reset: false, state: [] };
+        send(ws, data)
     }
 }
 
@@ -85,6 +95,7 @@ function errorCallback(data) {
 let timer;
 function simple_onmessage(event) {
     let data = JSON.parse(event.data);
+    console.log(data)
 
     clearTimeout(timer);
 

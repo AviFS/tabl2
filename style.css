@@ -56,9 +56,9 @@ html, body {
  }
 
 #right               { color: hsla(160, 62%, 74%, 1); }
-#output               { color: hsla(160, 62%, 74%, 1); }
+/* #output               { color: hsla(160, 62%, 74%, 1); } */
 #left                { color: hsla(200, 100%, 73%, 1); }
-#input                { color: hsla(200, 100%, 73%, 1); }
+/* #input                { color: hsla(200, 100%, 73%, 1); } */
 
 #right>.row.dim {
     color: hsla(160, 62%, 74%, .9);

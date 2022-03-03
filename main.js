@@ -30,7 +30,7 @@ function init() {
     ws.onclose = function(event) {
         console.log('close')
     }
-    ws.onmessage = simple_onmessage;
+    ws.onmessage = _onmessage;
 }
 
 function send(ws, data) {
@@ -93,22 +93,68 @@ function errorCallback(data) {
 }
 
 let timer;
-function simple_onmessage(event) {
+function _onmessage(event) {
     let data = JSON.parse(event.data);
-    console.log(data)
+    // console.log(data)
 
     clearTimeout(timer);
-
     document.getElementById('output').innerText = data.output? data.output: " ";
 
+    // disp
     if (!data.isError) {
         document.getElementById('right').children[data.line].classList.remove('dim');
         updateLine(data.line, data.disp)
     }
     else {
-        // updateLine(data.line, "*")
+        let errorString = "*"
         dim(data.line);
+        updateLine(data.line, data.disp)
         timer = setTimeout(errorCallback, 1000, data)
+    }
+
+    // output
+    if (data.output) {
+        document.getElementById('out').innerHTML += data.output;
+    }
+
+    // console
+    console1(data);
+
+}
+
+////////////////////////////////
+////////   helper  /////////////
+///////////////////////////////
+
+// console
+function console1(data) {
+    if (data.console.log || data.console.warn || data.console.error) {
+
+        // maybe use console.group for all the console things for easier debugging
+        console.group(`line ${data.line}: ${data.debug.code}`)
+
+        if (data.console.log) {
+            console.log(data.console.log)
+        }
+        if (data.console.warn) {
+            console.warn(data.console.warn)
+        }
+        if (data.console.error) {
+            console.error(data.console.error)
+        }
+        console.groupEnd(`${data.line}: ${data.debug.code}`)
+    }
+}
+
+function console2() {
+    if (data.console.log) {
+        console.log(`${data.line}: ${data.console.log}`)
+    }
+    if (data.console.warn) {
+        console.warn(`${data.line}: ${data.console.warn}`)
+    }
+    if (data.console.error) {
+        console.error(`${data.line}: ${data.console.error}`)
     }
 }
 

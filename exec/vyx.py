@@ -51,9 +51,13 @@ class Data:
     def error(self, msg):
         self.console_error = msg
     
-    def print(self, msg, end="\n"):
+    def output_print(self, msg, end="\n"):
         res = str(msg) + end
         self.output += res
+    
+    def disp_print(self, msg, end="\n"):
+        res = str(msg) + end
+        self.disp += res
     
     def format(self):
         data = {
@@ -76,40 +80,50 @@ inp = []
 def input(prompt):
     return inp.pop()
 
-def pprint(data, stack):
-    acc = []
-    for item in stack:
-        if isinstance(item, sympy.Basic):
-            acc.append(str(item))
-        elif isinstance(item, (list, dict, int)):
-            acc.append(json.dumps(item))
-        elif isinstance(item, str):
-            acc.append(json.dumps(item))
-        else:
-            data.console_warn += f"server: type {type(item)} not handled"
-            acc.append(json.dumps(str(item)))
+# def pprint(data, stack):
+#     acc = []
+#     for item in stack:
+#         if isinstance(item, sympy.Basic):
+#             acc.append(str(item))
+#         elif isinstance(item, (list, dict, int)):
+#             acc.append(json.dumps(item))
+#         elif isinstance(item, str):
+#             acc.append(json.dumps(item))
+#         elif isinstance(item, LazyList):
+#             acc.append("["+pprint(data, item)+"]")
+#         else:
+#             data.console_warn += f"server: type {type(item)} not handled"
+#             acc.append(json.dumps(str(item)))
 
-    return ' '.join(acc)
+#     return ' '.join(acc)
+
+def disp_format(out):
+    out = out.strip()
+    out = out[1:-1] # remove outer brackets
+    out = out.replace('[', '(').replace(']', ')')
+    out = out.replace(',', '')
+    return out
 
 def repl(disable_json = False, multiline=False):
 
     ctx, stack = Context(), []
     # ctx.online = True
     ctx.repl_mode = True
+    ctx.vyxal_lists = False
 
 
     while True:
         data = Data()
-        if disable_json:
-            code = __input()
-        else:
-            try:
+        try:
+            if disable_json:
+                line, code, inp, reset, state = 0, __input(), "", False, []
+            else:
                 line, code, inp, reset, state = data.parse(__input())
-            except (TypeError, KeyError, json.decoder.JSONDecodeError):
-                data.error("Server: Invalid JSON")
-                __print(data.format())
-                continue
-        
+        except (TypeError, KeyError, json.decoder.JSONDecodeError):
+            data.error("Server: Invalid JSON")
+            __print(data.format())
+            continue
+
         if reset:
             data.isError = True
             stack = []
@@ -118,7 +132,7 @@ def repl(disable_json = False, multiline=False):
             stack = state
 
         vyxal.__builtins__["input"] = input
-        vyxal.__builtins__["print"] = data.print
+        vyxal.__builtins__["print"] = data.output_print
 
         try:
             exec(transpile(code))
@@ -127,7 +141,12 @@ def repl(disable_json = False, multiline=False):
             data.isError = True
     
         data.state = stack
-        data.disp = pprint(data, stack)
+        vyxal.__builtins__["print"] = data.disp_print
+        vy_print(stack, ctx=ctx)
+        data.disp = disp_format(data.disp)
+        vyxal.__builtins__["print"] = data.output_print
+        # data.disp = 
+
 
         __print(data.format())
 
@@ -136,3 +155,4 @@ def repl(disable_json = False, multiline=False):
 
 if __name__ == "__main__":
     repl()
+    # repl(disable_json=True)

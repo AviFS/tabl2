@@ -1,2 +1,6 @@
 node_modules/
 package-lock.json
+
+exec/code.vy
+exec/main.py
+exec/main2.py

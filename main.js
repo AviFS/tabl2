@@ -56,6 +56,8 @@ function input() {
     let children = document.getElementById('right').children;
     send(ws, {reset: true})
 
+    send(ws, {code: document.getElementById('input').innerText});
+
     let currentLine = getLineNumber();
 
     // until we have a better solution
@@ -85,6 +87,8 @@ function simple_onmessage(event) {
     let data = JSON.parse(event.data);
 
     clearTimeout(timer);
+
+    document.getElementById('output').innerText = data.output? data.output: " ";
 
     if (!data.isError) {
         document.getElementById('right').children[data.line].classList.remove('dim');

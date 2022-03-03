@@ -1,4 +1,5 @@
 let ws;
+let debug = 0;
 
 function updateLine(line, data) {
     // console.log(line, data)
@@ -34,6 +35,10 @@ function init() {
 }
 
 function send(ws, data) {
+    if ( debug > 1 ) {
+        console.log("sent:\n", data);
+    }
+
     data = JSON.stringify({
         line: data.hasOwnProperty('line')? data.line: 0,
         code: data.hasOwnProperty('code')? data.code: "",
@@ -41,7 +46,6 @@ function send(ws, data) {
         reset: data.hasOwnProperty('reset')? data.reset: false,
         state: data.hasOwnProperty('state')? data.state: [],
     })
-    console.log(data)
 
     ws.send(data);
 }
@@ -95,7 +99,10 @@ function errorCallback(data) {
 let timer;
 function _onmessage(event) {
     let data = JSON.parse(event.data);
-    // console.log(data)
+
+    if ( debug > 0 ) {
+        console.log("received:\n", data);
+    }
 
     clearTimeout(timer);
     document.getElementById('output').innerText = data.output? data.output: " ";
@@ -118,7 +125,7 @@ function _onmessage(event) {
     }
 
     // console
-    console1(data);
+    console2(data);
 
 }
 
@@ -146,7 +153,7 @@ function console1(data) {
     }
 }
 
-function console2() {
+function console2(data) {
     if (data.console.log) {
         console.log(`${data.line}: ${data.console.log}`)
     }

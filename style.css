@@ -1,3 +1,7 @@
+#inout {
+    visibility: hidden;
+}
+
 @font-face {
     font-family: 'APL';
     src: url('fonts/APL386.ttf');

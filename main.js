@@ -23,8 +23,8 @@ function dim(line) {
 
 function init() {
     lines = [];
-    ws = new WebSocket('ws://54.153.39.161:8004/');
-    // ws = new WebSocket('ws://127.0.0.1:8004');
+    // ws = new WebSocket('ws://54.153.39.161:8004/');
+    ws = new WebSocket('ws://127.0.0.1:8004');
     ws.onopen = function(event) {
         console.log('connected')
     }
@@ -90,10 +90,8 @@ function input(code=true) {
 
 
 function errorCallback(data) {
-    // updateLine(data.line, "?");
-    if (data.err) {
-        console.warn(`${data.line}: ${data.err}`);
-    }
+    updateLine(data.line, "*");
+    console2(data);
 }
 
 let timer;
@@ -124,8 +122,6 @@ function _onmessage(event) {
         document.getElementById('out').innerHTML += data.output;
     }
 
-    // console
-    console2(data);
 
 }
 

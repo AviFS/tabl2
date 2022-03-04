@@ -1,5 +1,9 @@
 import frink.parser.Frink;
+
+import java.io.ByteArrayOutputStream;
 import java.io.Console;
+import java.io.PrintStream;
+
 import org.json.JSONObject;
 
 
@@ -27,20 +31,41 @@ class REPL {
         Console console = System.console();
         String results;
         String input;
+        
+        // ByteArrayOutputStream output;
+        ByteArrayOutputStream error;
+        // PrintStream outputStream;
+        PrintStream errorStream;
+        // PrintStream systemOut = System.out;
+        // PrintStream systemErr = System.err;
         while (true) {
+
+            error = new ByteArrayOutputStream();
+            errorStream = new PrintStream(error);
+            System.setErr(errorStream);
+
             try {
                 input = console.readLine(">>>>>\n");
                 results = interp.parseString(input);
 
+                // json.put("disp", results);
                 json.put("disp", results);
-                System.out.println(json);
+                json.put("isError", false);
+                // System.out.println(json);
             }
             catch (frink.errors.FrinkException err)
             {
                 json.put("isError", true);
-                // System.out.println(err);
+                json.put("disp", "");
+                // System.out.println(json);
                 // Do whatever you want with the exception
             }
+
+            System.err.flush();
+            json.put("error", error.toString());
+
+            System.out.println(json);
+
         }
         
         // System.out.println(results);

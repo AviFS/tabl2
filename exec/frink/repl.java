@@ -3,6 +3,7 @@ import frink.parser.Frink;
 import java.io.ByteArrayOutputStream;
 import java.io.Console;
 import java.io.PrintStream;
+import java.util.Scanner;
 
 import org.json.JSONObject;
 
@@ -21,20 +22,19 @@ class REPL {
     public static void main(String[] args) {
         JSONObject json = new JSONObject();
 
-        System.out.println("3290"); 
         Frink interp = new Frink();
 
         // Enable security here? Currently commented-out.
         // interp.setRestrictiveSecurity(true);
 
-        Console console = System.console();
+        Scanner in = new Scanner(System.in);
         String results;
         String input;
         
         ByteArrayOutputStream error;
         PrintStream errorStream;
 
-        while (true) {
+        while (in.hasNextLine()) {
 
             // Capture stderr into variable `error`
             error = new ByteArrayOutputStream();
@@ -42,7 +42,7 @@ class REPL {
             System.setErr(errorStream);
 
             try {
-                input = console.readLine(">>>>>\n");
+                input = in.nextLine();
                 results = interp.parseString(input);
 
                 json.put("disp", results);
@@ -60,5 +60,6 @@ class REPL {
             System.out.println(json);
 
         }
+        in.close();
     }
 }

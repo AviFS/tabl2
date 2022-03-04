@@ -20,7 +20,6 @@ run:
 class REPL {
     public static void main(String[] args) {
         JSONObject json = new JSONObject();
-        // json.put("a", 235);
 
         System.out.println("3290"); 
         Frink interp = new Frink();
@@ -32,14 +31,12 @@ class REPL {
         String results;
         String input;
         
-        // ByteArrayOutputStream output;
         ByteArrayOutputStream error;
-        // PrintStream outputStream;
         PrintStream errorStream;
-        // PrintStream systemOut = System.out;
-        // PrintStream systemErr = System.err;
+
         while (true) {
 
+            // Capture stderr into variable `error`
             error = new ByteArrayOutputStream();
             errorStream = new PrintStream(error);
             System.setErr(errorStream);
@@ -48,17 +45,13 @@ class REPL {
                 input = console.readLine(">>>>>\n");
                 results = interp.parseString(input);
 
-                // json.put("disp", results);
                 json.put("disp", results);
                 json.put("isError", false);
-                // System.out.println(json);
             }
             catch (frink.errors.FrinkException err)
             {
                 json.put("isError", true);
                 json.put("disp", "");
-                // System.out.println(json);
-                // Do whatever you want with the exception
             }
 
             System.err.flush();
@@ -67,8 +60,5 @@ class REPL {
             System.out.println(json);
 
         }
-        
-        // System.out.println(results);
-
     }
 }

@@ -12,6 +12,7 @@ from vyxal.transpile import transpile
 
 from builtins import print as __print
 from builtins import input as __input
+import builtins
 
 import json
 
@@ -36,7 +37,7 @@ class Data:
         # self.debug_code = ""
         # self.debug_input = ""
         # self.debug_reset = False
-        self.debug = {}
+        self.debug = "23" 
 
         self.inp = []
 
@@ -45,7 +46,12 @@ class Data:
         line, code, inp, reset, state = data['line'], data['code'], data['input'], data['reset'], data['state']
         self.inp = inp.strip().split(' ')
         self.line = int(line) # takes care of leading zeroes
-        self.debug = {"line": line, "code": code, "input": inp, "reset": reset, "state": state}
+        # self.debug = {"line": line, "code": code, "input": inp, "reset": reset, "state": state}
+        # self.debug = json.dumps({"line": line, "code": code, "input": inp, "reset": reset, "state": state})
+        # self.output_print(self.debug)
+        # self.debug = "52"
+        # self.output_print("2323423423")
+        # builtins.print(self.debug)
         return line, code, inp, reset, state
     
     def log(self, msg):
@@ -99,6 +105,42 @@ class Data:
 
 #     return ' '.join(acc)
 
+
+def _vy_print(lhs, end="\n", ctx=None):
+    """Element ,
+    (any) -> send to stdout
+    """
+    ctx.printed = True
+    ts = vy_type(lhs)
+
+    if ts is LazyList:
+        lhs[0].output(end=end, ctx=ctx)
+        _vy_print("23092", end=end, ctx=ctx)
+    elif ts is list:
+        # _vy_print(vy_str(lhs[0:20], ctx=ctx), end, ctx)
+        # print("--<23>--")
+        # lhs[0].output(end=end, ctx=ctx)
+        # print(vy_str(lhs[0], ctx=ctx))
+        # print(lhs[0].output(end=end, ctx=ctx))
+        if vy_type(lhs[0]) is LazyList:
+            print("<lst>")
+        # print(vy_type(lhs[0]))
+    elif ts is types.FunctionType:
+        res = lhs(ctx.stacks[-1], lhs, ctx=ctx)[
+            -1
+        ]  # lgtm[py/call-to-non-callable]
+        _vy_print(res, ctx=ctx)
+    else:
+        if is_sympy(lhs):
+            if ctx.print_decimals:
+                lhs = str(float(lhs)).strip(".0")
+            else:
+                lhs = sympy.nsimplify(lhs.round(20), rational=True)
+        if ctx.online:
+            ctx.online_output[1] += vy_str(lhs, ctx=ctx) + end
+        else:
+            print(lhs, end=end)
+
 def disp_format(out):
     out = out.strip()
     out = out[1:-1] # remove outer brackets
@@ -125,6 +167,10 @@ def repl(disable_json = False, multiline=False):
             data.error("Server: Invalid JSON")
             __print(data.format())
             continue
+        except (EOFError):
+            data.error("Server: EOF")
+            __print(data.format())
+            break
 
         if reset:
             data.isError = True
@@ -144,7 +190,8 @@ def repl(disable_json = False, multiline=False):
     
         data.state = stack
         vyxal.__builtins__["print"] = data.disp_print
-        vy_print(stack, ctx=ctx)
+        _vy_print(stack, ctx=ctx)
+        # __print(data.debug)
         data.disp = disp_format(data.disp)
         vyxal.__builtins__["print"] = data.output_print
         # data.disp = 
@@ -156,5 +203,5 @@ def repl(disable_json = False, multiline=False):
             stack = []
 
 if __name__ == "__main__":
-    repl()
-    # repl(disable_json=True)
+    # repl()
+    repl(disable_json=True, multiline=True)

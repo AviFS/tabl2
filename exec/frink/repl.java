@@ -28,9 +28,13 @@ class REPL {
         // interp.setRestrictiveSecurity(true);
 
         Scanner in = new Scanner(System.in);
-        String results;
+        String results = "";
         String input;
         
+        ByteArrayOutputStream output;
+        PrintStream outputStream;
+        PrintStream systemOut = System.out;
+
         ByteArrayOutputStream error;
         PrintStream errorStream;
 
@@ -41,11 +45,15 @@ class REPL {
             errorStream = new PrintStream(error);
             System.setErr(errorStream);
 
+            // Capture stdout into variable `output`
+            output = new ByteArrayOutputStream();
+            outputStream = new PrintStream(output);
+            // System.setOut(outputStream);
+
             try {
                 input = in.nextLine();
                 results = interp.parseString(input);
 
-                json.put("disp", results);
                 json.put("isError", false);
             }
             catch (frink.errors.FrinkException err)
@@ -55,9 +63,19 @@ class REPL {
             }
 
             System.err.flush();
-            json.put("error", error.toString());
+            System.out.flush();
+            System.setOut(systemOut);
+
+            json.put("disp", results);
+            // System.out.println(error.toString());
+            if (json.get("isError").equals(true)) {
+                System.out.println("lsjkdf");
+                System.out.println(output.toString());
+                // json.put("disp", output.toString());
+            } 
 
             System.out.println(json);
+            // System.out.println(output.toString());
 
         }
         in.close();

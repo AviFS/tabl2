@@ -23,8 +23,8 @@ function dim(line) {
 
 function init() {
     lines = [];
-    // ws = new WebSocket('ws://54.153.39.161:8004/');
-    ws = new WebSocket('ws://127.0.0.1:8004');
+    ws = new WebSocket('ws://54.153.39.161:8005/');
+    // ws = new WebSocket('ws://127.0.0.1:8004');
     ws.onopen = function(event) {
         console.log('connected')
     }

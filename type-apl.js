@@ -57,7 +57,7 @@
 			if (c) { t.value = v.slice(0, i) + c + v.slice(i); t.selectionStart = t.selectionEnd = i + 1; pd(x); return !1 }
 		}
 		if (!x.ctrlKey && !x.shiftKey && !x.altKey && !x.metaKey) {
-			if ("`‘’½²^º§ùµ°".indexOf(x.key) > -1) {
+			if ("`‘!’½²^º§ùµ°".indexOf(x.key) > -1) {
 				bqm = 1; d.body.classList.add('ngn_bq'); pd(x); // ` or other trigger symbol pressed, wait for next key
 			} else if (x.key == "Tab") {
 				let i = t.selectionStart, v = t.value, c = tc[v.slice(i - 2, i)]

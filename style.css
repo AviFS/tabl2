@@ -140,4 +140,19 @@ html, body {
     body, html {
         background-color: hsla(224, 19%, 15%, 1) !important;
     }
+    #box {
+        margin-top: 0px !important;
+        padding-top: 10px !important;
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+    }
+    #inout {
+        margin-left: 10px !important;
+    }
+    #output {
+        margin-top: 0px;
+    }
+    html, body {
+        height: auto !important;
+    }
 }

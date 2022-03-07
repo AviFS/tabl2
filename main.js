@@ -23,8 +23,8 @@ function dim(line) {
 
 function init() {
     lines = [];
-    ws = new WebSocket('ws://54.153.39.161:8005/');
-    // ws = new WebSocket('ws://127.0.0.1:8004');
+    ws = new WebSocket('ws://54.153.39.161:8006/');
+    // ws = new WebSocket('ws://127.0.0.1:8005');
     ws.onopen = function(event) {
         console.log('connected')
     }
@@ -70,7 +70,7 @@ function input(code=true) {
         return;
     }
 
-    send(ws, {reset: true})
+    // send(ws, {reset: true})
 
     let currentLine = getLineNumber();
 
@@ -91,12 +91,26 @@ function input(code=true) {
 
 function errorCallback(data) {
     updateLine(data.line, "*");
-    console2(data);
+    console3(data);
 }
 
 let timer;
+
+// This is a super hacky wrapper function for 'onmessage' because APL's output JSON is being annoying.
+// It works, but it throws tons of JS errors in the console
+// This just runs our usual onmessage function, while hiding the errors
+// The debug value has to be in the double digits to show the errors, because they're that unhelpful 
+// function __onmessage(event) {
+//     try { _onmessage(event); }
+//     catch (error) {
+//         if (debug > 9) {
+//             console.log(error);
+//         }
+//     }
+// }
+
 function _onmessage(event) {
-    let data = JSON.parse(event.data);
+    data = JSON.parse(event.data);
 
     if ( debug > 0 ) {
         console.log("received:\n", data);
@@ -112,8 +126,7 @@ function _onmessage(event) {
     }
     else {
         let errorString = "*"
-        dim(data.line);
-        updateLine(data.line, data.disp)
+        // dim(data.line);
         timer = setTimeout(errorCallback, 1000, data)
     }
 
@@ -161,3 +174,14 @@ function console2(data) {
     }
 }
 
+function console3(data) {
+    if (data.console.log) {
+        console.log(`${data.line+1}: ${data.console.log}`)
+    }
+    if (data.console.warn) {
+        console.warn(`${data.line+1}: ${data.console.warn}`)
+    }
+    if (data.console.error) {
+        console.error(`${data.line+1}: ${data.console.error}`)
+    }
+}

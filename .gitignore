@@ -1,7 +1,7 @@
-backend/node_modules/
-backend/package.json
-backend/package-lock.json
+node_modules/
+.vscode/
+.DS_Store
 
-tst.*
-test/
-old/*
+exec/code.vy
+exec/main.py
+exec/main2.py

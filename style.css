@@ -1,11 +1,70 @@
-body, #left {
-    background-color: rgb(32,36,47);
-    color: rgb(204,202,194);
-    /* font-family: 'Courier New', Courier, monospace */
+@font-face {
+    font-family: 'APL';
+    src: url('fonts/APL386.ttf');
+}
+* {
+    /* font-family: 'APL'; */
+    font-family: Menlo, Consolas, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;
 }
 
+html, body {
+    height: 100%;
+    /* overflow: hidden; */
+}
+
+/* <hide scrollbars> */
+*::-webkit-scrollbar { display: none; }
+* { -ms-overflow-style: none; scrollbar-width: none; }
+/* </hide scrollbars> */
+
+#inout {
+    color: hsl(48, 9%, 79%, .8);
+    position: fixed;
+    /* right: 5px; */
+
+    /* margin-top: px; */
+    margin-left: 15px;
+    width: 100px;
+    /* max-width: 90px; */
+    /* display: flex; */
+
+}
+
+#input, #output {
+    padding: 2px;
+    padding-left: 6px;
+    padding-right: 1px;
+    border: 1px solid hsla(0, 0%, 100%, .4);
+    background-color: hsla(224, 19%, 15%, 1);
+    border-radius: 5px;
+    font-size: 80%;
+}
+
+#output {
+    margin-top: 10px;
+    white-space: pre-wrap;
+    /* white-space: pre; */
+}
+
+#box, #left {
+    /* background-color: rgb(32,36,47); */
+    background-color: hsla(224, 19%, 15%, 1);
+    color: rgb(204,202,194);
+}
+ html {
+     background-color: hsla(224, 19%, 14%, 1);
+ }
+
+#right               { color: hsla(160, 62%, 74%, 1); }
+/* #output               { color: hsla(160, 62%, 74%, 1); } */
+#left                { color: hsla(200, 100%, 73%, 1); }
+/* #input                { color: hsla(200, 100%, 73%, 1); } */
+
+#right>.row.dim {
+    color: hsla(160, 62%, 74%, .9);
+}
 /* Make right side show new lines between divs, even when a div is empty */
-.row::after {
+#right>.row::after {
     content: "\A";
     white-space: pre;
 }
@@ -20,7 +79,9 @@ body, #left {
 }
 
 #left, #right {
-    font-family: monospace;
+    /* font-family: monospace; */
+    /* font-size: 15px; */
+    /* font-size: 22.5px; */
     font-size: 15px;
     line-height: 180%;
     padding: 0px;
@@ -34,13 +95,25 @@ body, #left {
 }
 
 #box {
-    border: 1px solid white;
-    border-radius: 5px;
+    border: 1px solid hsla(0, 0%, 100%, .4);
+    border-bottom: 0px;
+    border-radius: 5px 5px 0px 0px;
     display:flex;
-    padding: 1em;
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-top: 1em;
+    /* padding-top: .8em; */
     max-width: 55em;
-    min-height: 40em;
+    /* min-height: 60em; */
+    min-height: 100%;
     margin: auto;
+    margin-top: 20px;
+
+    /* box-shadow: 3px 4px hsla(224, 19%, 13%, 1); */
+}
+
+#box, #left, #right {
+    /* background-color: hsla(224, 25%, 16%, 1); */
 }
 
 #left {
@@ -51,3 +124,4 @@ body, #left {
 #right {
     flex: 1;
 }
+

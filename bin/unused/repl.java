@@ -1,3 +1,4 @@
+package unused;
 // Your First Program
 import frink.parser.Frink;
 

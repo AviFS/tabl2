@@ -77,11 +77,10 @@ function input(code=true) {
     // send(ws, {reset: true})
 
     let currentLine = getLineNumber();
+    let lineNums = whichLines(currentLine);
+    console.log(currentLine, lineNums)
 
-    // until we have a better solution
-    if (currentLine != 0) { currentLine--; }
-
-    for (let i=0; i<children.length; i++) {
+    for (const i of lineNums) {
         let code = getLine(i);
         if (code == "" || code[0] == '#') {
             children[i].innerHTML = "";
@@ -90,6 +89,31 @@ function input(code=true) {
         let data = { line: i, code: code, input: input, reset: false, state: [] };
         send(ws, data)
     }
+}
+
+// this is lang-specific
+// this one is for apl
+// it's not very smart, but a huge improvement
+function whichLines(line) {
+    function range (a,b) { return Array.from({length:b-a},(_,i)=>i+a); }
+    function runAll(code) { return code.includes("←←"); }
+    function hasAssignment(code) { return code.includes("←") || code.includes("⎕EX"); }
+    // That second check is just for Adám. Did I get that right?
+
+    let children = document.getElementById('right').children;
+    let code = getLine(line);
+    if (runAll(code)) {
+        return range(0, children.length);
+    }
+    if (hasAssignment(code)) {
+        let before = range(0, line).filter(function(i) {
+            return hasAssignment(getLine(i));
+        });
+        let after = range(line+1, children.length);
+        return [].concat(before, [line], after);
+    }
+    return [line];
+
 }
 
 

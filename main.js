@@ -23,8 +23,12 @@ function dim(line) {
 
 function init() {
     lines = [];
-    ws = new WebSocket('ws://54.153.39.161:8006/');
-    // ws = new WebSocket('ws://127.0.0.1:8005');
+    setWebSocket('ws://54.153.39.161:8006/');
+    // setWebSocket('ws://127.0.0.1:8005');
+}
+
+function setWebSocket(address) {
+    ws = new WebSocket(address);
     ws.onopen = function(event) {
         console.log('connected')
     }
@@ -136,6 +140,12 @@ function _onmessage(event) {
     }
 
 
+}
+
+function setHost({address, port}={}) {
+    if (address == undefined) { address = "127.0.0.1"; }
+    if (port == undefined) { port = 8008; }
+    setWebSocket(`ws://${address}:${port}`);
 }
 
 ////////////////////////////////

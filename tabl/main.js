@@ -23,8 +23,9 @@ function dim(line) {
 
 function init() {
     lines = [];
-    setWebSocket('ws://54.153.39.161:8006/');
-    // setWebSocket('ws://127.0.0.1:8005');
+    // setWebSocket('ws://54.153.39.161:8006/');
+    setWebSocket('ws://127.0.0.1:8005');
+    setWebSocket('ws://127.0.0.1:8002');
 }
 
 function setWebSocket(address) {
@@ -39,7 +40,7 @@ function setWebSocket(address) {
 }
 
 function send(ws, data) {
-    if ( debug > 1 ) {
+    if ( debug > 2 ) {
         console.log("sent:\n", data);
     }
 
@@ -78,7 +79,9 @@ function input(code=true) {
 
     let currentLine = getLineNumber();
     let lineNums = whichLines(currentLine);
-    console.log(currentLine, lineNums)
+    if (debug > 0) {
+        console.log(`running lines:\n`, lineNums)
+    }
 
     for (const i of lineNums) {
         let code = getLine(i);
@@ -102,6 +105,9 @@ function whichLines(line) {
 
     let children = document.getElementById('right').children;
     let code = getLine(line);
+
+    return range(0, children.length);
+
     if (runAll(code)) {
         return range(0, children.length);
     }
@@ -140,7 +146,7 @@ let timer;
 function _onmessage(event) {
     data = JSON.parse(event.data);
 
-    if ( debug > 0 ) {
+    if ( debug > 1 ) {
         console.log("received:\n", data);
     }
 

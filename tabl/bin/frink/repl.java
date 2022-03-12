@@ -30,7 +30,7 @@ class REPL {
         // interp.setRestrictiveSecurity(true);
 
         Scanner in = new Scanner(System.in);
-        String results = "";
+        String returned;
         String input;
         
         ByteArrayOutputStream output;
@@ -63,35 +63,67 @@ class REPL {
             inputJSON = new JSONObject(input);
 
             try {
-                results = interp.parseString(inputJSON.getString("code"));
+                returned = interp.parseString(inputJSON.getString("code"));
             }
             catch (frink.errors.FrinkException err)
             {
+                returned = "";
             }
 
             System.err.flush();
             System.out.flush();
             System.setOut(systemOut);
 
-            System.out.println(process(inputJSON, results));
+            System.out.println(process(inputJSON, returned, output.toString(), error.toString()));
+
+            // System.out.println("---");
+            // System.out.println("returned: "+returned);
+            // System.out.println("output: "+output);
+            // System.out.println("error: "+error);
         }
         in.close();
     }
 
-    static JSONObject process(JSONObject inputJSON, String output) {
+    // should at least remove all lines starting with "at" to get rid of the stacktraces
+    static String trimError(String errorString) { return errorString; }
+
+    static JSONObject process(JSONObject inputJSON, String returned, String output, String error) {
         JSONObject outputJSON = new JSONObject();
         JSONObject console = new JSONObject();
-        if (output.contains("(undefined symbol)")) {
+
+        // this is hacky, but so is frink's error handling
+        // sometimes they show up in `returned`, sometimes they show up in `output`, and sometimes they show up in `error`
+        // error isn't perfect either because warnings, like undefined names, don't get printed there
+        // plus the error is super long due to the stack trace
+
+        // checking (returned+output) isn't enough
+        // checking (error) isn't enough
+        // checking (returned+error) may be enough, though
+
+        if (returned.contains("(undefined symbol)")) {
             outputJSON.put("isError", true);
-            console.put("warn", output);
+            console.put("warn", returned);
         }
-        else if (output.contains("error")) {
+        // unfortunately, we have to check "error" & "Error"
+        // neither one is enough alone
+        // this is a hacky way of checking both
+
+        else if (returned.contains("rror") || output.contains("rror") || error.contains("rror")) {
             outputJSON.put("isError", true);
-            console.put("error", output);
+            String errorString = "";
+            if (returned.contains("rror")) { errorString += returned; }
+            if (output.contains("rror")) { errorString += output; }
+            if (error.contains("rror")) { errorString += error; }
+
+            console.put("error", trimError(errorString));
+
+            // Not sending back the error text until trimError() is decent
+            // The errors are super long to be sending back otherwise
+            console.put("error", "Error");
         }
         else {
             outputJSON.put("isError", false);
-            outputJSON.put("disp", output);
+            outputJSON.put("disp", returned);
         }
         outputJSON.put("console", console);
         outputJSON.put("line", inputJSON.get("line"));

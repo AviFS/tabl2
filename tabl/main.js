@@ -25,6 +25,9 @@ function init() {
     lines = [];
     // setWebSocket('ws://54.153.39.161:8006/');
     setWebSocket('ws://127.0.0.1:8002');
+
+    // temp fix; can be removed later
+    document.getElementById('right').innerHTML += "<div class='row'></div>";
 }
 
 function initFrink() {

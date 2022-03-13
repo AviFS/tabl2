@@ -25,6 +25,13 @@ import javax.print.event.PrintJobListener;
 
 import org.json.JSONObject;
 
+/* Run with:
+
+javac -cp "websocket.jar:frink.jar:json.jar" FrinkServer.java
+java -cp "websocket.jar:frink.jar:json.jar" FrinkServer.java
+
+*/
+
 public class FrinkServer extends WebSocketServer {
 
     Frink interp;

@@ -24,14 +24,25 @@ function dim(line) {
 function init() {
     lines = [];
     // setWebSocket('ws://54.153.39.161:8006/');
-    setWebSocket('ws://127.0.0.1:8005');
     setWebSocket('ws://127.0.0.1:8002');
 }
+
+function initFrink() {
+    [
+        // "showApproximations[false]",
+        "rationalAsFloat[true]",
+        "setPrecision[10]",
+        "showDimensionName[false]",
+    ].forEach(code => send(ws, {"code": code}));
+    // More efficient if .join(";") and send it in one JSON
+}
+
 
 function setWebSocket(address) {
     ws = new WebSocket(address);
     ws.onopen = function(event) {
         console.log('connected')
+        initFrink();
     }
     ws.onclose = function(event) {
         console.log('close')

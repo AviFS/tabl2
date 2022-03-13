@@ -14,8 +14,10 @@ import org.java_websocket.server.WebSocketServer;
 
 public class FrinkServer extends WebSocketServer {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws UnknownHostException {
         System.out.println(324);
+        FrinkServer frinkServer = new FrinkServer(8886);
+        frinkServer.start();
     }
 
   public FrinkServer(int port) throws UnknownHostException {

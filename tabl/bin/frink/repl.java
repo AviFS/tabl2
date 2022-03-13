@@ -21,7 +21,8 @@ run:
     java -cp "json.jar:frink.jar" repl.java
 */
 
-class REPL {
+public class REPL {
+    public static int f(int n) { return 3*n; }
     public static void main(String[] args) {
 
         Frink interp = new Frink();
@@ -47,6 +48,7 @@ class REPL {
         } catch (FrinkEvaluationException e) {
         }
 
+        System.out.println("Started up.");
         while (in.hasNextLine()) {
 
             // Capture stderr and ignore it

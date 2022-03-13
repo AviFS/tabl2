@@ -40,6 +40,11 @@ function initFrink() {
     // More efficient if .join(";") and send it in one JSON
 }
 
+// convenience function to use in browser console
+function sendCode(code) {
+    send(ws, {"code": code});
+}
+
 
 function setWebSocket(address) {
     ws = new WebSocket(address);

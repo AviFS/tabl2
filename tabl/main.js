@@ -21,10 +21,27 @@ function dim(line) {
     document.getElementById('right').children[line].classList.add('dim');
 }
 
+function setDefaultLang() {
+    defaultLang = "apl";
+    console.log(`Setting lang to ${defaultLang} by default.`);
+    return defaultLang;
+}
+
 function init() {
     lines = [];
     // setWebSocket('ws://54.153.39.161:8006/');
     setWebSocket('ws://127.0.0.1:8002');
+
+    let langID = window.location.hash.substring(1);
+    let opts = {
+        "frink": "frinkk",
+        "apl": "apll",
+    }
+    console.log(opts[langID])
+    let lang = opts[langID] || opts[setDefaultLang()];
+    console.log(lang);
+
+    
 
     // temp fix; can be removed later
     document.getElementById('right').innerHTML += "<div class='row'></div>";

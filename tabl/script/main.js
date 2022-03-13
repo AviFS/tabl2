@@ -1,4 +1,5 @@
 let ws;
+let lang;
 let debug = 0;
 
 function updateLine(line, data) {
@@ -30,15 +31,15 @@ function setDefaultLang() {
 function init() {
     lines = [];
     // setWebSocket('ws://54.153.39.161:8006/');
-    setWebSocket('ws://127.0.0.1:8002');
+    setWebSocket('ws://127.0.0.1:8008');
 
     let langID = window.location.hash.substring(1);
     let opts = {
-        "frink": "frinkk",
-        "apl": "apll",
+        "frink": Frink,
+        "apl": APL,
     }
     console.log(opts[langID])
-    let lang = opts[langID] || opts[setDefaultLang()];
+    lang = opts[langID] || opts[setDefaultLang()];
     console.log(lang);
 
     
@@ -47,15 +48,6 @@ function init() {
     document.getElementById('right').innerHTML += "<div class='row'></div>";
 }
 
-function initFrink() {
-    [
-        // "showApproximations[false]",
-        "rationalAsFloat[true]",
-        "setPrecision[10]",
-        "showDimensionName[false]",
-    ].forEach(code => send(ws, {"code": code}));
-    // More efficient if .join(";") and send it in one JSON
-}
 
 // convenience function to use in browser console
 function sendCode(code) {
@@ -67,7 +59,7 @@ function setWebSocket(address) {
     ws = new WebSocket(address);
     ws.onopen = function(event) {
         console.log('connected')
-        initFrink();
+        lang.init();
     }
     ws.onclose = function(event) {
         console.log('close')
@@ -80,13 +72,7 @@ function send(ws, data) {
         console.log("sent:\n", data);
     }
 
-    data = JSON.stringify({
-        line: data.hasOwnProperty('line')? data.line: 0,
-        code: data.hasOwnProperty('code')? data.code: "",
-        input: data.hasOwnProperty('input')? data.input: "",
-        reset: data.hasOwnProperty('reset')? data.reset: false,
-        state: data.hasOwnProperty('state')? data.state: [],
-    })
+    data = JSON.stringify(lang.formatJSON(data));
 
     ws.send(data);
 }
@@ -114,7 +100,7 @@ function input(code=true) {
     // send(ws, {reset: true})
 
     let currentLine = getLineNumber();
-    let lineNums = whichLines(currentLine);
+    let lineNums = lang.whichLines(currentLine);
     if (debug > 0) {
         console.log(`running lines:\n`, lineNums)
     }
@@ -128,34 +114,6 @@ function input(code=true) {
         let data = { line: i, code: code, input: input, reset: false, state: [] };
         send(ws, data)
     }
-}
-
-// this is lang-specific
-// this one is for apl
-// it's not very smart, but a huge improvement
-function whichLines(line) {
-    function range (a,b) { return Array.from({length:b-a},(_,i)=>i+a); }
-    function runAll(code) { return code.includes("←←"); }
-    function hasAssignment(code) { return code.includes("←") || code.includes("⎕EX"); }
-    // That second check is just for Adám. Did I get that right?
-
-    let children = document.getElementById('right').children;
-    let code = getLine(line);
-
-    return range(0, children.length);
-
-    if (runAll(code)) {
-        return range(0, children.length);
-    }
-    if (hasAssignment(code)) {
-        let before = range(0, line).filter(function(i) {
-            return hasAssignment(getLine(i));
-        });
-        let after = range(line+1, children.length);
-        return [].concat(before, [line], after);
-    }
-    return [line];
-
 }
 
 

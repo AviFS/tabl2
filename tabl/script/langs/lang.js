@@ -1,5 +1,9 @@
 class Lang {
 
+    static getAddress(localhost) {
+        console.error("getAddress() must be overwritten.")
+    }
+    
     static foo() {
         return 9991;
     }

@@ -7,6 +7,13 @@ class APL extends Lang {
         return 2;
     }
 
+    static getAddress(localhost) {
+        if (localhost) {
+            return 'ws://127.0.0.1:8008';
+        }
+        return 'ws://54.153.39.161:8006/';
+    }
+
 
     // it's still not very smart, but a huge improvement
     static whichLines(line) {

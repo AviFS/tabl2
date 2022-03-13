@@ -42,6 +42,8 @@ function init() {
     lang = opts[langID] || opts[setDefaultLang()];
     console.log(lang);
 
+    let localhost = false;
+    setWebSocket(lang.getAddress(localhost))
     
 
     // temp fix; can be removed later

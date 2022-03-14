@@ -8,6 +8,10 @@ class Lang {
         return 9991;
     }
 
+    static isIgnore(code) {
+        return code.trim() == "" || code[0] == '#';
+    }
+
     static whichLines(lines) {
         // return lines;
         function range (a,b) { return Array.from({length:b-a},(_,i)=>i+a); }

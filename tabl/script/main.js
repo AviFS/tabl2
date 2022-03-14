@@ -117,12 +117,13 @@ function input(code=true) {
     let lineNums = lang.whichLines(changedLines);
     // let lineNums = changedLines;
     if (debug > 0) {
-        console.log(`running lines:\n`, lineNums)
+        // console.log(`runningLines\n`, lineNums)
+        console.log(`running lines:\n`, lineNums.filter(x => !lang.isIgnore(getLine(x))));
     }
 
     for (const i of lineNums) {
         let code = getLine(i);
-        if (code == "" || code[0] == '#') {
+        if (lang.isIgnore(code)) {
             children[i].innerHTML = "";
             continue;
         }

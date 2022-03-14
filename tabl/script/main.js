@@ -97,7 +97,8 @@ function input(code=true) {
 
     // if we're on a new line, add a new div
     if (document.getElementById('right').children.length < lines.length) {
-        document.getElementById('right').innerHTML += "<div class='row'></div>";
+        let missing = lines.length - document.getElementById('right').children.length;
+        document.getElementById('right').innerHTML += "<div class='row'></div>".repeat(missing);
     }
 
     let children = document.getElementById('right').children;

@@ -23,8 +23,6 @@ class APL extends Lang {
         // That second check is just for Adám. Did I get that right?
     
         let children = document.getElementById('right').children;
-        // let code = getLine(line);
-    
     
         let accLines = [];
         for (let i=0; i<lines.length; i++) {
@@ -51,19 +49,6 @@ class APL extends Lang {
             accLines.push(line);
         }
         return lines;
-
-        if (runAll(code)) {
-            return range(0, children.length);
-        }
-        if (hasAssignment(code)) {
-            let before = range(0, line).filter(function(i) {
-                return hasAssignment(getLine(i));
-            });
-            let after = range(line+1, children.length);
-            return [].concat(before, [line], after);
-        }
-        return [line];
-
     }
 
 }

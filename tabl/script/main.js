@@ -91,7 +91,7 @@ function input(code=true) {
     linesUpdate()
     let changedLines = diffLines(prev, lines)
 
-    if (debug > 0) {
+    if (debug == 0.5 || debug == 1.5) {
         console.log("changedLines:\n", changedLines);
     }
 
@@ -118,7 +118,8 @@ function input(code=true) {
     // let lineNums = changedLines;
     if (debug > 0) {
         // console.log(`runningLines\n`, lineNums)
-        console.log(`running lines:\n`, lineNums.filter(x => !lang.isIgnore(getLine(x))));
+        let running = lineNums.filter(x => !lang.isIgnore(getLine(x)));
+        console.log(`running lines:\n`, running);
     }
 
     for (const i of lineNums) {

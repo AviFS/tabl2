@@ -38,9 +38,7 @@ function init() {
         "frink": Frink,
         "apl": APL,
     }
-    console.log(opts[langID])
     lang = opts[langID] || opts[setDefaultLang()];
-    console.log(lang);
 
     let localhost = false;
     setWebSocket(lang.getAddress(localhost))
@@ -79,9 +77,24 @@ function send(ws, data) {
     ws.send(data);
 }
 
+function diffLines(prev, curr) {
+    function range (a,b) { return Array.from({length:b-a},(_,i)=>i+a); }
+    return range(0, Math.max(prev.length, curr.length)).filter(function (ind) {
+        let prevInd = prev[ind]? prev[ind]: "";
+        let currInd = curr[ind]? curr[ind]: "";
+        return prevInd != currInd;
+    });
+}
 
 function input(code=true) {
+    let prev = lines;
     linesUpdate()
+    let changedLines = diffLines(prev, lines)
+
+    if (debug > 0) {
+        console.log("changedLines:\n", changedLines);
+    }
+
     // if we're on a new line, add a new div
     if (document.getElementById('right').children.length < lines.length) {
         document.getElementById('right').innerHTML += "<div class='row'></div>";
@@ -101,8 +114,8 @@ function input(code=true) {
 
     // send(ws, {reset: true})
 
-    let currentLine = getLineNumber();
-    let lineNums = lang.whichLines(currentLine);
+    // let lineNums = lang.whichLines(changedLines);
+    let lineNums = changedLines;
     if (debug > 0) {
         console.log(`running lines:\n`, lineNums)
     }

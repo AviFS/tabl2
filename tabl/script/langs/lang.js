@@ -8,7 +8,8 @@ class Lang {
         return 9991;
     }
 
-    static whichLines(line) {
+    static whichLines(lines) {
+        // return lines;
         function range (a,b) { return Array.from({length:b-a},(_,i)=>i+a); }
         let children = document.getElementById('right').children;
         return range(0, children.length);

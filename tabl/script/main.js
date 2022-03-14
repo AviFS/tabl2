@@ -114,8 +114,8 @@ function input(code=true) {
 
     // send(ws, {reset: true})
 
-    // let lineNums = lang.whichLines(changedLines);
-    let lineNums = changedLines;
+    let lineNums = lang.whichLines(changedLines);
+    // let lineNums = changedLines;
     if (debug > 0) {
         console.log(`running lines:\n`, lineNums)
     }

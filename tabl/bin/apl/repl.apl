@@ -1,6 +1,6 @@
 trim←{⍵/⍨(∨\∧∘⌽∨\∘⌽)' '≠⍵}
 flatten←{⍕↓⍣{2>⍴⍴⍵}⍵}
-eval←{⍕ trim flatten ⍎⍵}
+eval←{⍕ trim ⍎⍵}
 
 outjson←'{"line": 0, "disp": "", "isError": false, "console": {}}'
 

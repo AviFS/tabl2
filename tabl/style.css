@@ -1,4 +1,26 @@
 
+#permalink {
+
+    float:right;
+    margin-right: 6px;
+    margin-top: -9px;
+    background-color: hsla(224, 19%, 18%, 1);
+    fill: hsla(0, 0%, 100%, .4);
+    padding-top: 5px;
+    border: 1px solid hsla(0, 0%, 90%, .1);
+    /* border: none; */
+    border-radius: 4px;
+}
+
+#permalink:hover {
+    background-color: hsla(224, 19%, 17%, 1);
+    fill: hsla(0, 0%, 80%, .4);
+}
+
+#permalink:active {
+    fill: hsla(0, 0%, 100%, .4);
+}
+
 #inout {
     visibility: hidden;
 }
@@ -133,7 +155,10 @@ html, body {
 }
 
 
-@media (max-width:600px) { 
+@media (max-width:1000px) { 
+    #permalink {
+        margin-top: 10px;
+    }
     #box {
         border: none !important;
     }

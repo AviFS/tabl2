@@ -3,6 +3,9 @@ let lang;
 let debug = 0;
 let url;
 
+let defaultLang = "apl";
+let opts;
+
 function updateLine(line, data) {
     // console.log(line, data)
     document.getElementById('right').children[line].innerHTML = data;
@@ -24,7 +27,6 @@ function dim(line) {
 }
 
 function setDefaultLang() {
-    defaultLang = "apl";
     console.log(`Setting lang to ${defaultLang} by default.`);
     return defaultLang;
 }
@@ -35,11 +37,13 @@ function init() {
     // setWebSocket('ws://127.0.0.1:8008');
 
     url = parseURL();
-    let opts = {
+    console.log(defaultLang)
+    opts = {
         "frink": Frink,
         "apl": APL,
     }
-    lang = opts[url.langID] || opts[setDefaultLang()];
+    if (!opts.hasOwnProperty(url.langID)) { url.langID = setDefaultLang(); }
+    lang = opts[url.langID];
 
     let localhost = false;
 
@@ -49,6 +53,19 @@ function init() {
     document.getElementById('left').value = parseTIOLink(url.permalink).code;
 
     setWebSocket(lang.getAddress(localhost))
+}
+
+function generatePermalink() {
+
+    
+    // this trimming will be a nasty bug if i add an esolang lang like whitespace
+    if (document.getElementById('left').value.trim() == "") {
+        window.location.href = `#${url.langID}`;
+    }
+    else {
+        let permalink = TIO.makeLink("qqq", "", document.getElementById('left').value).substring(18);
+        window.location.href = `#${url.langID}##${permalink}`;
+    }
 }
 
 function parseTIOLink(link) {

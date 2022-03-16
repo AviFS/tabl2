@@ -158,6 +158,11 @@ html, body {
 @media (max-width:1000px) { 
     #permalink {
         margin-top: 10px;
+
+        /* hide it for now */
+        visibility: hidden;
+        position: absolute;
+        /* end hide */
     }
     #box {
         border: none !important;

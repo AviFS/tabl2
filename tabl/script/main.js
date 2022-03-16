@@ -32,7 +32,7 @@ function setDefaultLang() {
 function init() {
     lines = [];
     // setWebSocket('ws://54.153.39.161:8006/');
-    setWebSocket('ws://127.0.0.1:8008');
+    // setWebSocket('ws://127.0.0.1:8008');
 
     url = parseURL();
     let opts = {
@@ -42,11 +42,13 @@ function init() {
     lang = opts[url.langID] || opts[setDefaultLang()];
 
     let localhost = false;
-    setWebSocket(lang.getAddress(localhost))
-    
 
     // temp fix; can be removed later
     document.getElementById('right').innerHTML += "<div class='row'></div>";
+
+    document.getElementById('left').value = TIO.parseLink(url.permalink).code;
+
+    setWebSocket(lang.getAddress(localhost))
 }
 
 function parseURL() {
@@ -72,6 +74,7 @@ function setWebSocket(address) {
     ws.onopen = function(event) {
         console.log('connected')
         lang.init();
+        input(code=true);
     }
     ws.onclose = function(event) {
         console.log('close')

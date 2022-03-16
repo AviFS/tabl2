@@ -155,7 +155,7 @@ html, body {
 }
 
 
-@media (max-width:1000px) { 
+@media (max-width: 1000px) {
     #permalink {
         margin-top: 10px;
 
@@ -164,6 +164,9 @@ html, body {
         position: absolute;
         /* end hide */
     }
+}
+
+@media (max-width:600px) { 
     #box {
         border: none !important;
     }

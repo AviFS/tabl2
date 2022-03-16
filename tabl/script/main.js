@@ -46,9 +46,18 @@ function init() {
     // temp fix; can be removed later
     document.getElementById('right').innerHTML += "<div class='row'></div>";
 
-    document.getElementById('left').value = TIO.parseLink(url.permalink).code;
+    document.getElementById('left').value = parseTIOLink(url.permalink).code;
 
     setWebSocket(lang.getAddress(localhost))
+}
+
+function parseTIOLink(link) {
+    try {
+        return TIO.parseLink(url.permalink);
+    }
+    catch {
+        return {"languageId":"","header":"","code":"","footer":"","input":"","args":[],"options":[]}
+    }
 }
 
 function parseURL() {

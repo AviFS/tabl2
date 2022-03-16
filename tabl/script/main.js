@@ -1,6 +1,7 @@
 let ws;
 let lang;
 let debug = 0;
+let url;
 
 function updateLine(line, data) {
     // console.log(line, data)
@@ -33,12 +34,12 @@ function init() {
     // setWebSocket('ws://54.153.39.161:8006/');
     setWebSocket('ws://127.0.0.1:8008');
 
-    let langID = window.location.hash.substring(1);
+    url = parseURL();
     let opts = {
         "frink": Frink,
         "apl": APL,
     }
-    lang = opts[langID] || opts[setDefaultLang()];
+    lang = opts[url.langID] || opts[setDefaultLang()];
 
     let localhost = false;
     setWebSocket(lang.getAddress(localhost))
@@ -48,6 +49,17 @@ function init() {
     document.getElementById('right').innerHTML += "<div class='row'></div>";
 }
 
+function parseURL() {
+    let hash = window.location.hash.substring(1);
+    if (hash[0] == '#') {
+        return {"langID": "", "permalink": hash.substring(1)};
+    }
+    if (hash.includes('##')) {
+        let i = hash.indexOf('##');
+        return {"langID": hash.substring(0,i), "permalink": hash.substring(i+2)};
+    }
+    return {"langID": hash, "permalink": ""};
+}
 
 // convenience function to use in browser console
 function sendCode(code) {

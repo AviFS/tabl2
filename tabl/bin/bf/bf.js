@@ -1,4 +1,29 @@
+const { inherits } = require('util');
+
+let n = 5;
+
+function pprint(tape, tapeIndex) {
+    // return tape.slice(0, n).join(' ')
+    let acc = "";
+    for (let i = 0; i<n; i++) {
+        if (tape[i] == 0 ) {
+            acc += "_".padStart(3, ' ');
+        }
+        else {
+            acc += String(tape[i]).padStart(3, ' ');
+        }
+        acc += i==tapeIndex? "* ": "  ";
+    }
+    acc += "\n";
+    return acc;
+}
+
+
+
 let bf = (code, input = '') => {
+    function init() {
+        tape = new Array(n).fill(0), tapeIndex = 0, tapeLimit = Infinity, cellLimit = 256, output = '';
+    }
     code = [...code];
     let start_indices = [];
     for (let i = 0; i < code.length; i++) {
@@ -7,7 +32,8 @@ let bf = (code, input = '') => {
     }
     code = code.filter((char, i) => !start_indices.includes(i))
 
-    var tape = [0], tapeIndex = 0, tapeLimit = Infinity, cellLimit = 256, output = '';
+    var tape, tapeIndex, tapeLimit, cellLimit, output;
+    init();
   input = [...input];
   let codeTable = {
       '+': 'tape[tapeIndex] = (tape[tapeIndex] + 1) % cellLimit',
@@ -18,6 +44,7 @@ let bf = (code, input = '') => {
       ']': '}',
       '.': 'output += String.fromCharCode(tape[tapeIndex])',
       ',': 'tape[tapeIndex] = input.shift().charCodeAt()',
+      '#': 'output += pprint(tape, tapeIndex)',
   }
   let transpiled = '';
   for(let char of code){
@@ -26,5 +53,28 @@ let bf = (code, input = '') => {
       }
   }
   eval(transpiled);
+  output += pprint(tape, tapeIndex);
     return output;
 }
+
+
+function main() {
+
+    const readline = require('readline').createInterface({
+        input: process.stdin,
+        output: process.stdout
+    })
+
+    var repl = function() {
+    readline.question("", function(answer) {
+        console.log(bf(answer));
+        repl();
+    });
+    }
+
+    repl();
+}
+
+main();
+
+// console.log(bf("++>+"))

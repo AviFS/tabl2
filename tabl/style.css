@@ -100,6 +100,7 @@ html, body {
 
 #right {
     text-align: right;
+    white-space: pre;
 }
 
 #left {

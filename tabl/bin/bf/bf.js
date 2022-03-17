@@ -1,4 +1,4 @@
-const { inherits } = require('util');
+// const { inherits } = require('util');
 
 let n = 5;
 
@@ -21,9 +21,6 @@ function pprint(tape, tapeIndex) {
 
 
 let bf = (code, input = '') => {
-    function init() {
-        tape = new Array(n).fill(0), tapeIndex = 0, tapeLimit = Infinity, cellLimit = 256, output = '';
-    }
     code = [...code];
     let start_indices = [];
     for (let i = 0; i < code.length; i++) {
@@ -32,8 +29,7 @@ let bf = (code, input = '') => {
     }
     code = code.filter((char, i) => !start_indices.includes(i))
 
-    var tape, tapeIndex, tapeLimit, cellLimit, output;
-    init();
+    let tape = new Array(n).fill(0), tapeIndex = 0, tapeLimit = Infinity, cellLimit = 256, output = "", disp = "";
   input = [...input];
   let codeTable = {
       '+': 'tape[tapeIndex] = (tape[tapeIndex] + 1) % cellLimit',
@@ -44,7 +40,8 @@ let bf = (code, input = '') => {
       ']': '}',
       '.': 'output += String.fromCharCode(tape[tapeIndex])',
       ',': 'tape[tapeIndex] = input.shift().charCodeAt()',
-      '#': 'output += pprint(tape, tapeIndex)',
+      '`': 'disp += pprint(tape, tapeIndex)',
+      '~': 'disp += "\\n"',
   }
   let transpiled = '';
   for(let char of code){
@@ -53,8 +50,7 @@ let bf = (code, input = '') => {
       }
   }
   eval(transpiled);
-  output += pprint(tape, tapeIndex);
-    return output;
+    return {"disp": disp, "output": output};
 }
 
 
@@ -75,6 +71,6 @@ function main() {
     repl();
 }
 
-main();
+// main();
 
 // console.log(bf("++>+"))

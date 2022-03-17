@@ -3,7 +3,7 @@ let lang;
 let debug = 0;
 let url;
 
-let defaultLang = "apl";
+let defaultLang = "bf";
 let opts;
 
 function updateLine(line, data) {
@@ -41,6 +41,7 @@ function init() {
     opts = {
         "frink": Frink,
         "apl": APL,
+        "bf": Brainfuck,
     }
     if (!opts.hasOwnProperty(url.langID)) { url.langID = setDefaultLang(); }
     lang = opts[url.langID];
@@ -55,7 +56,9 @@ function init() {
     document.getElementById('input').addEventListener('input', x => lang.input(code=false));
     document.getElementById('left').addEventListener('input', x => lang.input(code=true));
 
-    setWebSocket(lang.getAddress(localhost))
+    if (lang.getAddress(localhost) != false) {
+        setWebSocket(lang.getAddress(localhost))
+    }
 }
 
 function generatePermalink() {

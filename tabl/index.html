@@ -12,6 +12,8 @@
     <script src="script/langs/frink.js"></script>
     <script src="script/langs/apl.js"></script>
 
+    <script src="bin/bf/bf.js"></script>
+
     <!-- tio-api -->
     <script src="script/tio-api/min-tioapi.js"></script>
     <script src="script/tio-api/min-pako.js"></script>
@@ -31,7 +33,7 @@
 
     <!-- <script src="https://abrudz.github.io/lb/lb.js"></script> -->
    <div id="inout">
-       <div id='input' contenteditable="true" oninput="input(code=false)"></div>
+       <div id='input' contenteditable="true"></div>
        <div id='output'> </div>
    </div>
 
@@ -42,7 +44,7 @@
        <!-- contenteditable div is preferable, but it has very weird behavior with making new lines and adding <br> and <div></div> nodes inconsistently nested
        contenteditable div fixes the scrolling issue when you get to the bottom, instead growing dynamically
        however i'd have to rewrite getLineNumber() and getLine() which i wasn't able to do because of it's weird behavior -->
-       <textarea id='left' class="child" oninput="input(code=true)"></textarea>
+       <textarea id='left' class="child"></textarea>
        <div id='right' class="child"></div>
    </div>
 </body>

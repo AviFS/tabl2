@@ -6,10 +6,22 @@ class Brainfuck extends Lang {
 
     static input(code = true) {
         let program = document.getElementById('left').value;
+        let lines = document.getElementById('left').value.split('\n');
         
         let res = runLines(program);
         console.log(res.disp)
-        document.getElementById('right').innerHTML = res.disp.map(x => x[0]).join('');
+
+        let display = ""
+        for (let i=0; i<lines.length; i++) {
+            if (!lang.isIgnore(lines[i])) {
+                display += res.disp[i][0];
+            }
+            else {
+                display += "\n";
+            }
+        }
+
+        document.getElementById('right').innerHTML = display;
         document.getElementById('output').innerHTML = res.output;
 
         // let program = ""

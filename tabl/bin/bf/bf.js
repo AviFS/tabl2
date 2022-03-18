@@ -6,6 +6,16 @@ class RunBF {
     static padding = 4;
     static MAX_ITER = 512;
 
+    static dispMore(items = 7) {
+        RunBF.padding = 3;
+        RunBF.n = items;
+    }
+
+    static dispReset(items = 5) {
+        RunBF.padding = 4;
+        RunBF.n = items;
+    }
+
     static pprint(tape, tapeIndex) {
         // return tape.slice(0, n).join(' ')
         let acc = "";

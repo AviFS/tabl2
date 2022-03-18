@@ -5,6 +5,7 @@ class RunBF {
     static n = 5;
     static padding = 4;
     static MAX_ITER = 512;
+    static dispEndpoints = RunBF.dispEndpointsFixed;
 
     static dispMore(items = 7) {
         RunBF.padding = 3;
@@ -16,24 +17,30 @@ class RunBF {
         RunBF.n = items;
     }
 
-    static dispEndpoints() {
+    static dispEndpointsFixed(tapeIndex) {
         return [0, RunBF.n];
+    }
+
+    static dispEndpointsCentered(tapeIndex) {
+        let smallHalf = Math.floor(RunBF.n/2);
+        let bigHalf = Math.ceil(RunBF.n/2);
+        return [tapeIndex-smallHalf, tapeIndex+bigHalf]
     }
 
     static pprint(tape, tapeIndex) {
         // return tape.slice(0, n).join(' ')
         let acc = "";
         
-        let [dispStart, dispEnd] = RunBF.dispEndpoints();
-
+        let [dispStart, dispEnd] = RunBF.dispEndpoints(tapeIndex);
         for (let i = dispStart; i<dispEnd; i++) {
-            if (tape[i] == 0 ) {
+            let wrap = (i+256) % 256
+            if (tape[wrap] == 0 ) {
                 acc += "_".padStart(RunBF.padding, ' ');
             }
             else {
-                acc += String(tape[i]).padStart(RunBF.padding, ' ');
+                acc += String(tape[wrap]).padStart(RunBF.padding, ' ');
             }
-            acc += i==tapeIndex? "* ": "  ";
+            acc += wrap==tapeIndex? "* ": "  ";
         }
         acc += "\n";
         return acc;

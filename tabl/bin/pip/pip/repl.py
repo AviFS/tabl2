@@ -20,7 +20,7 @@ def run(code, argv=[5,8,2]):
     global stdout, stderr
     stdout, stderr = "", ""
     pip.pip(code, argv)
-    result = {"out": stdout, "err": stderr}
+    result = {"disp": stdout, "console": {"error": stderr}}
     return result
 
 # pip.__builtins__["input"] = input
@@ -49,6 +49,8 @@ def repl(disable_json=False):
         except Exception as e:
             outputJSON['err'] += e
             outputJSON['isError'] = True
+        else:
+            outputJSON['isError'] = False
         
         outputJSON['line'] = inputJSON['line']
             

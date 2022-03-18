@@ -4,6 +4,7 @@ class RunBF {
     static loopMax = 512;
     static n = 5;
     static padding = 4;
+    static MAX_ITER = 512;
 
     static pprint(tape, tapeIndex) {
         // return tape.slice(0, n).join(' ')
@@ -135,7 +136,6 @@ class RunBF {
         let tape = new Array(256).fill(0), tapeIndex = 0, tapeLimit = Infinity, cellLimit = 256, output = "", disp = RunBF.emptyArray(lines.length);
         let loopCounts = new Array(RunBF.count(code, '[')).fill(0);
         let loopCountsInd = 0;
-        let MAX_ITER = 512;
 
         input = [...input];
 
@@ -148,8 +148,8 @@ class RunBF {
                 if (lines[i][j] == "[") {
                     let curr = `loopCounts[${loopCountsInd}]`
                     transpiled += `
-                    if (${curr} > MAX_ITER) {
-                        console.warn("Exceeded MAX_ITER of ${MAX_ITER}. To run anyway, change MAX_ITER in console.");
+                    if (${curr} > RunBF.MAX_ITER) {
+                        console.warn("Exceeded MAX_ITER of ${RunBF.MAX_ITER}. To run anyway, change RunBF.MAX_ITER in console.");
                         break;
                     }
                     ${curr}++;

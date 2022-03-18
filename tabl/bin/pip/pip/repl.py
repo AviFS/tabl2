@@ -21,8 +21,7 @@ def run(code, argv=[5,8,2]):
     stdout, stderr = "", ""
     pip.pip(code, argv)
     result = {"out": stdout, "err": stderr}
-    jsonified = json.dumps(result)
-    __print(jsonified)
+    return result
 
 # pip.__builtins__["input"] = input
 pip.__builtins__["print"] = print
@@ -33,6 +32,31 @@ pip.__builtins__["print"] = print
 
 # __print(jsonified)
 
-# while True:
-#     code = input()
-#     run(code)
+def repl(disable_json=False):
+    while True:
+        try:
+            inp = input()
+        except (EOFError):
+            __print("Server: EOF")
+            break
+        if not disable_json:
+            inputJSON = json.loads(inp)
+        else:
+            inputJSON = {"line": 0, "code": inp, "input": [5,8,2]}
+
+        try:
+            outputJSON = run(inputJSON['code'], inputJSON['input'])
+        except Exception as e:
+            outputJSON['err'] += e
+            outputJSON['isError'] = True
+        
+        outputJSON['line'] = inputJSON['line']
+            
+        __print(json.dumps(outputJSON))
+
+
+# repl(disable_json=True)
+repl()
+
+# Test with:
+#    python3 repl.py < pip.in

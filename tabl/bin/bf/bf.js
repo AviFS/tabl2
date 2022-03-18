@@ -1,5 +1,6 @@
 // const { inherits } = require('util');
 
+let loopMax = 512;
 let n = 5;
 
 function pprint(tape, tapeIndex) {
@@ -19,19 +20,21 @@ function pprint(tape, tapeIndex) {
 }
 
 
+let codeTable = {
+    '+': 'tape[tapeIndex] = (tape[tapeIndex] + 1) % cellLimit',
+    '-': 'tape[tapeIndex] = tape[tapeIndex] ? tape[tapeIndex] - 1 : cellLimit - 1',
+    '>': 'tapeIndex = (tapeIndex + 1) % tapeLimit',
+    '<': 'tapeIndex = tapeIndex ? tapeIndex - 1 : Number.isFinite(tapeLimit) ? tapeLimit - 1 : tape.unshift(0) && 0',
+    '[': 'while(tape[tapeIndex]){',
+    ']': '}',
+    '.': 'output += String.fromCharCode(tape[tapeIndex])',
+    ',': 'tape[tapeIndex] = input.shift().charCodeAt()',
+    //   '`': 'disp += pprint(tape, tapeIndex)',
+    //   '~': 'disp += "\\n"',
+}
+
 function transpile(code) {
-  let codeTable = {
-      '+': 'tape[tapeIndex] = (tape[tapeIndex] + 1) % cellLimit',
-      '-': 'tape[tapeIndex] = tape[tapeIndex] ? tape[tapeIndex] - 1 : cellLimit - 1',
-      '>': 'tapeIndex = (tapeIndex + 1) % tapeLimit',
-      '<': 'tapeIndex = tapeIndex ? tapeIndex - 1 : Number.isFinite(tapeLimit) ? tapeLimit - 1 : tape.unshift(0) && 0',
-      '[': 'while(tape[tapeIndex]){',
-      ']': '}',
-      '.': 'output += String.fromCharCode(tape[tapeIndex])',
-      ',': 'tape[tapeIndex] = input.shift().charCodeAt()',
-      '`': 'disp += pprint(tape, tapeIndex)',
-      '~': 'disp += "\\n"',
-  }
+
   let transpiled = '';
   for(let char of code){
       if(char in codeTable){
@@ -43,17 +46,29 @@ function transpile(code) {
 
 function test() {
     let tape = new Array(n).fill(0), tapeIndex = 0, tapeLimit = Infinity, cellLimit = 256, output = "", disp = [[], [], [], []];
-    tape[tapeIndex] = (tape[tapeIndex] + 1) % cellLimit
-    tape[tapeIndex] = (tape[tapeIndex] + 1) % cellLimit
-    tape[tapeIndex] = (tape[tapeIndex] + 1) % cellLimit
+    let loopCounters = [0];
+    loopMax = 256;
+    tape[tapeIndex] = tape[tapeIndex] ? tape[tapeIndex] - 1 : cellLimit - 1
+    // tape[tapeIndex] = 100;
+    // tape[tapeIndex] = (tape[tapeIndex] + 1) % cellLimit
+    // tape[tapeIndex] = (tape[tapeIndex] + 1) % cellLimit
+    // tape[tapeIndex] = (tape[tapeIndex] + 1) % cellLimit
+    // tape[tapeIndex] = (tape[tapeIndex] + 1) % cellLimit
     disp[0].push(pprint(tape, tapeIndex))
-    while(tape[tapeIndex]){
+    while(tape[tapeIndex]) {
+        if (loopCounters[0] > loopMax) {
+            console.log(`Exceeded loopMax of ${loopMax}. To run anyway, change loopMax in console.`);
+            break;
+        }
+        loopCounters[0]++;
+        // console.log(loopCounters)
         disp[1].push(pprint(tape, tapeIndex))
-        tape[tapeIndex] = tape[tapeIndex] ? tape[tapeIndex] - 1 : cellLimit - 1
+        // tape[tapeIndex] = tape[tapeIndex] ? tape[tapeIndex] - 1 : cellLimit - 1
         disp[2].push(pprint(tape, tapeIndex))
+        // tape[tapeIndex] = 0;
     }
     disp[3].push(pprint(tape, tapeIndex))
-    console.log(disp)
+    console.log(disp.map(x => x[0]).join(''))
 }
 
 let bf = (code, input = '') => {
@@ -100,20 +115,49 @@ function removeMismatchedBrackets(code) {
     return code.join('');
 }
 
+function count(string, char) {
+    console.assert(char.length == 1);
+    let acc = 0;
+    for (const c of string) {
+        if (c == char) { acc++; } 
+    }
+    return acc;
+}
+
 function runLines(code, input='') {
 
     code = removeMismatchedBrackets(code);
 
     let lines = code.split('\n');
     let tape = new Array(n).fill(0), tapeIndex = 0, tapeLimit = Infinity, cellLimit = 256, output = "", disp = emptyArray(lines.length);
+    let loopCounts = new Array(count(code, '[')).fill(0);
+    let loopCountsInd = 0;
+    let MAX_ITER = 512;
+
     input = [...input];
 
-    transpiled = ""
+    let transpiled = ""
     for (let i=0; i<lines.length; i++) {
-        transpiled += transpile(lines[i]);
+        for (let j=0; j<lines[i].length; j++) {
+            if (lines[i][j] in codeTable) {
+                transpiled += codeTable[lines[i][j]] + "\n";
+            }
+            if (lines[i][j] == "[") {
+                curr = `loopCounts[${loopCountsInd}]`
+                transpiled += `
+                if (${curr} > MAX_ITER) {
+                    console.warn("Exceeded MAX_ITER of ${MAX_ITER}. To run anyway, change MAX_ITER in console.");
+                    break;
+                }
+                ${curr}++;
+                `
+                loopCountsInd++;
+            }
+            // transpiled += transpile(lines[i]);
+        }
         transpiled += `\ndisp[${i}].push(pprint(tape, tapeIndex))\n`;
     }
-    // console.log(transpiled);
+    console.log(transpiled);
     eval(transpiled);
     return {"disp": disp, "output": output};
 }
@@ -145,7 +189,7 @@ function main() {
 
 // console.log(bf("++>+"))
 
-// test();
+test();
 
 // let k = "]][-[]+[]]";
 // console.log(removeMismatchedBrackets(k));

@@ -16,10 +16,17 @@ class RunBF {
         RunBF.n = items;
     }
 
+    static dispEndpoints() {
+        return [0, RunBF.n];
+    }
+
     static pprint(tape, tapeIndex) {
         // return tape.slice(0, n).join(' ')
         let acc = "";
-        for (let i = 0; i<RunBF.n; i++) {
+        
+        let [dispStart, dispEnd] = RunBF.dispEndpoints();
+
+        for (let i = dispStart; i<dispEnd; i++) {
             if (tape[i] == 0 ) {
                 acc += "_".padStart(RunBF.padding, ' ');
             }

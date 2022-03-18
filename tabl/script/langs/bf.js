@@ -8,7 +8,7 @@ class Brainfuck extends Lang {
         let program = document.getElementById('left').value;
         let lines = document.getElementById('left').value.split('\n');
         
-        let res = runLines(program);
+        let res = RunBF.runLines(program);
 
         let display = ""
         for (let i=0; i<lines.length; i++) {

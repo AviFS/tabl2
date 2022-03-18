@@ -31,6 +31,11 @@ function setDefaultLang() {
     return defaultLang;
 }
 
+function initialRun() {
+    lang.init();
+    lang.input(true);
+}
+
 function init() {
     lines = [];
     // setWebSocket('ws://54.153.39.161:8006/');
@@ -58,6 +63,9 @@ function init() {
 
     if (lang.getAddress(localhost) != false) {
         setWebSocket(lang.getAddress(localhost))
+    }
+    else {
+        initialRun();
     }
 }
 
@@ -105,8 +113,7 @@ function setWebSocket(address) {
     ws = new WebSocket(address);
     ws.onopen = function(event) {
         console.log('connected')
-        lang.init();
-        lang.input(code=true);
+        initialRun();
     }
     ws.onclose = function(event) {
         console.log('close')

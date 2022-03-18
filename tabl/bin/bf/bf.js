@@ -2,16 +2,17 @@
 
 let loopMax = 512;
 let n = 5;
+let padding = 4;
 
 function pprint(tape, tapeIndex) {
     // return tape.slice(0, n).join(' ')
     let acc = "";
     for (let i = 0; i<n; i++) {
         if (tape[i] == 0 ) {
-            acc += "_".padStart(3, ' ');
+            acc += "_".padStart(padding, ' ');
         }
         else {
-            acc += String(tape[i]).padStart(3, ' ');
+            acc += String(tape[i]).padStart(padding, ' ');
         }
         acc += i==tapeIndex? "* ": "  ";
     }
@@ -24,7 +25,8 @@ let codeTable = {
     '+': 'tape[tapeIndex] = (tape[tapeIndex] + 1) % cellLimit',
     '-': 'tape[tapeIndex] = tape[tapeIndex] ? tape[tapeIndex] - 1 : cellLimit - 1',
     '>': 'tapeIndex = (tapeIndex + 1) % tapeLimit',
-    '<': 'tapeIndex = tapeIndex ? tapeIndex - 1 : Number.isFinite(tapeLimit) ? tapeLimit - 1 : tape.unshift(0) && 0',
+    // '<': 'tapeIndex = tapeIndex ? tapeIndex - 1 : Number.isFinite(tapeLimit) ? tapeLimit - 1 : tape.unshift(0) && 0',
+    '<': 'tapeIndex = tapeIndex ? tapeIndex - 1 : tapeLimit - 1',
     '[': 'while(tape[tapeIndex]){',
     ']': '}',
     '.': 'output += String.fromCharCode(tape[tapeIndex])',
@@ -45,7 +47,7 @@ function transpile(code) {
 }
 
 function test() {
-    let tape = new Array(n).fill(0), tapeIndex = 0, tapeLimit = Infinity, cellLimit = 256, output = "", disp = [[], [], [], []];
+    let tape = new Array(256).fill(0), tapeIndex = 0, tapeLimit = Infinity, cellLimit = 256, output = "", disp = [[], [], [], []];
     let loopCounters = [0];
     loopMax = 256;
     tape[tapeIndex] = tape[tapeIndex] ? tape[tapeIndex] - 1 : cellLimit - 1
@@ -84,7 +86,7 @@ let bf = (code, input = '') => {
   input = [...input];
   transpiled = transpile(code);
   eval(transpiled);
-  console.log(transpiled)
+//   console.log(transpiled)
     return {"disp": disp, "output": output};
 }
 
@@ -157,7 +159,7 @@ function runLines(code, input='') {
         }
         transpiled += `\ndisp[${i}].push(pprint(tape, tapeIndex))\n`;
     }
-    console.log(transpiled);
+    // console.log(transpiled);
     eval(transpiled);
     return {"disp": disp, "output": output};
 }
@@ -189,7 +191,7 @@ function main() {
 
 // console.log(bf("++>+"))
 
-test();
+// test();
 
 // let k = "]][-[]+[]]";
 // console.log(removeMismatchedBrackets(k));

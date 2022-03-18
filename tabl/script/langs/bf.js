@@ -5,9 +5,9 @@ class Brainfuck extends Lang {
     }
 
     static input(code = true) {
-        let lines = document.getElementById('left').value.split('\n');
+        let program = document.getElementById('left').value;
         
-        let res = runLines(lines);
+        let res = runLines(program);
         console.log(res.disp)
         document.getElementById('right').innerHTML = res.disp.map(x => x[0]).join('');
         document.getElementById('output').innerHTML = res.output;

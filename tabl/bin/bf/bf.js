@@ -73,17 +73,48 @@ let bf = (code, input = '') => {
     return {"disp": disp, "output": output};
 }
 
-function runLines(lines, input='') {
+// should test this function a bit more, but I think it works
+// eg. removeMismatchedBrackets("]][-[]+[]]") -> "[-[]+[]]"
+function removeMismatchedBrackets(code) {
+    let matchedBrackets = [];
+    let openIndices = [];
+    for (let i=0; i<code.length; i++) {
+        if (code[i] == '[') {
+            openIndices.push(i);
+        }
+        if (code[i] == ']') {
+            if (openIndices.length != 0) {
+                let openingBracket = openIndices.pop();
+                let closingBracket = i;
+                matchedBrackets.push(openingBracket, closingBracket);
+            }
+        }
+    }
+    code = [...code];
+    code = code.filter(function (char, i) {
+        if (char == "[" || char == "]") {
+            return matchedBrackets.includes(i);
+        }
+        return true;
+    });
+    return code.join('');
+}
+
+function runLines(code, input='') {
+
+    code = removeMismatchedBrackets(code);
+
+    let lines = code.split('\n');
     let tape = new Array(n).fill(0), tapeIndex = 0, tapeLimit = Infinity, cellLimit = 256, output = "", disp = emptyArray(lines.length);
-  input = [...input];
+    input = [...input];
 
     transpiled = ""
     for (let i=0; i<lines.length; i++) {
         transpiled += transpile(lines[i]);
         transpiled += `\ndisp[${i}].push(pprint(tape, tapeIndex))\n`;
     }
-    eval(transpiled)
-    console.log(transpiled)
+    // console.log(transpiled);
+    eval(transpiled);
     return {"disp": disp, "output": output};
 }
 
@@ -115,3 +146,6 @@ function main() {
 // console.log(bf("++>+"))
 
 // test();
+
+// let k = "]][-[]+[]]";
+// console.log(removeMismatchedBrackets(k));

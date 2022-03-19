@@ -1,5 +1,6 @@
 {"line": 0, "code": "3+4", "input": ""} 
 {"line": 23, "code": "3+4", "input": ""} 
+{"line": 23, "code": "3+", "input": ""} 
 {"line": 0, "code": "LaPi::o+:i", "input": "6"} 
 {"line": 0, "code": "LaPi::o+:i", "input": "10"} 
 {"line": 0, "code": "$*\\,a", "input": "5"} 

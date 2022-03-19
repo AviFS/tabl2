@@ -13,7 +13,8 @@ class ngnAPL extends Lang {
         let display = ""
         for (let i=0; i<lines.length; i++) {
             if (!lang.isIgnore(lines[i])) {
-                display += format(apl(lines[i]))+'\n';
+                let prog = lines.slice(0, i+1).join('\n')
+                display += format(apl(prog))+'\n';
             }
             else {
                 display += "\n";

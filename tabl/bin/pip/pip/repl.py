@@ -20,7 +20,7 @@ def run(code, argv=[5,8,2]):
     global stdout, stderr
     stdout, stderr = "", ""
     pip.pip(code, argv)
-    result = {"disp": stdout, "console": {"error": stderr}}
+    result = {"disp": stdout.strip(), "console": {"error": stderr}}
     return result
 
 # pip.__builtins__["input"] = input

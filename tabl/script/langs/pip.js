@@ -8,11 +8,11 @@ class Pip extends Lang {
     }
     
     static whichLines(lines) {
-        // return lines;
+        return lines;
 
-        function range (a,b) { return Array.from({length:b-a},(_,i)=>i+a); }
-        let children = document.getElementById('right').children;
+        // function range (a,b) { return Array.from({length:b-a},(_,i)=>i+a); }
+        // let children = document.getElementById('right').children;
 
-        return range(0, children.length);
+        // return range(0, children.length);
     }
 }

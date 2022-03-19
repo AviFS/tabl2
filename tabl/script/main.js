@@ -52,7 +52,7 @@ function init() {
     if (!opts.hasOwnProperty(url.langID)) { url.langID = setDefaultLang(); }
     lang = opts[url.langID];
 
-    let localhost = !false;
+    let localhost = false;
 
     // temp fix; can be removed later
     document.getElementById('right').innerHTML += "<div class='row'></div>";

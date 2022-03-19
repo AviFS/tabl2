@@ -48,6 +48,7 @@ function init() {
         "apl": APL,
         "bf": Brainfuck,
         "pip": Pip,
+        "ngn-apl": ngnAPL,
     }
     if (!opts.hasOwnProperty(url.langID)) { url.langID = setDefaultLang(); }
     lang = opts[url.langID];

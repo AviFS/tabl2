@@ -16,18 +16,20 @@ let unit = (base) => String.raw `( ${base}(?:\^${int})?)?`; // note the leading 
 //     m kg s A cd mol K bit USD
 //     1 m s kg A K dollar mol bit cd (unknown unit type)
 let baseUnits = ["m", "s", "kg", "A", "K", "dollar", "mol", "bit", "cd"].slice(0,3)
+let dimension = String.raw `((?:unknown unit type)|(?:[a-z_]+))`
 
 // let p1 = String.raw `(?:${float}|${frac})`;
 let p1_a = String.raw `${float}`
 let p1_b = String.raw `${frac} \(${approx}\)`
 let p1 = String.raw `(?:${p1_a}|${p1_b})`
-
 let p2 = baseUnits.map(unit).join(""); // again, note these are joined with the empty string, not a space
+let p3 = String.raw `\(${dimension}\)`
 
 
-let expr = p2;
-expr = "^"+float+expr+"$";
-// console.log(expr);
+
+let expr = p3;
+expr = "^"+expr+"$";
+console.log(expr);
 const re = new RegExp(expr)
 
 // let inps = `
@@ -38,11 +40,17 @@ const re = new RegExp(expr)
 // `.trim()
 
 let inps = `
-0.5 m s kg
-3 s^2
-4 m s^-1 kg
-2.9 m^3 kg^2
+(unknown unit type)
+(time)
+(currency)
+(mass_density)
 `.trim()
+
+// inps = `
+// 5
+// 5 dollar
+// 5 dollar^2
+// `.trim()
 
 for (const inp of inps.split('\n')) {
     let matches = inp.match(re)
@@ -50,7 +58,12 @@ for (const inp of inps.split('\n')) {
         console.log("null")
     }
     else {
-        console.log(matches.slice(1).map(x => x==undefined? '_': x).map(x => x.padStart(6, ' ')).join(' '));
+        console.log(
+            matches.slice(1).
+            map(x => x==undefined? '_': x).
+            // map(x => x.padStart(6, ' ')).
+            join(' ')
+        );
         // console.log(`${(matches[0]+':').padEnd(20, ' ')} ${matches.slice(1).map(x => x==undefined? '_': x).map(x => x.padStart(6, ' ')).join(' ')}`);
         // console.log(matches)
     }

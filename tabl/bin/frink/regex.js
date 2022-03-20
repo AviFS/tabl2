@@ -1,10 +1,16 @@
 num = "(.)?"
 
 expr = num + "e" + num
-const re = new RegExp(expr)
+const re = new RegExp("^"+expr+"$")
 
-let inp = "fel"
+let inps = `
+def
+ep
+ke
+nomatch
+`.trim()
 
-let matches = inp.match(re)
-
-console.log(matches)
+for (const inp of inps.split('\n')) {
+    let matches = inp.match(re)
+    console.log(matches)
+}

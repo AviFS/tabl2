@@ -51,19 +51,23 @@ let inps = `
 // 5 dollar^2
 // `.trim()
 
+function printMatches(matches) {
+    console.log(
+        matches.slice(1).
+        map(x => x==undefined? '_': x).
+        // map(x => x.padStart(6, ' ')).
+        join(' ')
+    );
+    // console.log(`${(matches[0]+':').padEnd(20, ' ')} ${matches.slice(1).map(x => x==undefined? '_': x).map(x => x.padStart(6, ' ')).join(' ')}`);
+    // console.log(matches)
+}
+
 for (const inp of inps.split('\n')) {
     let matches = inp.match(re)
     if (matches == null) {
         console.log("null")
     }
     else {
-        console.log(
-            matches.slice(1).
-            map(x => x==undefined? '_': x).
-            // map(x => x.padStart(6, ' ')).
-            join(' ')
-        );
-        // console.log(`${(matches[0]+':').padEnd(20, ' ')} ${matches.slice(1).map(x => x==undefined? '_': x).map(x => x.padStart(6, ' ')).join(' ')}`);
-        // console.log(matches)
+        printMatches(matches);
     }
 }

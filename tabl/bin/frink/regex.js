@@ -9,7 +9,7 @@ let imaginary = String.raw ` (i)?`
 // to match any [text]^[int], and do a repeated thing of that capturing both the unit and exp for each
 
 let approx = String.raw `(exactly|approx\.) ${float}`;
-let unit = (base) => String.raw `(?: ${base}(?:\^${int})?)?`; // note the leading space is already included
+let unit = (base) => String.raw `( ${base}(?:\^${int})?)?`; // note the leading space is already included
 // list from: https://frinklang.org/#HowFrinkIsDifferent
 // i then ran it in the frink repl to see how it outputs and in what fixed order the units get displayed:
 //     m kg s A cd mol K bit USD

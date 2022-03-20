@@ -30,7 +30,7 @@ let expr = base;
 
 
 expr = "^"+expr+"$";
-console.log(expr);
+// console.log(expr);
 const re = new RegExp(expr)
 
 // let inps = `
@@ -68,6 +68,44 @@ for (const inp of inps.split('\n')) {
         console.log("null")
     }
     else {
-        printMatches(matches);
+        let out = {};
+
+        let original = matches[0];
+        let numeric = matches.slice(1,6);
+        let units = matches.slice(1, matches.length-1)
+        let dimension = matches[matches.length-1];
+
+        out.dimension = dimension == undefined? "scalar": dimension;
+
+        if (numeric[0] != undefined) {
+            out.decimal = parseFloat(numeric[0]);
+        }
+        else {
+            let numerator = parseInt(numeric[1]);
+            let denominator = parseInt(numeric[2]);
+            let exactApprox = numeric[3];
+            let decimal = parseFloat(numeric[4])
+
+            out.fraction = [numerator, denominator];
+            
+            switch (exactApprox) {
+                case "exactly":
+                    out.isExact = true;
+                    break;
+                case "approx.":
+                    out.isExact = false;
+                    break;
+                default:
+                    console.error(`Frontend: Expected 'exactly' or 'approx.', but got ${exactApprox}`)
+            }
+
+            out.decimal = decimal;
+        }
+
+        console.log(out)
+
+        // printMatches(matches);
+        // console.log(matches);
+        // break;
     }
 }

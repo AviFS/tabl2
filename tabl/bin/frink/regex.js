@@ -15,7 +15,7 @@ let unit = (base) => String.raw `(?: (${base})(?:\^${int})?)?`; // note the lead
 // i then ran it in the frink repl to see how it outputs and in what fixed order the units get displayed:
 //     m kg s A cd mol K bit USD
 //     1 m s kg A K dollar mol bit cd (unknown unit type)
-let baseUnits = ["m", "s", "kg", "A", "K", "dollar", "mol", "bit", "cd"].slice(0,3)
+let baseUnits = ["m", "s", "kg", "A", "K", "dollar", "mol", "bit", "cd"]
 let dimension = String.raw `((?:unknown unit type)|(?:[a-z_]+))`
 
 // let p1 = String.raw `(?:${float}|${frac})`;
@@ -72,7 +72,7 @@ for (const inp of inps.split('\n')) {
 
         let original = matches[0];
         let numeric = matches.slice(1,6);
-        let units = matches.slice(1, matches.length-1)
+        let units = matches.slice(6, matches.length-1)
         let dimension = matches[matches.length-1];
 
         out.dimension = dimension == undefined? "scalar": dimension;
@@ -109,6 +109,42 @@ for (const inp of inps.split('\n')) {
             }
 
             out.decimal = fracToFloat;
+        }
+
+
+        out.units = [];
+        for (let i=0; i<units.length; i+=2) {
+            
+            let base = units[i];
+            let exp = units[i+1];
+
+            if (base == undefined) {
+                out.units.push(0);
+            }
+            if (base != undefined && exp == undefined) {
+                out.units.push(1);
+            }
+            if (base != undefined && exp != undefined) {
+                out.units.push(parseFloat(exp));
+            }
+
+            // the above are all mutually exclusive so this also works
+            // somehow i'm finding the one above easier to read for now though
+            // not necessarily inherently, but it feels like it maps onto the logic of the regex better
+            // without trying to make fancy shortcuts that just obfuscate the regex logic taken
+            // but according to every style convention and gut instinct, i'm sure the below is better
+            // we'll see when i look at it with fresh eyes if i still agree with me
+
+            // if (base == undefined) {
+            //     out.units.push(0);
+            // }
+            // else {
+            //     if (exp == undefined) {
+            //         out.units.push(1);
+            //     }
+            //     out.units.push(parseFloat(exp));
+            // }
+
         }
 
         console.log(out)

@@ -23,11 +23,12 @@ let p1_a = String.raw `${float}`
 let p1_b = String.raw `${frac} \(${approx}\)`
 let p1 = String.raw `(?:${p1_a}|${p1_b})`
 let p2 = baseUnits.map(unit).join(""); // again, note these are joined with the empty string, not a space
-let p3 = String.raw `\(${dimension}\)`
+let p3 = String.raw `(?: \(${dimension}\))?`
+
+let base = String.raw `${p1}${p2}${p3}`
+let expr = base;
 
 
-
-let expr = p3;
 expr = "^"+expr+"$";
 console.log(expr);
 const re = new RegExp(expr)
@@ -40,10 +41,8 @@ const re = new RegExp(expr)
 // `.trim()
 
 let inps = `
-(unknown unit type)
-(time)
-(currency)
-(mass_density)
+1/4 (exactly 0.25) m s^-2 kg (force)
+0.2
 `.trim()
 
 // inps = `

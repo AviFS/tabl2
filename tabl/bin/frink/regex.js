@@ -77,15 +77,24 @@ for (const inp of inps.split('\n')) {
 
         out.dimension = dimension == undefined? "scalar": dimension;
 
-        if (numeric[0] != undefined) {
-            out.decimal = parseFloat(numeric[0]);
+        let [primaryFloat, numerator, denominator, exactApprox, fracToFloat] = numeric;
+
+        [primaryFloat, numerator, denominator, exactApprox, fracToFloat] = [
+            parseFloat(primaryFloat),
+            parseInt(numerator),
+            parseInt(denominator),
+            String(exactApprox),
+            parseFloat(fracToFloat),
+        ];
+
+        // [primaryFloat, fracToFloat] = [primaryFloat, fracToFloat].map(parseFloat);
+        // [numerator, denominator] = [numerator, denominator].map(parseInt);
+        // [exactApprox] = [exactApprox].map(String);
+
+        if (!isNaN(primaryFloat)) {
+            out.decimal = primaryFloat;
         }
         else {
-            let numerator = parseInt(numeric[1]);
-            let denominator = parseInt(numeric[2]);
-            let exactApprox = numeric[3];
-            let decimal = parseFloat(numeric[4])
-
             out.fraction = [numerator, denominator];
             
             switch (exactApprox) {
@@ -99,7 +108,7 @@ for (const inp of inps.split('\n')) {
                     console.error(`Frontend: Expected 'exactly' or 'approx.', but got ${exactApprox}`)
             }
 
-            out.decimal = decimal;
+            out.decimal = fracToFloat;
         }
 
         console.log(out)

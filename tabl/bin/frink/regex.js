@@ -3,6 +3,8 @@ let float = String.raw `(-?\d+(?:\.\d+)?)`; // float or int
 let int = String.raw `(-?\d+)`;
 let frac = String.raw `${int}\/${int}`
 
+let imaginary = String.raw ` (i)?`
+
 let approx = String.raw `(exactly|approx\.) ${float}`;
 let unit = (base) => String.raw `(?: ${base}(?:\^${int})?)?`; // leading space required for match
 

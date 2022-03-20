@@ -43,6 +43,9 @@ const re = new RegExp(expr)
 let inps = `
 1/4 (exactly 0.25) m s^-2 kg (force)
 0.2
+196133/20000 (exactly 9.80665) m s^-2 (acceleration)
+2/3 (approx. 0.66666666666666667)
+32.5 dollar (currency)
 `.trim()
 
 // inps = `
@@ -147,6 +150,8 @@ for (const inp of inps.split('\n')) {
 
         }
 
+        // just for pprinting for testing
+        out.units = "[" + out.units.join(", ") + "]"
         console.log(out)
 
         // printMatches(matches);

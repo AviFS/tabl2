@@ -103,12 +103,12 @@ function parseFrinkOutput(inp) {
 
         [primaryFloatBase, primaryFloatExp, numerator, denominator, exactApprox, fracToFloatBase, fracToFloatExp] = [
             parseFloat(primaryFloatBase),
-            parseFloat(primaryFloatExp),
+            parseInt(primaryFloatExp),
             parseInt(numerator),
             parseInt(denominator),
             String(exactApprox),
             parseFloat(fracToFloatBase),
-            parseFloat(fracToFloatExp),
+            parseInt(fracToFloatExp),
         ];
 
         // [primaryFloat, fracToFloat] = [primaryFloat, fracToFloat].map(parseFloat);
@@ -116,6 +116,7 @@ function parseFrinkOutput(inp) {
         // [exactApprox] = [exactApprox].map(String);
 
         if (!isNaN(primaryFloatBase)) {
+            primaryFloatExp = isNaN(primaryFloatExp)? 1: primaryFloatExp;
             out.decimal = [primaryFloatBase, primaryFloatExp];
         }
         else {
@@ -132,6 +133,7 @@ function parseFrinkOutput(inp) {
                     console.error(`Frontend: Expected 'exactly' or 'approx.', but got ${exactApprox}`)
             }
 
+            fracToFloatExp = isNaN(fracToFloatExp)? 1: fracToFloatExp;
             out.decimal = [fracToFloatBase, fracToFloatExp];
         }
 
@@ -238,13 +240,13 @@ function pprintFrinkOutput(disp) {
 
     let out = parseFrinkOutput(disp);
 
-    console.log(out)
+    // console.log(out)
     if (!out.matched == true) {
         return out.original;
     }
 
-    let decimal = out.decimal;
-    // let decimal = Utils.round(out.decimal, 6);
+    let decimal = parseFloat(out.decimal.join('e'));
+    // decimal = Utils.round(decimal, 6);
     let units = out.units.slice(0,3);
 
     // units = units.map(x => String(x).padStart(3, " "));
@@ -269,5 +271,5 @@ function mainPprint() {
 }
 
 
-// mainPprint();
-mainParse();
+mainPprint();
+// mainParse();

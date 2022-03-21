@@ -21,6 +21,21 @@ class Frink extends Lang {
         // More efficient if .join(";") and send it in one JSON
     }
 
+    static postProcess(disp) {
+        let out = parseFrinkOutput(disp);
+
+        if (!out.matched == true) {
+            return out.original;
+        }
+
+        let decimal = out.decimal;
+        let units = out.units.slice(0,3);
+        units = "(" + units.join(", ") + ")"
+
+        return `${decimal} ${units}`;
+
+    }
+
 
     // not very smart but better than the alternative
     static whichLines(lines) {

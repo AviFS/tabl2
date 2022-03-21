@@ -33,6 +33,13 @@ class Lang {
         };
     }
 
+    // by default this is the identity
+    // all current backends send back ".disp" exactly as it should be displayed
+    // that was the whole original idea! but no more.
+    static postProcess(disp) {
+        return disp;
+    }
+
 
     static input(code=true) {
         let prev = lines;

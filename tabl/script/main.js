@@ -178,7 +178,7 @@ function _onmessage(event) {
     // disp
     if (!data.isError) {
         document.getElementById('right').children[data.line].classList.remove('dim');
-        updateLine(data.line, data.disp)
+        updateLine(data.line, lang.postProcess(data.disp));
     }
     else {
         let errorString = "*"

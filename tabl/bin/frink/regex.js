@@ -250,6 +250,9 @@ function pprintFrinkOutput(disp) {
     let units = out.units.slice(0,3);
 
     // units = units.map(x => String(x).padStart(3, " "));
+    
+    // change unit order from frink's (m, s, kg) to the mks/cgs (m, kg, s)
+    units = [units[0], units[2], units[1]];
 
     units = vectorPrint(units);
     // units = tapePrint(units);

@@ -5,3 +5,6 @@ node_modules/
 exec/code.vy
 exec/main.py
 exec/main2.py
+
+# not sure what this is
+../aplcore 

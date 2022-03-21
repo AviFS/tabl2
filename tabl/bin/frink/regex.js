@@ -116,7 +116,7 @@ function parseFrinkOutput(inp) {
         // [exactApprox] = [exactApprox].map(String);
 
         if (!isNaN(primaryFloatBase)) {
-            primaryFloatExp = isNaN(primaryFloatExp)? 1: primaryFloatExp;
+            primaryFloatExp = isNaN(primaryFloatExp)? 0: primaryFloatExp;
             out.decimal = [primaryFloatBase, primaryFloatExp];
         }
         else {
@@ -133,7 +133,7 @@ function parseFrinkOutput(inp) {
                     console.error(`Frontend: Expected 'exactly' or 'approx.', but got ${exactApprox}`)
             }
 
-            fracToFloatExp = isNaN(fracToFloatExp)? 1: fracToFloatExp;
+            fracToFloatExp = isNaN(fracToFloatExp)? 0: fracToFloatExp;
             out.decimal = [fracToFloatBase, fracToFloatExp];
         }
 

@@ -1,5 +1,10 @@
 let ws;
+let lang;
 let debug = 0;
+let url;
+
+let defaultLang = "bf";
+let opts;
 
 function updateLine(line, data) {
     // console.log(line, data)
@@ -21,23 +26,83 @@ function dim(line) {
     document.getElementById('right').children[line].classList.add('dim');
 }
 
+function setDefaultLang() {
+    console.log(`Setting lang to ${defaultLang} by default.`);
+    return defaultLang;
+}
+
+function initialRun() {
+    lang.init();
+    lang.input(true);
+}
+
 function init() {
     lines = [];
     // setWebSocket('ws://54.153.39.161:8006/');
-    setWebSocket('ws://127.0.0.1:8002');
+    // setWebSocket('ws://127.0.0.1:8008');
+
+    url = parseURL();
+    console.log(defaultLang)
+    opts = {
+        "frink": Frink,
+        "apl": APL,
+        "bf": Brainfuck,
+        "pip": Pip,
+        "ngn-apl": ngnAPL,
+    }
+    if (!opts.hasOwnProperty(url.langID)) { url.langID = setDefaultLang(); }
+    lang = opts[url.langID];
+
+    let localhost = false;
 
     // temp fix; can be removed later
     document.getElementById('right').innerHTML += "<div class='row'></div>";
+
+    document.getElementById('left').value = parseTIOLink(url.permalink).code;
+
+    document.getElementById('input').addEventListener('input', x => lang.input(code=false));
+    document.getElementById('left').addEventListener('input', x => lang.input(code=true));
+
+    if (lang.getAddress(localhost) != false) {
+        setWebSocket(lang.getAddress(localhost))
+    }
+    else {
+        initialRun();
+    }
 }
 
-function initFrink() {
-    [
-        // "showApproximations[false]",
-        "rationalAsFloat[true]",
-        "setPrecision[10]",
-        "showDimensionName[false]",
-    ].forEach(code => send(ws, {"code": code}));
-    // More efficient if .join(";") and send it in one JSON
+function generatePermalink() {
+
+    
+    // this trimming will be a nasty bug if i add an esolang lang like whitespace
+    if (document.getElementById('left').value.trim() == "") {
+        window.location.href = `#${url.langID}`;
+    }
+    else {
+        let permalink = TIO.makeLink("qqq", "", document.getElementById('left').value).substring(18);
+        window.location.href = `#${url.langID}##${permalink}`;
+    }
+}
+
+function parseTIOLink(link) {
+    try {
+        return TIO.parseLink(url.permalink);
+    }
+    catch {
+        return {"languageId":"","header":"","code":"","footer":"","input":"","args":[],"options":[]}
+    }
+}
+
+function parseURL() {
+    let hash = window.location.hash.substring(1);
+    if (hash[0] == '#') {
+        return {"langID": "", "permalink": hash.substring(1)};
+    }
+    if (hash.includes('##')) {
+        let i = hash.indexOf('##');
+        return {"langID": hash.substring(0,i), "permalink": hash.substring(i+2)};
+    }
+    return {"langID": hash, "permalink": ""};
 }
 
 // convenience function to use in browser console
@@ -50,7 +115,7 @@ function setWebSocket(address) {
     ws = new WebSocket(address);
     ws.onopen = function(event) {
         console.log('connected')
-        initFrink();
+        initialRun();
     }
     ws.onclose = function(event) {
         console.log('close')
@@ -63,83 +128,21 @@ function send(ws, data) {
         console.log("sent:\n", data);
     }
 
-    data = JSON.stringify({
-        line: data.hasOwnProperty('line')? data.line: 0,
-        code: data.hasOwnProperty('code')? data.code: "",
-        input: data.hasOwnProperty('input')? data.input: "",
-        reset: data.hasOwnProperty('reset')? data.reset: false,
-        state: data.hasOwnProperty('state')? data.state: [],
-    })
+    data = JSON.stringify(lang.formatJSON(data));
 
     ws.send(data);
 }
 
-
-function input(code=true) {
-    linesUpdate()
-    // if we're on a new line, add a new div
-    if (document.getElementById('right').children.length < lines.length) {
-        document.getElementById('right').innerHTML += "<div class='row'></div>";
-    }
-
-    let children = document.getElementById('right').children;
-
-    let input = document.getElementById('input').innerText;
-
-    // this shouldn't be necessary, for most langs, but just to save a nasty bug down the line
-    // without this, if you enter input, but you have no code, nothing runs
-    // that's just what we want... except for langs where input alone can create output
-    if (code == false && document.getElementById('left').value.trim() == "") {
-        send(ws, {line: 0, code: code, input: input});
-        return;
-    }
-
-    // send(ws, {reset: true})
-
-    let currentLine = getLineNumber();
-    let lineNums = whichLines(currentLine);
-    if (debug > 0) {
-        console.log(`running lines:\n`, lineNums)
-    }
-
-    for (const i of lineNums) {
-        let code = getLine(i);
-        if (code == "" || code[0] == '#') {
-            children[i].innerHTML = "";
-            continue;
-        }
-        let data = { line: i, code: code, input: input, reset: false, state: [] };
-        send(ws, data)
-    }
-}
-
-// this is lang-specific
-// this one is for apl
-// it's not very smart, but a huge improvement
-function whichLines(line) {
+function diffLines(prev, curr) {
     function range (a,b) { return Array.from({length:b-a},(_,i)=>i+a); }
-    function runAll(code) { return code.includes("←←"); }
-    function hasAssignment(code) { return code.includes("←") || code.includes("⎕EX"); }
-    // That second check is just for Adám. Did I get that right?
-
-    let children = document.getElementById('right').children;
-    let code = getLine(line);
-
-    return range(0, children.length);
-
-    if (runAll(code)) {
-        return range(0, children.length);
-    }
-    if (hasAssignment(code)) {
-        let before = range(0, line).filter(function(i) {
-            return hasAssignment(getLine(i));
-        });
-        let after = range(line+1, children.length);
-        return [].concat(before, [line], after);
-    }
-    return [line];
-
+    return range(0, Math.max(prev.length, curr.length)).filter(function (ind) {
+        let prevInd = prev[ind]? prev[ind]: "";
+        let currInd = curr[ind]? curr[ind]: "";
+        return prevInd != currInd;
+    });
 }
+
+
 
 
 function errorCallback(data) {

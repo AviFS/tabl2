@@ -20,6 +20,7 @@ class Frink extends Lang {
         ].forEach(code => send(ws, {"code": code}));
         // More efficient if .join(";") and send it in one JSON
     }
+    
 
     static postProcess(disp) {
         let out = parseFrinkOutput(disp);
@@ -28,8 +29,10 @@ class Frink extends Lang {
             return out.original;
         }
 
-        let decimal = out.decimal;
+        // let decimal = out.decimal;
+        let decimal = Utils.round(out.decimal, 6);
         let units = out.units.slice(0,3);
+        // units = units.map(x => String(x).padStart(3, " "))
         units = "(" + units.join(", ") + ")"
 
         return `${decimal} ${units}`;

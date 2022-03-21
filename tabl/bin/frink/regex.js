@@ -65,13 +65,19 @@ function printMatches(matches) {
     // console.log(matches)
 }
 
-for (const inp of inps.split('\n')) {
-    let matches = inp.match(re)
-    if (matches == null) {
-        console.log("null")
-    }
-    else {
+function parseFrinkOutput(inp) {
+
+        let matches = inp.match(re)
+
         let out = {};
+        out.original = inp;
+
+        if (matches == null) {
+            out.matched = false;
+            return out;
+        }
+
+        out.matched = true;
 
         let original = matches[0];
         let numeric = matches.slice(1,6);
@@ -151,11 +157,23 @@ for (const inp of inps.split('\n')) {
         }
 
         // just for pprinting for testing
-        out.units = "[" + out.units.join(", ") + "]"
-        console.log(out)
+        // out.units = "[" + out.units.join(", ") + "]"
+        // console.log(out)
+
+        return out;
 
         // printMatches(matches);
         // console.log(matches);
         // break;
+}
+
+function main() {
+    for (const inp of inps.split('\n')) {
+        let out = parseFrinkOutput(inp);
+        console.log(out);
     }
 }
+
+
+main();
+// console.log(parseFrinkOutput("4/53 (exactly 23.5) m^2 A^-2 (energy)"))

@@ -177,3 +177,23 @@ function main() {
 
 main();
 // console.log(parseFrinkOutput("4/53 (exactly 23.5) m^2 A^-2 (energy)"))
+
+
+
+/* Still have to handle:
+
+*** main formatting case ***
+
+> scientific notation for floats
+2/4 (exactly 4.61e-24) m^6 s kg^3 K^-1 (unknown unit type)
+
+
+*** other formatting cases ***
+
+> interval notation
+
+> lists
+
+> strings
+
+*/

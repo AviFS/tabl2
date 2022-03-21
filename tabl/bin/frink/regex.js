@@ -1,4 +1,7 @@
-let float = String.raw `(-?\d+(?:\.\d+)?)`; // float or int
+// float or int
+let float_base = String.raw `(-?\d+\.?\d*)`;
+let float_exp = String.raw `(?:e((?:\+|-)\d+))?`;
+let float = float_base+float_exp;
 
 let int = String.raw `(-?\d+)`;
 let frac = String.raw `${int}\/${int}`
@@ -43,10 +46,20 @@ const re = new RegExp(expr)
 let inps = `
 1/4 (exactly 0.25) m s^-2 kg (force)
 0.2
-196133/20000 (exactly 9.80665) m s^-2 (acceleration)
+196133/20000 (exactly 9.80665e+32) m s^-2 (acceleration)
 2/3 (approx. 0.66666666666666667)
 32.5 dollar (currency)
 `.trim()
+
+// let inps = `
+// 232.23408
+// 123.
+// 0.5
+// 2.390482039482095e+22
+// 230000.
+// 23e+3
+// 5.234e-23
+// `.trim()
 
 // inps = `
 // 5
@@ -80,28 +93,30 @@ function parseFrinkOutput(inp) {
         out.matched = true;
 
         let original = matches[0];
-        let numeric = matches.slice(1,6);
-        let units = matches.slice(6, matches.length-1)
+        let numeric = matches.slice(1,8);
+        let units = matches.slice(8, matches.length-1)
         let dimension = matches[matches.length-1];
 
         out.dimension = dimension == undefined? "scalar": dimension;
 
-        let [primaryFloat, numerator, denominator, exactApprox, fracToFloat] = numeric;
+        let [primaryFloatBase, primaryFloatExp, numerator, denominator, exactApprox, fracToFloatBase, fracToFloatExp] = numeric;
 
-        [primaryFloat, numerator, denominator, exactApprox, fracToFloat] = [
-            parseFloat(primaryFloat),
+        [primaryFloatBase, primaryFloatExp, numerator, denominator, exactApprox, fracToFloatBase, fracToFloatExp] = [
+            parseFloat(primaryFloatBase),
+            parseFloat(primaryFloatExp),
             parseInt(numerator),
             parseInt(denominator),
             String(exactApprox),
-            parseFloat(fracToFloat),
+            parseFloat(fracToFloatBase),
+            parseFloat(fracToFloatExp),
         ];
 
         // [primaryFloat, fracToFloat] = [primaryFloat, fracToFloat].map(parseFloat);
         // [numerator, denominator] = [numerator, denominator].map(parseInt);
         // [exactApprox] = [exactApprox].map(String);
 
-        if (!isNaN(primaryFloat)) {
-            out.decimal = primaryFloat;
+        if (!isNaN(primaryFloatBase)) {
+            out.decimal = [primaryFloatBase, primaryFloatExp];
         }
         else {
             out.fraction = [numerator, denominator];
@@ -117,7 +132,7 @@ function parseFrinkOutput(inp) {
                     console.error(`Frontend: Expected 'exactly' or 'approx.', but got ${exactApprox}`)
             }
 
-            out.decimal = fracToFloat;
+            out.decimal = [fracToFloatBase, fracToFloatExp];
         }
 
 
@@ -168,10 +183,13 @@ function parseFrinkOutput(inp) {
 }
 
 function mainParse() {
+    let jsons = [];
     for (const inp of inps.split('\n')) {
         let out = parseFrinkOutput(inp);
-        console.log(out);
+        // console.log(out);
+        jsons.push(out);
     }
+    console.log(JSON.stringify(jsons));
 }
 
 
@@ -251,4 +269,5 @@ function mainPprint() {
 }
 
 
-mainPprint();
+// mainPprint();
+mainParse();

@@ -22,21 +22,25 @@ class Frink extends Lang {
     }
     
 
+    // static postProcess(disp) {
+    //     let out = parseFrinkOutput(disp);
+
+    //     if (!out.matched == true) {
+    //         return out.original;
+    //     }
+
+    //     // let decimal = out.decimal;
+    //     let decimal = Utils.round(out.decimal, 6);
+    //     let units = out.units.slice(0,3);
+    //     // units = units.map(x => String(x).padStart(3, " "))
+    //     units = "(" + units.join(", ") + ")"
+
+    //     return `${decimal} ${units}`;
+
+    // }
+
     static postProcess(disp) {
-        let out = parseFrinkOutput(disp);
-
-        if (!out.matched == true) {
-            return out.original;
-        }
-
-        // let decimal = out.decimal;
-        let decimal = Utils.round(out.decimal, 6);
-        let units = out.units.slice(0,3);
-        // units = units.map(x => String(x).padStart(3, " "))
-        units = "(" + units.join(", ") + ")"
-
-        return `${decimal} ${units}`;
-
+        return pprintFrinkOutput(disp);
     }
 
 

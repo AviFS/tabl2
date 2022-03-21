@@ -167,7 +167,7 @@ function parseFrinkOutput(inp) {
         // break;
 }
 
-function main() {
+function mainParse() {
     for (const inp of inps.split('\n')) {
         let out = parseFrinkOutput(inp);
         console.log(out);
@@ -175,7 +175,7 @@ function main() {
 }
 
 
-main();
+// mainParse();
 // console.log(parseFrinkOutput("4/53 (exactly 23.5) m^2 A^-2 (energy)"))
 
 
@@ -197,3 +197,58 @@ main();
 > strings
 
 */
+
+class Utils {
+    static round(num, places) {
+        let p = places;
+        return +(Math.round(num + "e+"+p)  + "e-"+p);
+    }
+}
+
+function vectorPrint(list) {
+    list = [list[0], ...list.slice(1).map(x => String(x).padStart(3, " "))]
+    return "(" + list.join(",") + ")";
+}
+
+function tapePrint(list) {
+    list = list.map(x => x==0? "_": String(x));
+    list = [list[0], ...list.slice(1).map(x => String(x).padStart(3, " "))]
+    return " "+list.join(" ");
+}
+
+function pprintFrinkOutput(disp) {
+
+    let out = parseFrinkOutput(disp);
+
+    console.log(out)
+    if (!out.matched == true) {
+        return out.original;
+    }
+
+    let decimal = out.decimal;
+    // let decimal = Utils.round(out.decimal, 6);
+    let units = out.units.slice(0,3);
+
+    // units = units.map(x => String(x).padStart(3, " "));
+
+    units = vectorPrint(units);
+    // units = tapePrint(units);
+
+
+
+
+    return `${decimal} ${units}`;
+
+}
+
+
+function mainPprint() {
+    for (const inp of inps.split('\n')) {
+        let out = pprintFrinkOutput(inp);
+        out = String(out).padStart(40, " ")
+        console.log(out);
+    }
+}
+
+
+mainPprint();

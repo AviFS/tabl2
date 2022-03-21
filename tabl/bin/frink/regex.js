@@ -254,10 +254,11 @@ function pprintFrinkOutput(disp) {
     units = vectorPrint(units);
     // units = tapePrint(units);
 
+    let dimension = out.dimension=="unknown unit area"? '*': out.dimension;
 
 
 
-    return `${decimal} ${units}`;
+    return `${decimal} ${dimension} ${units}`;
 
 }
 

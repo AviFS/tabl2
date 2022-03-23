@@ -19,3 +19,7 @@
        <div id='right' class="child"></div>
    </div>
 </main>
+
+<style>
+    main { height: 100%; }
+</style>

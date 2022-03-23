@@ -4,8 +4,34 @@
 	<meta charset='utf-8'>
 	<meta name='viewport' content='width=device-width,initial-scale=1'>
 
-	<title>Svelte app</title>
+	<title>tabl</title>
 
+    <script src="bin/frink/regex.js"></script>
+
+    <script src="script/utils.js"></script>
+    <script src="script/main.js"></script>
+    <script src="script/langs/lang.js"></script>
+    <script src="script/langs/frink.js"></script>
+    <script src="script/langs/apl.js"></script>
+    <script src="script/langs/bf.js"></script>
+    <script src="script/langs/pip.js"></script>
+    <script src="script/langs/ngn-apl.js"></script>
+
+    <script src="bin/bf/bf.js"></script>
+    <script src="bin/ngn-apl/apl.js"></script>
+
+    <!-- tio-api -->
+    <script src="script/tio-api/min-tioapi.js"></script>
+    <script src="script/tio-api/min-pako.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/gh/avifs/tio-api/min-tioapi.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.0.3/pako.min.js"
+    integrity="sha512-yJSo0YTQvvGOqL2au5eH0W4K/0FI0sTJuyHjiHkh0O31Lzlb814P0fDXtuEtzOj13lOBZ9j99BjqFx4ASz9pGA=="
+    crossorigin="anonymous"></script> -->
+    
+    <link rel="stylesheet" href="style.css">
+
+	<!--  svelte -->
+    <link rel="icon" href="favicon.ico" type="image/ico"/>
 	<link rel='icon' type='image/png' href='/favicon.png'>
 	<link rel='stylesheet' href='/global.css'>
 	<link rel='stylesheet' href='/build/bundle.css'>
@@ -13,6 +39,8 @@
 	<script defer src='/build/bundle.js'></script>
 </head>
 
-<body>
+<body onload="init()">
 </body>
 </html>
+
+

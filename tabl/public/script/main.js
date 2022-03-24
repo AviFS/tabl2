@@ -37,6 +37,10 @@ function initialRun() {
 }
 
 function init() {
+
+    // Focus input element on load
+    document.getElementById('left').focus();
+
     lines = [];
     // setWebSocket('ws://54.153.39.161:8006/');
     // setWebSocket('ws://127.0.0.1:8008');

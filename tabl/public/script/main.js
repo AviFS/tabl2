@@ -3,7 +3,7 @@ let lang;
 let debug = 0;
 let url;
 
-let defaultLang = "bf";
+let defaultLang = "apl";
 let opts;
 
 function updateLine(line, data) {

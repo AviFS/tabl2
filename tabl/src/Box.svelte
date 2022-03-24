@@ -29,7 +29,7 @@ however i'd have to rewrite getLineNumber() and getLine() which i wasn't able to
 
     main, #left {
         /* background-color: rgb(32,36,47); */
-        background-color: hsla(224, 19%, 15%, 1);
+        /* background-color: hsla(224, 19%, 15%, 1); */
         color: rgb(204,202,194);
     }
 
@@ -86,9 +86,9 @@ however i'd have to rewrite getLineNumber() and getLine() which i wasn't able to
         flex: 1;
     }
 
-    @media (max-width:600px) { 
+    /* @media (max-width:600px) {  */
         main {
             border: none !important;
         }
-    }
+    /* } */
 </style>

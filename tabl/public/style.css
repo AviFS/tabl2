@@ -144,6 +144,7 @@ html, body {
 
 #box, #left, #right {
     /* background-color: hsla(224, 25%, 16%, 1); */
+    background-color: rgb(31,29,30);
 }
 
 #left {
@@ -156,7 +157,7 @@ html, body {
 }
 
 
-@media (max-width: 1000px) {
+/* @media (max-width: 1000px) { */
     #permalink {
         margin-top: 10px;
 
@@ -165,14 +166,15 @@ html, body {
         position: absolute;
         /* end hide */
     }
-}
+/* } */
 
-@media (max-width:600px) { 
+/* @media (max-width:600px) {  */
     #box {
         border: none !important;
     }
     body, html {
-        background-color: hsla(224, 19%, 15%, 1) !important;
+        /* background-color: hsla(224, 19%, 15%, 1) !important; */
+        background-color: rgb(31,29,30);
     }
     #box {
         margin-top: 0px !important;
@@ -189,4 +191,4 @@ html, body {
     html, body {
         height: auto !important;
     }
-}
+/* } */

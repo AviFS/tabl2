@@ -19,7 +19,6 @@ Emmet prepopulated it in there so it might be important later. -->
    </div>
 
 
-       <div id="settings"><Settings></Settings></div>
        <div id="boxx" transition:fly>
         <Box></Box>
        </div>

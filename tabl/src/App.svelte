@@ -3,8 +3,9 @@ Emmet prepopulated it in there so it might be important later. -->
 
 <script>
     import Box from "./Box.svelte";
-    import Modal from "./Modal.svelte";
     import Settings from "./Settings.svelte";
+
+    import { fly } from "svelte/transition";
 </script>
 
 <main>
@@ -19,7 +20,9 @@ Emmet prepopulated it in there so it might be important later. -->
 
 
        <div id="settings"><Settings></Settings></div>
-       <Box></Box>
+       <div id="boxx" transition:fly>
+        <Box></Box>
+       </div>
 
    <!-- <Sidebar bind:show={sidebarShow}></Sidebar>
    <Box></Box> -->
@@ -36,6 +39,9 @@ Emmet prepopulated it in there so it might be important later. -->
         height: 100%;
     }
 
+    #boxx {
+        height: 100%;
+    }
     
     /* #flex-container {
         display: flex;

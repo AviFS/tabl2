@@ -261,7 +261,7 @@ function pprintFrinkOutput(disp) {
 
 
 
-    return `${decimal} ${dimension} ${units}`;
+    return `${decimal} ${units}`;
 
 }
 

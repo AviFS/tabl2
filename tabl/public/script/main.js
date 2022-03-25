@@ -3,8 +3,10 @@ let lang;
 let debug = 0;
 let url;
 
-let defaultLang = "ngn-apl";
+let defaultLang = "frink";
 let opts;
+
+window.onload = init;
 
 function updateLine(line, data) {
     // console.log(line, data)
@@ -57,7 +59,7 @@ function init() {
     if (!opts.hasOwnProperty(url.langID)) { url.langID = setDefaultLang(); }
     lang = opts[url.langID];
 
-    let localhost = false;
+    let localhost = !false;
 
     // temp fix; can be removed later
     document.getElementById('right').innerHTML += "<div class='row'></div>";

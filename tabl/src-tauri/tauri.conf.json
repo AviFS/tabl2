@@ -1,29 +1,29 @@
 {
   "package": {
-    "productName": "tabl",
-    "version": "0.1.0"
+    "productName": "tabl"
   },
   "build": {
     "distDir": "../public",
-    "devPath": "http://localhost:8080",
+    "devPath": "http://localhost:5500/src/index.html",
     "beforeDevCommand": "",
     "beforeBuildCommand": ""
   },
   "tauri": {
     "bundle": {
       "active": true,
-      "targets": "all",
-      "identifier": "com.tauri.dev",
+      "targets": [
+        "dmg",
+        "deb",
+        "appimage",
+        "msi"
+      ],
+      "identifier": "com.example.tauri-template",
       "icon": [
-        "icons/32x32.png",
-        "icons/128x128.png",
-        "icons/128x128@2x.png",
-        "icons/icon.icns",
-        "icons/icon.ico"
+        "icons/icon.icns"
       ],
       "resources": [],
       "externalBin": [],
-      "copyright": "",
+      "copyright": "© 2021 kasper.space",
       "category": "DeveloperTool",
       "shortDescription": "",
       "longDescription": "",
@@ -33,11 +33,10 @@
       },
       "macOS": {
         "frameworks": [],
-        "minimumSystemVersion": "",
+        "minimumSystemVersion": "10.13",
         "useBootstrapper": false,
         "exceptionDomain": "",
         "signingIdentity": null,
-        "providerShortName": null,
         "entitlements": null
       },
       "windows": {
@@ -50,19 +49,12 @@
       "active": false
     },
     "allowlist": {
-      "all": true
-    },
-    "windows": [
-      {
-        "title": "",
-        "width": 800,
-        "height": 600,
-        "resizable": true,
-        "fullscreen": false
+      "shell": {
+        "open": true
       }
-    ],
+    },
     "security": {
-      "csp": null
+      "csp": "default-src blob: data: filesystem: ws: wss: http: https: tauri: 'unsafe-eval' 'unsafe-inline' 'self' img-src: 'self'"
     }
   }
 }

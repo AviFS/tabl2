@@ -16,8 +16,26 @@
 
 // const Units = require("./sorted-units");
 
+let bases = ["m", "s", "kg", "A", "K", "dollar", "mol", "bit", "cd"];
+
 function getUnit(unit) {
-  return Units.standalone[unit];
+  let value = Units.standalone[unit];
+  if (value != undefined) {
+    return value;
+  }
+
+  for (const base of bases) {
+    if (unit == base) {
+      return undefined;
+    }
+    if (unit.slice(unit.length-base.length) == base) {
+      return base;
+      // let pre = unit.slice(0, unit.length-base.length);
+      // return Units.prefix[pre] || Units.prefixStrict[pre];
+  } 
+  return undefined;
+
+  }
 }
 
 function lastWord(str) {
@@ -39,4 +57,4 @@ function recursiveGetUnit(unit) {
 //   }
 // }
 
-// console.log(recursiveGetUnit('yard'))
+console.log(recursiveGetUnit('yard'))

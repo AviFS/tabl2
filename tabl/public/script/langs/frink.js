@@ -3,6 +3,7 @@ class Frink extends Lang {
     static commandPrefix = '!';
 
     static getAddress(localhost) {
+        return 'ws://127.0.0.1:8884';
         if (localhost) {
             return 'ws://127.0.0.1:8002';
         }

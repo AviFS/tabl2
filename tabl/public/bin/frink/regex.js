@@ -246,7 +246,7 @@ function pprintFrinkOutput(disp) {
     }
 
     let decimal = parseFloat(out.decimal.join('e'));
-    // decimal = Utils.round(decimal, 6);
+    decimal = Utils.round(decimal, 3);
     let units = out.units.slice(0,3);
 
     // units = units.map(x => String(x).padStart(3, " "));

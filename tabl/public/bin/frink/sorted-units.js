@@ -1,4 +1,6 @@
-let standalone = {
+class Units {
+
+static standalone = {
 "meter": "m",
 "second": "s",
 "kilogram": "kg",
@@ -2182,7 +2184,7 @@ let standalone = {
 "smoot": "5 feet + 7 inches",
 }
 
-let prefix = {
+static prefix = {
 "yotta": "1ee24",
 "zetta": "1ee21",
 "exa": "1ee18",
@@ -2220,7 +2222,7 @@ let prefix = {
 "exbi": "2^60",
 }
 
-let prefixStrict = {
+static prefixStrict = {
 "Y": "yotta",
 "Z": "zetta",
 "E": "exa",
@@ -2258,7 +2260,7 @@ let prefixStrict = {
 "Ei": "exbi",
 }
 
-let dimensions = {
+static dimensions = {
 "1": "dimensionless",
 "m^2": "area",
 "m^3": "volume",
@@ -2324,7 +2326,7 @@ let dimensions = {
 "g/mol": "molar_mass",
 }
 
-let base = {
+static base = {
 "length": "m",
 "time": "s",
 "mass": "kg",
@@ -2336,4 +2338,7 @@ let base = {
 "luminous_intensity": "cd",
 }
 
-module.exports = {standalone, prefix, prefixStrict, dimensions, base}
+}
+
+// module.exports = {standalone, prefix, prefixStrict, dimensions, base}
+// module.exports = Units;

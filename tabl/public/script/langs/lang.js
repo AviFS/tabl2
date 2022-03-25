@@ -1,5 +1,6 @@
 class Lang {
 
+    static commandPrefix = undefined;
     static getAddress(localhost) {
         console.error("getAddress() must be overwritten.")
     }
@@ -84,7 +85,14 @@ class Lang {
                 children[i].innerHTML = "";
                 continue;
             }
+            if (code[0] == lang.commandPrefix) {
+                let res = lang.runCommand(code);
+                children[i].innerHTML = res? res: children[i].innerHTML;
+                continue;
+            }
             let data = { line: i, code: code, input: input, reset: false, state: [] };
+            // can have something a bit more flexible here like this, or even more flexible, but i'll keep the simple prefix command for now:
+            /* if (lang.isIntercept(data)) { continue; } */
             send(ws, data)
         }
     }

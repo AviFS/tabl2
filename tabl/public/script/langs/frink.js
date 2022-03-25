@@ -1,5 +1,7 @@
 class Frink extends Lang {
 
+    static commandPrefix = '!';
+
     static getAddress(localhost) {
         if (localhost) {
             return 'ws://127.0.0.1:8002';
@@ -47,6 +49,13 @@ class Frink extends Lang {
         return pprintFrinkOutput(disp);
     }
 
+
+    static runCommand(command) {
+        if (command[1] == '!') {
+            return recursiveGetUnit(command.slice(2)).join('\n');
+        }
+        return getUnit(command.slice(1));
+    }
 
     // not very smart but better than the alternative
     static whichLines(lines) {

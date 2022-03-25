@@ -40,6 +40,10 @@ class Frink extends Lang {
     // }
 
     static postProcess(disp) {
+        if (disp[0] == '[') {
+            let items = disp.slice(1, disp.length-1).split(', ')
+            return items.join('\n')
+        }
         return pprintFrinkOutput(disp);
     }
 

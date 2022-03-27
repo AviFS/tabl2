@@ -1,11 +1,11 @@
 [package]
-name = "tauri-template"
+name = "tabl"
 version = "0.1.0"
-description = "A Tauri App"
+description = "A repl for the 21st century"
 authors = ["you"]
 license = ""
 repository = ""
-default-run = "tauri-template"
+default-run = "tabl"
 edition = "2018"
 build = "src/build.rs"
 

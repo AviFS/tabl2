@@ -2,6 +2,8 @@ class Frink extends Lang {
 
     static commandPrefix = '!';
 
+    static mod = false;
+
     static getAddress(localhost) {
         return 'ws://127.0.0.1:8884';
         if (localhost) {
@@ -46,6 +48,13 @@ class Frink extends Lang {
         if (disp[0] == '[') {
             let items = disp.slice(1, disp.length-1).split(', ')
             return items.join('\n')
+        }
+
+        if (Frink.mod == true) {
+            Frink.mod = false;
+            let out = parseFrinkOutput(disp);
+            let dimension = out.dimension=="unknown unit type"? '*': out.dimension;
+            return dimension;
         }
         return pprintFrinkOutput(disp);
     }
@@ -92,6 +101,103 @@ class Frink extends Lang {
             accLines.push(line);
         }
         return lines;
+    }
+
+
+    static input(code=true) {
+        let prev = lines;
+        linesUpdate()
+        let changedLines = diffLines(prev, lines)
+    
+        if (debug == 0.5 || debug == 1.5) {
+            console.log("changedLines:\n", changedLines);
+        }
+    
+        // if we're on a new line, add a new div
+        if (document.getElementById('right').children.length < lines.length) {
+            let missing = lines.length - document.getElementById('right').children.length;
+            document.getElementById('right').innerHTML += "<div class='row'></div>".repeat(missing);
+        }
+    
+        let children = document.getElementById('right').children;
+    
+        let input = document.getElementById('input').innerText;
+    
+        // this shouldn't be necessary, for most langs, but just to save a nasty bug down the line
+        // without this, if you enter input, but you have no code, nothing runs
+        // that's just what we want... except for langs where input alone can create output
+        if (code == false && document.getElementById('left').value.trim() == "") {
+            send(ws, {line: 0, code: code, input: input});
+            return;
+        }
+    
+        // send(ws, {reset: true})
+    
+        let lineNums = lang.whichLines(changedLines);
+        // let lineNums = changedLines;
+        if (debug > 0) {
+            // console.log(`runningLines\n`, lineNums)
+            let running = lineNums.filter(x => !lang.isIgnore(getLine(x)));
+            console.log(`running lines:\n`, running);
+        }
+    
+        for (const i of lineNums) {
+            let code = getLine(i);
+            if (lang.isIgnore(code)) {
+                children[i].innerHTML = "";
+                continue;
+            }
+            // if (code[0] == lang.commandPrefix) {
+            //     let res = lang.runCommand(code);
+            //     children[i].innerHTML = res? res: children[i].innerHTML;
+            //     continue;
+            // }
+            let data = { line: i, code: code, input: input, reset: false, state: [] };
+
+            if (code[0] == '!') {
+                if (code[1] == '!') {
+                    children[i].innerHTML = recursiveGetUnit(code.slice(2)).join('\n');
+                }
+                else if (code[1] == '(') {
+                    function parseTuple(tuple) {
+                        let s = tuple.split(',');
+                        for (let i=0; i<3; i++) {
+                            if (i > s.length-1) s.push(0)
+                            else s[i] = parseInt(s[i])
+                        }
+                        return s
+                    }
+                    let [m, kg, s] = parseTuple(code.slice(2))
+                    let unitString = `m^${m} kg^${kg} s^${s}`;
+                    if (code.trim()[code.trim().length-1] == ")") {
+                        data.code = `units[${unitString}]`
+                        send(ws, data)
+                    }
+                    else {
+                        Frink.mod = true;
+                        data.code = unitString;
+                        send(ws, data)
+                    }
+                }
+                else {
+                    return getUnit(command.slice(1))
+                }
+                continue;
+            }
+
+            let trimmed = code.trim()
+            if (trimmed.slice(-2) == "??") {
+                // Frink.mod = true;
+                data.code = "units[" + trimmed.slice(0,-2) + "]";
+            }
+            else if (trimmed[trimmed.length-1] == "?") {
+                Frink.mod = true;
+                data.code = trimmed.slice(0,-1);
+            }
+            // can have something a bit more flexible here like this, or even more flexible, but i'll keep the simple prefix command for now:
+            /* if (lang.isIntercept(data)) { continue; } */
+            send(ws, data)
+        }
     }
 
 }

@@ -2,10 +2,21 @@ let ws;
 let lang;
 let url;
 let opts;
+let disp = [];
+let lastLine = 0;
 
 let debug = 0;
 let localhost = false;
-let defaultLang = "frink";
+let defaultLang = "ngn-apl";
+
+document.addEventListener("selectionchange", function () {
+    let currLine = getLineNumber();
+    if (lastLine != currLine) {
+        ngnAPL.updateDisp(disp, lastLine);
+        ngnAPL.updateDisp(disp, currLine);
+    }
+    lastLine = currLine;
+})
 
 function updateLine(line, data) {
     // console.log(line, data)

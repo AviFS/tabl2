@@ -12,10 +12,18 @@ let defaultLang = "ngn-apl";
 document.addEventListener("selectionchange", function () {
     let currLine = getLineNumber();
     if (lastLine != currLine) {
+        if (lastLine+1<disp.length) {
+            document.getElementById('right').children[lastLine+1].classList.remove('l');
+        }
+        if (currLine+1<disp.length) {
+            document.getElementById('right').children[currLine+1].classList.add('l');
+        }
+        document.getElementById('right').children[lastLine].classList.remove('multiline');
+        document.getElementById('right').children[currLine].classList.add('multiline');
         lang.updateDisp(lastLine);
         lang.updateDisp(currLine);
+        lastLine = currLine;
     }
-    lastLine = currLine;
 })
 
 function updateLine(line, data) {

@@ -9,6 +9,7 @@ class ngnAPL extends Lang {
             updateLine(line, disp[line]);
             return;
         }
+        
         updateLine(line, disp[line].split('\n').join(' ⋄ '));
     }
 

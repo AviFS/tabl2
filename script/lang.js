@@ -9,6 +9,14 @@ class Lang {
         return 9991;
     }
 
+    static updateDisp(line) {
+        if (getLineNumber() == line) {
+            updateLine(line, disp[line]);
+            return;
+        }
+        updateLine(line, disp[line].split('\n').join(' ⋄ '));
+    }
+
     static isIgnore(code) {
         return code.trim() == "" || code[0] == '#';
     }

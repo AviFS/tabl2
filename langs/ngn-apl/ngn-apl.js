@@ -4,14 +4,12 @@ class ngnAPL extends Lang {
         return false;
     }
 
-    static updateDisp(disp, i) {
-        // console.log(lastLine, i)
-        // console.log('3')
-        if (getLineNumber() == i) {
-            updateLine(i, disp[i]);
+    static updateDisp(line) {
+        if (getLineNumber() == line) {
+            updateLine(line, disp[line]);
             return;
         }
-        updateLine(i, disp[i].split('\n').join(' ⋄ '));
+        updateLine(line, disp[line].split('\n').join(' ⋄ '));
     }
 
     static processAll() {
@@ -40,11 +38,11 @@ class ngnAPL extends Lang {
                 let prog = lines.slice(0, i+1).join('\n')
                 let result = format(apl(prog));
                 disp[i] = result;
-                ngnAPL.updateDisp(disp, i);
+                lang.updateDisp(i);
             }
             else {
                 disp[i] = "";
-                ngnAPL.updateDisp(disp, i);
+                lang.updateDisp(i);
             }
         }
 

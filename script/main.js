@@ -12,8 +12,8 @@ let defaultLang = "ngn-apl";
 document.addEventListener("selectionchange", function () {
     let currLine = getLineNumber();
     if (lastLine != currLine) {
-        ngnAPL.updateDisp(disp, lastLine);
-        ngnAPL.updateDisp(disp, currLine);
+        lang.updateDisp(lastLine);
+        lang.updateDisp(currLine);
     }
     lastLine = currLine;
 })

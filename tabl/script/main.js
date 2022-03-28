@@ -46,7 +46,6 @@ function init() {
     // setWebSocket('ws://127.0.0.1:8008');
 
     url = parseURL();
-    console.log(defaultLang)
     opts = {
         "frink": Frink,
         "apl": APL,

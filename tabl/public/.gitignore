@@ -1,0 +1,4 @@
+# # gitignored tabl config loaded after all other scripts
+# script/.tabl.config.js
+
+.DS_Store

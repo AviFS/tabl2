@@ -217,6 +217,7 @@ background-color: rgb(0,28,28);
 */
 
 .curr-line {
+    color: hsl(37, 65%, 50%);
 }
 
 /* < MULTILINE >  */

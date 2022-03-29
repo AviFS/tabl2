@@ -184,7 +184,8 @@ html, body {
         border: none !important;
     }
     body, html {
-        background-color: hsla(224, 19%, 15%, 1) !important;
+        background-color: rgb(31,29,30);
+        /* background-color: hsla(224, 19%, 15%, 1) !important; */
     }
     #box {
         margin-top: 0px !important;

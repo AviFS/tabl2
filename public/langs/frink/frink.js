@@ -180,7 +180,7 @@ class Frink extends Lang {
                     }
                 }
                 else {
-                    children[i].innerHTML = getUnit(command.slice(1));
+                    children[i].innerHTML = getUnit(code.slice(1));
                 }
                 continue;
             }

@@ -5,12 +5,18 @@ class ngnAPL extends Lang {
     }
 
     static updateDisp(line) {
+        let curr = disp[line];
         if (getLineNumber() == line) {
-            updateLine(line, disp[line]);
+            updateLine(line, curr);
             return;
         }
-        
-        updateLine(line, disp[line].split('\n').join(' ⋄ '));
+
+        // updateLine(line, disp[line].split('\n').join(' ⋄ '));
+        if (curr.indexOf('\n') > -1) {
+            updateLine(line, "> " + curr.slice(0, curr.indexOf('\n')));
+            return;
+        }
+        updateLine(line, curr);
     }
 
     static processAll() {

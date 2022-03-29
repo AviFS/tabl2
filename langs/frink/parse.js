@@ -263,7 +263,7 @@ function pprintFrinkOutput(disp) {
         return `${decimal} ${units}`;
     }
 
-    return `${decimal} ${dimension} ${units}`;
+    return `${decimal} ${units}`;
 
 }
 

@@ -116,7 +116,7 @@ class Frink extends Lang {
         // if we're on a new line, add a new div
         if (document.getElementById('right').children.length < lines.length) {
             let missing = lines.length - document.getElementById('right').children.length;
-            document.getElementById('right').innerHTML += "<div class='row'></div>".repeat(missing);
+            document.getElementById('right').innerHTML += "<div class='row-wrapper'><div ></div></div>".repeat(missing);
         }
     
         let children = document.getElementById('right').children;
@@ -144,19 +144,19 @@ class Frink extends Lang {
         for (const i of lineNums) {
             let code = getLine(i);
             if (lang.isIgnore(code)) {
-                children[i].innerHTML = "";
+                children[i].firstElementChild.innerHTML = "";
                 continue;
             }
             // if (code[0] == lang.commandPrefix) {
             //     let res = lang.runCommand(code);
-            //     children[i].innerHTML = res? res: children[i].innerHTML;
+            //     children[i].firstElementChild.innerHTML = res? res: children[i].firstElementChild.innerHTML;
             //     continue;
             // }
             let data = { line: i, code: code, input: input, reset: false, state: [] };
 
             if (code[0] == '!') {
                 if (code[1] == '!') {
-                    children[i].innerHTML = recursiveGetUnit(code.slice(2)).join('\n');
+                    children[i].firstElementChild.innerHTML = recursiveGetUnit(code.slice(2)).join('\n');
                 }
                 else if (code[1] == '(') {
                     function parseTuple(tuple) {
@@ -180,7 +180,7 @@ class Frink extends Lang {
                     }
                 }
                 else {
-                    children[i].innerHTML = getUnit(command.slice(1));
+                    children[i].firstElementChild.innerHTML = getUnit(command.slice(1));
                 }
                 continue;
             }

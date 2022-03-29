@@ -207,31 +207,28 @@ html, body {
     /* line-height: 1.5em; */
 }
 
-/* .multiline {
-    overflow-y: visible;
-    height: 1.8em;
-    background-color: rgb(31,29,30);
-} */
-
-.multiline {
-    position: fixed;
-    right: 24px;
-    background-color: rgb(31,29,30);
-}
-
 /* This is a pretty cool effect to highlight the current line */
 /*
-.multiline {
+.curr-line {
 padding: 0px;
 box-shadow: 0 0 10px 10px rgb(0 28 28);
 background-color: rgb(0,28,28);
 }
 */
 
-/* #right>.row.l::after {
-    content: 'before';
-} */
-
-#right>.row.l::before {
-    content: '\A'
+.curr-line {
 }
+
+/* < MULTILINE >  */
+.row {
+    background-color: rgb(31,29,30);
+    overflow-y: hidden;
+    z-index: 0;
+    position: relative;
+}
+.multiline {
+}
+.row-wrapper {
+    height: 1.8em;
+}
+/* </ MULTILINE > */

@@ -10,6 +10,9 @@ class Lang {
     }
 
     static updateDisp(line) {
+        disp = []
+        // for (let i=0;i++;i<line+1) { disp.push(`${i}\n${i*2}\n${i*3}`)
+        disp = ["234\n3\n3", "2"];
         if (getLineNumber() == line) {
             updateLine(line, disp[line]);
             return;
@@ -62,7 +65,7 @@ class Lang {
         // if we're on a new line, add a new div
         if (document.getElementById('right').children.length < lines.length) {
             let missing = lines.length - document.getElementById('right').children.length;
-            document.getElementById('right').innerHTML += "<div class='row'></div>".repeat(missing);
+            document.getElementById('right').innerHTML += "<div class='row-wrapper'><div class='row'></div></div>".repeat(missing);
         }
     
         let children = document.getElementById('right').children;
@@ -90,12 +93,12 @@ class Lang {
         for (const i of lineNums) {
             let code = getLine(i);
             if (lang.isIgnore(code)) {
-                children[i].innerHTML = "";
+                children[i].firstElementChild.innerHTML = "";
                 continue;
             }
             if (code[0] == lang.commandPrefix) {
                 let res = lang.runCommand(code);
-                children[i].innerHTML = res? res: children[i].innerHTML;
+                children[i].firstElementChild.innerHTML = res? res: children[i].firstElementChild.innerHTML;
                 continue;
             }
             let data = { line: i, code: code, input: input, reset: false, state: [] };

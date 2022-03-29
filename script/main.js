@@ -12,14 +12,16 @@ let defaultLang = "ngn-apl";
 document.addEventListener("selectionchange", function () {
     let currLine = getLineNumber();
     if (lastLine != currLine) {
-        if (lastLine+1<disp.length) {
-            document.getElementById('right').children[lastLine+1].classList.remove('l');
-        }
-        if (currLine+1<disp.length) {
-            document.getElementById('right').children[currLine+1].classList.add('l');
-        }
-        document.getElementById('right').children[lastLine].classList.remove('multiline');
-        document.getElementById('right').children[currLine].classList.add('multiline');
+        document.getElementById('right').children[lastLine].firstElementChild.classList.remove('curr-line');
+        document.getElementById('right').children[currLine].firstElementChild.classList.add('curr-line');
+
+        // May want multiple multilines in the future
+        // So the z-index is set dynamically for each row to give precedence to later outputs in case of overlap
+        document.getElementById('right').children[lastLine].firstElementChild.classList.remove('multiline');
+        document.getElementById('right').children[currLine].firstElementChild.classList.add('multiline');
+        document.getElementById('right').children[lastLine].firstElementChild.style["z-index"] = 0;
+        document.getElementById('right').children[currLine].firstElementChild.style["z-index"] = currLine;
+
         lang.updateDisp(lastLine);
         lang.updateDisp(currLine);
         lastLine = currLine;
@@ -28,7 +30,7 @@ document.addEventListener("selectionchange", function () {
 
 function updateLine(line, data) {
     // console.log(line, data)
-    document.getElementById('right').children[line].innerHTML = data;
+    document.getElementById('right').children[line].firstElementChild.innerHTML = data;
 }
 function getLineNumber() {
     let textarea = document.getElementById('left');
@@ -43,7 +45,7 @@ function getLine(lineNum) {
     return lineNum < lines.length? lines[lineNum]: "";
 }
 function dim(line) {
-    document.getElementById('right').children[line].classList.add('dim');
+    document.getElementById('right').children[line].firstElementChild.classList.add('dim');
 }
 
 function setDefaultLang() {
@@ -77,7 +79,7 @@ function init() {
     lang = opts[url.langID];
 
     // temp fix; can be removed later
-    document.getElementById('right').innerHTML += "<div class='row'></div>";
+    document.getElementById('right').innerHTML += "<div class='row-wrapper'><div class='row'></div></div>";
 
     document.getElementById('left').value = parseTIOLink(url.permalink).code;
 
@@ -198,7 +200,7 @@ function _onmessage(event) {
 
     // disp
     if (!data.isError) {
-        document.getElementById('right').children[data.line].classList.remove('dim');
+        document.getElementById('right').children[data.line].firstElementChild.classList.remove('dim');
         updateLine(data.line, lang.postProcess(data.disp));
     }
     else {

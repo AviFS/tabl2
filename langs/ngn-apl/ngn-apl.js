@@ -29,7 +29,7 @@ class ngnAPL extends Lang {
         if (document.getElementById('right').children.length < lines.length) {
             disp.push("");
             let missing = lines.length - document.getElementById('right').children.length;
-            document.getElementById('right').innerHTML += "<div class='row'></div>".repeat(missing);
+            document.getElementById('right').innerHTML += "<div class='row-wrapper'><div class='row'></div></div>".repeat(missing);
         }
 
         let right = document.getElementById('right').children;

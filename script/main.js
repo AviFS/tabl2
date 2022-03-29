@@ -20,7 +20,7 @@ document.addEventListener("selectionchange", function () {
         document.getElementById('right').children[lastLine].firstElementChild.classList.remove('multiline');
         document.getElementById('right').children[currLine].firstElementChild.classList.add('multiline');
         document.getElementById('right').children[lastLine].firstElementChild.style["z-index"] = 0;
-        document.getElementById('right').children[currLine].firstElementChild.style["z-index"] = currLine;
+        document.getElementById('right').children[currLine].firstElementChild.style["z-index"] = currLine+1;
 
         lang.updateDisp(lastLine);
         lang.updateDisp(currLine);

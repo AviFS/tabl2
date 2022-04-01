@@ -10,13 +10,22 @@ class Lang {
     }
 
     static updateDisp(line) {
-        disp = []
-        // for (let i=0;i++;i<line+1) { disp.push(`${i}\n${i*2}\n${i*3}`)
-        disp = ["234\n3\n3", "2"];
+        //  this happens whenever you leave an empty line on a "smart" runner
+        // the element disp[n] in the disp array is only defined when line n is run
+        // so if lang.whichLines/lang.isIgnore is set up to not run empty lines
+        // then the corresponding disp will be undefined until you type something on that line to make it get run
+        if (disp[line] == undefined) {
+            updateLine(line, "");
+            return;
+        }
+
+        // if current line, show full thing
         if (getLineNumber() == line) {
             updateLine(line, disp[line]);
             return;
         }
+
+        // if not current line, show one-line version
         updateLine(line, disp[line].split('\n').join(' ⋄ '));
     }
 
@@ -93,12 +102,14 @@ class Lang {
         for (const i of lineNums) {
             let code = getLine(i);
             if (lang.isIgnore(code)) {
-                children[i].firstElementChild.innerHTML = "";
+                disp[i] = "";
+                lang.updateDisp(i);
                 continue;
             }
             if (code[0] == lang.commandPrefix) {
                 let res = lang.runCommand(code);
-                children[i].firstElementChild.innerHTML = res? res: children[i].firstElementChild.innerHTML;
+                disp[i] = res? res: disp[i];
+                lang.updateDisp(i);
                 continue;
             }
             let data = { line: i, code: code, input: input, reset: false, state: [] };

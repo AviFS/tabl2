@@ -201,7 +201,8 @@ function _onmessage(event) {
     // disp
     if (!data.isError) {
         document.getElementById('right').children[data.line].firstElementChild.classList.remove('dim');
-        updateLine(data.line, lang.postProcess(data.disp));
+        disp[data.line] = data.disp;
+        lang.updateDisp(data.line);
     }
     else {
         let errorString = "*"

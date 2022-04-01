@@ -6,4 +6,6 @@ class Utilss {
         return +(Math.round(num + "e+"+p)  + "e-"+p);
     }
 
+    static range (a,b) { return Array.from({length:b-a},(_,i)=>i+a); }
+
 }

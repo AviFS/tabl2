@@ -12,6 +12,7 @@ let defaultLang = "ngn-apl";
 document.addEventListener("selectionchange", function () {
     let currLine = getLineNumber();
     if (currLine > document.getElementById('right').children.length-1) {
+        disp.push({isEmpty: true});
         let missing = currLine - (document.getElementById('right').children.length-1);
         document.getElementById('right').innerHTML += "<div class='row-wrapper'><div class='row'></div></div>".repeat(missing);
     }
@@ -30,6 +31,10 @@ document.addEventListener("selectionchange", function () {
         lang.updateDisp(currLine);
         lastLine = currLine;
     }
+
+    //  temp hacky fix to get rid of empty values in array where there are blank lines
+    disp = Utilss.range(0,disp.length).map(i=>disp[i]==undefined? {isEmpty: true}: disp[i]);
+
 })
 
 function updateLine(line, data) {
@@ -84,6 +89,7 @@ function init() {
 
     // temp fix; can be removed later
     document.getElementById('right').innerHTML += "<div class='row-wrapper'><div class='row'></div></div>";
+    disp.push({isEmpty: true})
 
     document.getElementById('left').value = parseTIOLink(url.permalink).code;
 

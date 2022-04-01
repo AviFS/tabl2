@@ -64,8 +64,7 @@ class Frink extends Lang {
         // the element disp[n] in the disp array is only defined when line n is run
         // so if lang.whichLines/lang.isIgnore is set up to not run empty lines
         // then the corresponding disp will be undefined until you type something on that line to make it get run
-        let isEmpty = disp[line] == undefined || disp[line].empty == false;
-        if (isEmpty) {
+        if (disp[line].isEmpty == true) {
             updateLine(line, "");
             return;
         }
@@ -163,7 +162,7 @@ class Frink extends Lang {
         for (const i of lineNums) {
             let code = getLine(i);
             if (lang.isIgnore(code)) {
-                disp[i] = {empty: true};
+                disp[i] = {isEmpty: true};
                 lang.updateDisp(i);
                 continue;
             }

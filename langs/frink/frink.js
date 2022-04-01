@@ -182,7 +182,7 @@ class Frink extends Lang {
                     }
                 }
                 else {
-                    disp[i] = getUnit(command.slice(1));
+                    disp[i] = getUnit(code.slice(1));
                     lang.updateDisp(i);
                 }
                 continue;

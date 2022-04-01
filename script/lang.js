@@ -71,12 +71,6 @@ class Lang {
             console.log("changedLines:\n", changedLines);
         }
     
-        // if we're on a new line, add a new div
-        if (document.getElementById('right').children.length < lines.length) {
-            let missing = lines.length - document.getElementById('right').children.length;
-            document.getElementById('right').innerHTML += "<div class='row-wrapper'><div class='row'></div></div>".repeat(missing);
-        }
-    
         let children = document.getElementById('right').children;
     
         let input = document.getElementById('input').innerText;

@@ -11,6 +11,10 @@ let defaultLang = "ngn-apl";
 
 document.addEventListener("selectionchange", function () {
     let currLine = getLineNumber();
+    if (currLine > document.getElementById('right').children.length-1) {
+        disp.push("");
+        document.getElementById('right').innerHTML += "<div class='row-wrapper'><div class='row'></div></div>";
+    }
     if (lastLine != currLine) {
         document.getElementById('right').children[lastLine].firstElementChild.classList.remove('curr-line');
         document.getElementById('right').children[currLine].firstElementChild.classList.add('curr-line');

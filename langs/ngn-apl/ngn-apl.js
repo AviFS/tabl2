@@ -31,13 +31,6 @@ class ngnAPL extends Lang {
         
         function format(expr) { return apl.fmt(expr).join('\n'); }
 
-        // if we're on a new line, add a new div
-        if (document.getElementById('right').children.length < lines.length) {
-            disp.push("");
-            let missing = lines.length - document.getElementById('right').children.length;
-            document.getElementById('right').innerHTML += "<div class='row-wrapper'><div class='row'></div></div>".repeat(missing);
-        }
-
         let right = document.getElementById('right').children;
 
         for (let i=0; i<right.length; i++) {

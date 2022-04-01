@@ -11,7 +11,7 @@ class Lang {
 
     static updateAllDisp() {
         // disp.map((_, i) => updateDisp(i));
-        Utilss.range(disp.length).map(i => lang.updateDisp(i));
+        Utilss.range(0, disp.length).map(i => lang.updateDisp(i));
     }
 
     static updateDisp(line) {

@@ -27,6 +27,11 @@ class RunBF {
         return [tapeIndex-smallHalf, tapeIndex+bigHalf]
     }
 
+    static repr(tape, tapeIndex) {
+        // return JSON.stringify({tape: "["+tape.slice(0,4).join(", ")+"]", ptr: tapeIndex});
+        return {tape: tape.slice(0,7), ptr: tapeIndex};
+    }
+
     static pprint(tape, tapeIndex) {
         // return tape.slice(0, n).join(' ')
         let acc = "";
@@ -182,7 +187,7 @@ class RunBF {
                 }
                 // transpiled += transpile(lines[i]);
             }
-            transpiled += `\ndisp[${i}].push(RunBF.pprint(tape, tapeIndex))\n`;
+            transpiled += `\ndisp[${i}].push(RunBF.repr(tape, tapeIndex))\n`;
         }
         // console.log(transpiled);
         eval(transpiled);

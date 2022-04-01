@@ -4,12 +4,20 @@ class Brainfuck extends Lang {
         return false;
     }
 
+    static updateDisp(line) {
+        if (disp[line].isEmpty == true) {
+            updateLine(line, "");
+            return;
+        }
+
+        let val = disp[line];
+        updateLine(line, RunBF.pprint(val.tape, val.ptr));
+        return;
+    }
+
     static input(code = true) {
         let program = document.getElementById('left').value;
         let lines = document.getElementById('left').value.split('\n');
-        console.log("lines: ", lines.length)
-        console.log("disp: ", disp.length)
-        console.log("right: ", document.getElementById('right').children.length)
         
         let res = RunBF.runLines(program);
 

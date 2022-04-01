@@ -10,11 +10,14 @@ class Lang {
     }
 
     static updateDisp(line) {
+        updateLine(line, 234)
+        console.log(line,disp)
         //  this happens whenever you leave an empty line on a "smart" runner
         // the element disp[n] in the disp array is only defined when line n is run
         // so if lang.whichLines/lang.isIgnore is set up to not run empty lines
         // then the corresponding disp will be undefined until you type something on that line to make it get run
-        if (disp[line] == undefined) {
+        console.log(2)
+        if (disp[line]?.isEmpty == true) {
             updateLine(line, "");
             return;
         }

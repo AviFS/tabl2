@@ -6,6 +6,12 @@ class ngnAPL extends Lang {
 
     static updateDisp(line) {
         let curr = disp[line];
+
+        if (disp[line].isEmpty == true) {
+            updateLine(line, "");
+            return;
+        }
+
         if (getLineNumber() == line) {
             updateLine(line, curr);
             return;
@@ -41,7 +47,7 @@ class ngnAPL extends Lang {
                 lang.updateDisp(i);
             }
             else {
-                disp[i] = "";
+                disp[i] = {isEmpty: true};
                 lang.updateDisp(i);
             }
         }

@@ -21,8 +21,9 @@ class Brainfuck extends Lang {
         }
 
         // document.getElementById('right').innerHTML = disp.map(x => x[0]).join('');
-        document.getElementById('right').innerHTML = display;
-        document.getElementById('output').innerHTML = res.output;
+        disp = display.split('\n');
+        // document.getElementById('right').innerHTML = display;
+        // document.getElementById('output').innerHTML = res.output;
 
         // let program = ""
         // for (const line of lines) {

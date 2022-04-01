@@ -12,8 +12,11 @@ let defaultLang = "ngn-apl";
 document.addEventListener("selectionchange", function () {
     let currLine = getLineNumber();
     if (currLine > document.getElementById('right').children.length-1) {
-        disp.push({isEmpty: true});
         let missing = currLine - (document.getElementById('right').children.length-1);
+        // console.log(disp.length)
+        // disp.push(...Utilss.fill({isEmpty: true}, missing));
+        disp.push({isEmpty: true});
+        // console.log(disp.length)
         document.getElementById('right').innerHTML += "<div class='row-wrapper'><div class='row'></div></div>".repeat(missing);
     }
     if (lastLine != currLine) {

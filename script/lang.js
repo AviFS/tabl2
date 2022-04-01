@@ -9,6 +9,11 @@ class Lang {
         return 9991;
     }
 
+    static updateAllDisp() {
+        // disp.map((_, i) => updateDisp(i));
+        Utilss.range(disp.length).map(i => lang.updateDisp(i));
+    }
+
     static updateDisp(line) {
         updateLine(line, 234)
         // console.log(line,disp)

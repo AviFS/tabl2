@@ -26,7 +26,7 @@ class Lang {
         }
 
         // if not current line, show one-line version
-        updateLine(line, disp[line].split('\n').join(' ⋄ '));
+        updateLine(line, disp[line].split('\n').join(', '));
     }
 
     static isIgnore(code) {

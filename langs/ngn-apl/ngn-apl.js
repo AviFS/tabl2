@@ -40,6 +40,9 @@ class ngnAPL extends Lang {
 
         let right = document.getElementById('right').children;
 
+        // this logic should be taken care of somewhere else
+        for (let i=0; i<lines.length; i++) { if (i>right.length-1) { document.getElementById('right').innerHTML += "<div class='row-wrapper'><div class='row'></div></div>"; }}
+
         for (let i=0; i<right.length; i++) {
             if (i<lines.length && !lang.isIgnore(lines[i])) {
                 let prog = lines.slice(0, i+1).join('\n')

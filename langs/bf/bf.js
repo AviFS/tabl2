@@ -22,8 +22,11 @@ class Brainfuck extends Lang {
         
         let res = RunBF.runLines(program);
 
+        // this logic should be taken care of somewhere else
+        for (let i=0; i<lines.length; i++) { if (i>right.length-1) { document.getElementById('right').innerHTML += "<div class='row-wrapper'><div class='row'></div></div>"; }}
+
         for (let i=0; i<right.length; i++) {
-            if (!lang.isIgnore(lines[i])) {
+            if (i<lines.length && !lang.isIgnore(lines[i])) {
                 let val = res.disp[i][0];
                 disp[i] = {type: "BFState", tape: val.tape, ptr: val.ptr};
             }

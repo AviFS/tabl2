@@ -7,20 +7,17 @@ class Brainfuck extends Lang {
     static input(code = true) {
         let program = document.getElementById('left').value;
         let lines = document.getElementById('left').value.split('\n');
-        console.log("lines: ", lines.length)
-        console.log("disp: ", disp.length)
-        console.log("right: ", document.getElementById('right').children.length)
+        let right = document.getElementById('right').children;
         
         let res = RunBF.runLines(program);
 
-        for (let i=0; i<lines.length; i++) {
+        for (let i=0; i<right.length; i++) {
             if (!lang.isIgnore(lines[i])) {
                 disp[i] = res.disp[i][0];
             }
             else {
                 disp[i] = {isEmpty: true};
             }
-            console.log(i)
         lang.updateDisp(i)
         }
 

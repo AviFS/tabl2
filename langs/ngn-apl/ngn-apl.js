@@ -18,7 +18,7 @@ class ngnAPL extends Lang {
             }
 
             // updateLine(line, item.text.split('\n').join(' ⋄ '));
-            if (text.indexOf('\n') > -1) {
+            if (item.text.indexOf('\n') > -1) {
                 updateLine(line, "﹥ " + item.text.slice(0, text.indexOf('\n')));
                 return;
             }

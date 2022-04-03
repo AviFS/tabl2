@@ -13,6 +13,12 @@ function toggleSettings() {
     document.getElementById('settings').classList.toggle('hide');
 }
 
+function updateSettings() {
+    RunBF.n = document.getElementById('n').value;
+    RunBF.padding = document.getElementById('padding').value;
+    lang.updateAllDisp();
+}
+
 document.addEventListener("selectionchange", function () {
     let currLine = getLineNumber();
     if (currLine > document.getElementById('right').children.length-1) {

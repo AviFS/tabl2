@@ -10,8 +10,8 @@ class Brainfuck extends Lang {
             return;
         }
 
-        if (disp[line].type == "Static") {
-            let val = disp[line].text;
+        if (disp[line].type == "BFState") {
+            let val = disp[line];
             updateLine(line, RunBF.pprint(val.tape, val.ptr));
             return;
         }
@@ -26,7 +26,8 @@ class Brainfuck extends Lang {
 
         for (let i=0; i<right.length; i++) {
             if (!lang.isIgnore(lines[i])) {
-                disp[i] = {type: "Static", text: res.disp[i][0]};
+                let val = res.disp[i][0];
+                disp[i] = {type: "BFState", tape: val.tape, ptr: val.ptr};
             }
             else {
                 disp[i] = {type: "Empty"}

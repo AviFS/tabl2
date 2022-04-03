@@ -12,8 +12,8 @@ let defaultLang = "ngn-apl";
 document.addEventListener("selectionchange", function () {
     let currLine = getLineNumber();
     if (currLine > document.getElementById('right').children.length-1) {
-        disp.push({isEmpty: true});
         let missing = currLine - (document.getElementById('right').children.length-1);
+        disp.push(...Utilss.fill({isEmpty: true}, missing));
         document.getElementById('right').innerHTML += "<div class='row-wrapper'><div class='row'></div></div>".repeat(missing);
     }
     if (lastLine != currLine) {
@@ -32,7 +32,9 @@ document.addEventListener("selectionchange", function () {
         lastLine = currLine;
     }
 
-    //  temp hacky fix to get rid of empty values in array where there are blank lines
+    // temp hacky fix to get rid of empty values in array where there are blank lines
+    // occurs when copying/pasting (multiline input) text containing blank lines (or isIgnore lines) while
+    // using a runner that doesn't run blank lines so that those lines are neither initializied nor evaluated
     disp = Utilss.range(0,disp.length).map(i=>disp[i]==undefined? {isEmpty: true}: disp[i]);
 
 })

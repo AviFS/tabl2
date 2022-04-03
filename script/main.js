@@ -9,6 +9,10 @@ let debug = 0;
 let localhost = false;
 let defaultLang = "ngn-apl";
 
+function toggleSettings() {
+    document.getElementById('settings').classList.toggle('hide');
+}
+
 document.addEventListener("selectionchange", function () {
     let currLine = getLineNumber();
     if (currLine > document.getElementById('right').children.length-1) {

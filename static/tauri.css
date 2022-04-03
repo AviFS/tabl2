@@ -234,3 +234,19 @@ background-color: rgb(0,28,28);
     height: 1.8em;
 }
 /* </ MULTILINE > */
+
+
+/* < SETTINGS > */
+#settings {
+    float: left;
+    border-right: solid 1px white;
+    height: 100%;
+    width: 300px;
+    color: white;
+}
+
+#settings.hide {
+    visibility: hidden;
+    width: 0px;
+}
+/* < /SETTINGS > */

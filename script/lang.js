@@ -9,6 +9,29 @@ class Lang {
         return 9991;
     }
 
+    static updateAllDisp() {
+        // disp.map((_, i) => updateDisp(i));
+        Utilss.range(0, disp.length).map(i => lang.updateDisp(i));
+    }
+
+    static updateDisp(line) {
+        let item = disp[line];
+        if (item.type == "Empty") {
+            updateLine(line, "");
+        }
+
+        else if (item.type == "Static") {
+            // if current line, show full thing
+            if (getLineNumber() == line) {
+                updateLine(line, item.text);
+                return;
+        }
+
+            // if not current line, show one-line version
+            updateLine(line, item.text.split('\n').join(', '));
+        }
+    }
+
     static isIgnore(code) {
         return code.trim() == "" || code[0] == '#';
     }
@@ -51,12 +74,6 @@ class Lang {
             console.log("changedLines:\n", changedLines);
         }
     
-        // if we're on a new line, add a new div
-        if (document.getElementById('right').children.length < lines.length) {
-            let missing = lines.length - document.getElementById('right').children.length;
-            document.getElementById('right').innerHTML += "<div class='row'></div>".repeat(missing);
-        }
-    
         let children = document.getElementById('right').children;
     
         let input = document.getElementById('input').innerText;
@@ -82,12 +99,15 @@ class Lang {
         for (const i of lineNums) {
             let code = getLine(i);
             if (lang.isIgnore(code)) {
-                children[i].innerHTML = "";
+                // Can also push a separate {type: "Ignored"} here
+                disp[i] = {type: "Empty"};
+                lang.updateDisp(i);
                 continue;
             }
             if (code[0] == lang.commandPrefix) {
                 let res = lang.runCommand(code);
-                children[i].innerHTML = res? res: children[i].innerHTML;
+                disp[i] = {type: "Static", text: res? res: disp[i].text};
+                lang.updateDisp(i);
                 continue;
             }
             let data = { line: i, code: code, input: input, reset: false, state: [] };

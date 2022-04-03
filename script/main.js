@@ -2,14 +2,46 @@ let ws;
 let lang;
 let url;
 let opts;
+let disp = [];
+let lastLine = 0;
 
 let debug = 0;
 let localhost = false;
-let defaultLang = "frink";
+let defaultLang = "ngn-apl";
+
+document.addEventListener("selectionchange", function () {
+    let currLine = getLineNumber();
+    if (currLine > document.getElementById('right').children.length-1) {
+        let missing = currLine - (document.getElementById('right').children.length-1);
+        disp.push(...Utilss.fill({type: "Empty"}, missing));
+        document.getElementById('right').innerHTML += "<div class='row-wrapper'><div class='row'></div></div>".repeat(missing);
+    }
+    if (lastLine != currLine) {
+        document.getElementById('right').children[lastLine].firstElementChild.classList.remove('curr-line');
+        document.getElementById('right').children[currLine].firstElementChild.classList.add('curr-line');
+
+        // May want multiple multilines in the future
+        // So the z-index is set dynamically for each row to give precedence to later outputs in case of overlap
+        document.getElementById('right').children[lastLine].firstElementChild.classList.remove('multiline');
+        document.getElementById('right').children[currLine].firstElementChild.classList.add('multiline');
+        document.getElementById('right').children[lastLine].firstElementChild.style["z-index"] = 0;
+        document.getElementById('right').children[currLine].firstElementChild.style["z-index"] = currLine+1;
+
+        lang.updateDisp(lastLine);
+        lang.updateDisp(currLine);
+        lastLine = currLine;
+    }
+
+    // temp hacky fix to get rid of empty values in array where there are blank lines
+    // occurs when copying/pasting (multiline input) text containing blank lines (or isIgnore lines) while
+    // using a runner that doesn't run blank lines so that those lines are neither initializied nor evaluated
+    disp = Utilss.range(0,disp.length).map(i=>disp[i]==undefined? {type: "Empty"}: disp[i]);
+
+})
 
 function updateLine(line, data) {
     // console.log(line, data)
-    document.getElementById('right').children[line].innerHTML = data;
+    document.getElementById('right').children[line].firstElementChild.innerHTML = data;
 }
 function getLineNumber() {
     let textarea = document.getElementById('left');
@@ -24,7 +56,7 @@ function getLine(lineNum) {
     return lineNum < lines.length? lines[lineNum]: "";
 }
 function dim(line) {
-    document.getElementById('right').children[line].classList.add('dim');
+    document.getElementById('right').children[line].firstElementChild.classList.add('dim');
 }
 
 function setDefaultLang() {
@@ -58,7 +90,8 @@ function init() {
     lang = opts[url.langID];
 
     // temp fix; can be removed later
-    document.getElementById('right').innerHTML += "<div class='row'></div>";
+    document.getElementById('right').innerHTML += "<div class='row-wrapper'><div class='row'></div></div>";
+    disp.push({type: "Empty"})
 
     document.getElementById('left').value = parseTIOLink(url.permalink).code;
 
@@ -179,8 +212,9 @@ function _onmessage(event) {
 
     // disp
     if (!data.isError) {
-        document.getElementById('right').children[data.line].classList.remove('dim');
-        updateLine(data.line, lang.postProcess(data.disp));
+        document.getElementById('right').children[data.line].firstElementChild.classList.remove('dim');
+        disp[data.line] = {type: "Static", text: data.disp};
+        lang.updateDisp(data.line);
     }
     else {
         let errorString = "*"

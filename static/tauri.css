@@ -184,7 +184,8 @@ html, body {
         border: none !important;
     }
     body, html {
-        background-color: hsla(224, 19%, 15%, 1) !important;
+        background-color: rgb(31,29,30);
+        /* background-color: hsla(224, 19%, 15%, 1) !important; */
     }
     #box {
         margin-top: 0px !important;
@@ -202,3 +203,34 @@ html, body {
         height: auto !important;
     }
 }
+
+#box, #left, #right {
+    /* line-height: 1.5em; */
+}
+
+/* This is a pretty cool effect to highlight the current line */
+/*
+.curr-line {
+padding: 0px;
+box-shadow: 0 0 10px 10px rgb(0 28 28);
+background-color: rgb(0,28,28);
+}
+*/
+
+.curr-line {
+    /* color: hsl(37, 65%, 50%); */
+}
+
+/* < MULTILINE >  */
+.row {
+    background-color: rgb(31,29,30);
+    overflow-y: hidden;
+    z-index: 0;
+    position: relative;
+}
+.multiline {
+}
+.row-wrapper {
+    height: 1.8em;
+}
+/* </ MULTILINE > */

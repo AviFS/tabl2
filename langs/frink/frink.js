@@ -59,6 +59,23 @@ class Frink extends Lang {
         return pprintFrinkOutput(disp);
     }
 
+    static updateDisp(line) {
+        let item = disp[line];
+        if (item.type == "Empty") {
+            updateLine(line, "");
+        }
+
+        else if (item.type == "Static") {
+            // if current line, show full thing
+            if (getLineNumber() == line) {
+                updateLine(line, Frink.postProcess(item.text));
+                return;
+            }
+
+            // if not current line, show one-line version
+            updateLine(line, Frink.postProcess(item.text).split('\n').join(', '));
+        }
+    }
 
     static runCommand(command) {
         if (command[1] == '!') {
@@ -113,12 +130,6 @@ class Frink extends Lang {
             console.log("changedLines:\n", changedLines);
         }
     
-        // if we're on a new line, add a new div
-        if (document.getElementById('right').children.length < lines.length) {
-            let missing = lines.length - document.getElementById('right').children.length;
-            document.getElementById('right').innerHTML += "<div class='row'></div>".repeat(missing);
-        }
-    
         let children = document.getElementById('right').children;
     
         let input = document.getElementById('input').innerText;
@@ -144,19 +155,21 @@ class Frink extends Lang {
         for (const i of lineNums) {
             let code = getLine(i);
             if (lang.isIgnore(code)) {
-                children[i].innerHTML = "";
+                disp[i] = {type: "Empty"}
+                lang.updateDisp(i);
                 continue;
             }
             // if (code[0] == lang.commandPrefix) {
             //     let res = lang.runCommand(code);
-            //     children[i].innerHTML = res? res: children[i].innerHTML;
+            //     disp[i] = {type: "Static", text: res? res: disp[i]};
             //     continue;
             // }
             let data = { line: i, code: code, input: input, reset: false, state: [] };
 
             if (code[0] == '!') {
                 if (code[1] == '!') {
-                    children[i].innerHTML = recursiveGetUnit(code.slice(2)).join('\n');
+                    disp[i] = {type: "Static", text: recursiveGetUnit(code.slice(2)).join('\n')};
+                    lang.updateDisp(i);
                 }
                 else if (code[1] == '(') {
                     function parseTuple(tuple) {
@@ -180,7 +193,8 @@ class Frink extends Lang {
                     }
                 }
                 else {
-                    children[i].innerHTML = getUnit(code.slice(1));
+                    disp[i] = {type: "Static", text: getUnit(code.slice(1))};
+                    lang.updateDisp(i);
                 }
                 continue;
             }

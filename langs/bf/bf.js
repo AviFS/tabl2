@@ -4,25 +4,41 @@ class Brainfuck extends Lang {
         return false;
     }
 
+    static updateDisp(line) {
+        let item = disp[line];
+        if (item.type == "Empty") {
+            updateLine(line, "");
+        }
+
+        else if (item.type == "BFState") {
+            updateLine(line, RunBF.pprint(item.tape, item.ptr));
+        }
+    }
+
     static input(code = true) {
         let program = document.getElementById('left').value;
         let lines = document.getElementById('left').value.split('\n');
+        let right = document.getElementById('right').children;
         
         let res = RunBF.runLines(program);
 
-        let display = ""
-        for (let i=0; i<lines.length; i++) {
+        for (let i=0; i<right.length; i++) {
             if (!lang.isIgnore(lines[i])) {
-                display += res.disp[i][0];
+                let val = res.disp[i][0];
+                disp[i] = {type: "BFState", tape: val.tape, ptr: val.ptr};
             }
             else {
-                display += "\n";
+                disp[i] = {type: "Empty"}
             }
+        lang.updateDisp(i)
         }
 
         // document.getElementById('right').innerHTML = disp.map(x => x[0]).join('');
-        document.getElementById('right').innerHTML = display;
-        document.getElementById('output').innerHTML = res.output;
+        // disp = display.split('\n');
+        // console.log(disp)
+        // lang.updateAllDisp();
+        // document.getElementById('right').innerHTML = display;
+        // document.getElementById('output').innerHTML = res.output;
 
         // let program = ""
         // for (const line of lines) {

@@ -5,26 +5,24 @@ class ngnAPL extends Lang {
     }
 
     static updateDisp(line) {
-        let curr = disp[line];
+        let item = disp[line];
 
-        if (disp[line].type == "Empty") {
+        if (item.type == "Empty") {
             updateLine(line, "");
         }
 
-        else if (disp[line].type == "Static") {
-            let text = disp[line].text;
-
+        else if (item.type == "Static") {
             if (getLineNumber() == line) {
-                updateLine(line, text);
+                updateLine(line, item.text);
                 return;
             }
 
-            // updateLine(line, disp[line].split('\n').join(' ⋄ '));
+            // updateLine(line, item.text.split('\n').join(' ⋄ '));
             if (text.indexOf('\n') > -1) {
-                updateLine(line, "﹥ " + text.slice(0, text.indexOf('\n')));
+                updateLine(line, "﹥ " + item.text.slice(0, text.indexOf('\n')));
                 return;
             }
-            updateLine(line, text);
+            updateLine(line, item.text);
         }
     }
 

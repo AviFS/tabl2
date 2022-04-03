@@ -5,13 +5,13 @@ class Brainfuck extends Lang {
     }
 
     static updateDisp(line) {
-        if (disp[line].type == "Empty") {
+        let item = disp[line];
+        if (item.type == "Empty") {
             updateLine(line, "");
         }
 
-        else if (disp[line].type == "BFState") {
-            let val = disp[line];
-            updateLine(line, RunBF.pprint(val.tape, val.ptr));
+        else if (item.type == "BFState") {
+            updateLine(line, RunBF.pprint(item.tape, item.ptr));
         }
     }
 

@@ -60,23 +60,20 @@ class Frink extends Lang {
     }
 
     static updateDisp(line) {
-        //  this happens whenever you leave an empty line on a "smart" runner
-        // the element disp[n] in the disp array is only defined when line n is run
-        // so if lang.whichLines/lang.isIgnore is set up to not run empty lines
-        // then the corresponding disp will be undefined until you type something on that line to make it get run
-        if (disp[line].type == "Empty") {
+        let item = disp[line];
+        if (item.type == "Empty") {
             updateLine(line, "");
         }
 
-        else if (disp[line].type == "Static") {
+        else if (item.type == "Static") {
             // if current line, show full thing
             if (getLineNumber() == line) {
-                updateLine(line, Frink.postProcess(disp[line].text));
+                updateLine(line, Frink.postProcess(item.text));
                 return;
             }
 
             // if not current line, show one-line version
-            updateLine(line, Frink.postProcess(disp[line].text).split('\n').join(', '));
+            updateLine(line, Frink.postProcess(item.text).split('\n').join(', '));
         }
     }
 

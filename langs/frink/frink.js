@@ -64,24 +64,22 @@ class Frink extends Lang {
         // the element disp[n] in the disp array is only defined when line n is run
         // so if lang.whichLines/lang.isIgnore is set up to not run empty lines
         // then the corresponding disp will be undefined until you type something on that line to make it get run
-        if (disp[line].isEmpty == true) {
+        console.log(disp[line])
+        if (disp[line].type == "Empty") {
             updateLine(line, "");
             return;
         }
 
-        if (disp[line].static != undefined) {
-            updateLine(line, disp[line].static);
-            return;
-        }
+        if (disp[line].type == "Static") {
+            // if current line, show full thing
+            if (getLineNumber() == line) {
+                updateLine(line, Frink.postProcess(disp[line].text));
+                return;
+            }
 
-        // if current line, show full thing
-        if (getLineNumber() == line) {
-            updateLine(line, Frink.postProcess(disp[line]));
-            return;
+            // if not current line, show one-line version
+            updateLine(line, Frink.postProcess(disp[line].text).split('\n').join(', '));
         }
-
-        // if not current line, show one-line version
-        updateLine(line, disp[line].split('\n').join(', '));
     }
 
     static runCommand(command) {
@@ -162,20 +160,20 @@ class Frink extends Lang {
         for (const i of lineNums) {
             let code = getLine(i);
             if (lang.isIgnore(code)) {
-                disp[i] = {isEmpty: true};
+                disp[i] = {type: "Empty"}
                 lang.updateDisp(i);
                 continue;
             }
             // if (code[0] == lang.commandPrefix) {
             //     let res = lang.runCommand(code);
-            //     disp[i] = {static: res? res: disp[i]};
+            //     disp[i] = {type: "Static", text: res? res: disp[i]};
             //     continue;
             // }
             let data = { line: i, code: code, input: input, reset: false, state: [] };
 
             if (code[0] == '!') {
                 if (code[1] == '!') {
-                    disp[i] = {static: recursiveGetUnit(code.slice(2)).join('\n')};
+                    disp[i] = {type: "Static", text: recursiveGetUnit(code.slice(2)).join('\n')};
                     lang.updateDisp(i);
                 }
                 else if (code[1] == '(') {
@@ -200,7 +198,7 @@ class Frink extends Lang {
                     }
                 }
                 else {
-                    disp[i] = {static: getUnit(code.slice(1))};
+                    disp[i] = {type: "Static", text: getUnit(code.slice(1))};
                     lang.updateDisp(i);
                 }
                 continue;

@@ -7,22 +7,26 @@ class ngnAPL extends Lang {
     static updateDisp(line) {
         let curr = disp[line];
 
-        if (disp[line].isEmpty == true) {
+        if (disp[line].type == "Empty") {
             updateLine(line, "");
             return;
         }
 
-        if (getLineNumber() == line) {
-            updateLine(line, curr);
-            return;
-        }
+        if (disp[line].type == "Static") {
+            let text = disp[line].text;
 
-        // updateLine(line, disp[line].split('\n').join(' ⋄ '));
-        if (curr.indexOf('\n') > -1) {
-            updateLine(line, "﹥ " + curr.slice(0, curr.indexOf('\n')));
-            return;
+            if (getLineNumber() == line) {
+                updateLine(line, text);
+                return;
+            }
+
+            // updateLine(line, disp[line].split('\n').join(' ⋄ '));
+            if (text.indexOf('\n') > -1) {
+                updateLine(line, "﹥ " + text.slice(0, text.indexOf('\n')));
+                return;
+            }
+            updateLine(line, text);
         }
-        updateLine(line, curr);
     }
 
     static processAll() {
@@ -42,12 +46,12 @@ class ngnAPL extends Lang {
         for (let i=0; i<right.length; i++) {
             if (i<lines.length && !lang.isIgnore(lines[i])) {
                 let prog = lines.slice(0, i+1).join('\n')
-                let result = format(apl(prog));
+                let result = {type: "Static", text: format(apl(prog))};
                 disp[i] = result;
                 lang.updateDisp(i);
             }
             else {
-                disp[i] = {isEmpty: true};
+                disp[i] = {type: "Empty"};
                 lang.updateDisp(i);
             }
         }

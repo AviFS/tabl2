@@ -5,14 +5,16 @@ class Brainfuck extends Lang {
     }
 
     static updateDisp(line) {
-        if (disp[line].isEmpty == true) {
+        if (disp[line].type == "Empty") {
             updateLine(line, "");
             return;
         }
 
-        let val = disp[line];
-        updateLine(line, RunBF.pprint(val.tape, val.ptr));
-        return;
+        if (disp[line].type == "Static") {
+            let val = disp[line].text;
+            updateLine(line, RunBF.pprint(val.tape, val.ptr));
+            return;
+        }
     }
 
     static input(code = true) {
@@ -24,10 +26,10 @@ class Brainfuck extends Lang {
 
         for (let i=0; i<right.length; i++) {
             if (!lang.isIgnore(lines[i])) {
-                disp[i] = res.disp[i][0];
+                disp[i] = {type: "Static", text: res.disp[i][0]};
             }
             else {
-                disp[i] = {isEmpty: true};
+                disp[i] = {type: "Empty"}
             }
         lang.updateDisp(i)
         }

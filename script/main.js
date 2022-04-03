@@ -13,7 +13,7 @@ document.addEventListener("selectionchange", function () {
     let currLine = getLineNumber();
     if (currLine > document.getElementById('right').children.length-1) {
         let missing = currLine - (document.getElementById('right').children.length-1);
-        disp.push(...Utilss.fill({isEmpty: true}, missing));
+        disp.push(...Utilss.fill({type: "Empty"}, missing));
         document.getElementById('right').innerHTML += "<div class='row-wrapper'><div class='row'></div></div>".repeat(missing);
     }
     if (lastLine != currLine) {
@@ -35,7 +35,7 @@ document.addEventListener("selectionchange", function () {
     // temp hacky fix to get rid of empty values in array where there are blank lines
     // occurs when copying/pasting (multiline input) text containing blank lines (or isIgnore lines) while
     // using a runner that doesn't run blank lines so that those lines are neither initializied nor evaluated
-    disp = Utilss.range(0,disp.length).map(i=>disp[i]==undefined? {isEmpty: true}: disp[i]);
+    disp = Utilss.range(0,disp.length).map(i=>disp[i]==undefined? {type: "Empty"}: disp[i]);
 
 })
 
@@ -91,7 +91,7 @@ function init() {
 
     // temp fix; can be removed later
     document.getElementById('right').innerHTML += "<div class='row-wrapper'><div class='row'></div></div>";
-    disp.push({isEmpty: true})
+    disp.push({type: "Empty"})
 
     document.getElementById('left').value = parseTIOLink(url.permalink).code;
 
@@ -213,7 +213,7 @@ function _onmessage(event) {
     // disp
     if (!data.isError) {
         document.getElementById('right').children[data.line].firstElementChild.classList.remove('dim');
-        disp[data.line] = data.disp;
+        disp[data.line] = {type: "Static", text: data.disp};
         lang.updateDisp(data.line);
     }
     else {

@@ -64,13 +64,11 @@ class Frink extends Lang {
         // the element disp[n] in the disp array is only defined when line n is run
         // so if lang.whichLines/lang.isIgnore is set up to not run empty lines
         // then the corresponding disp will be undefined until you type something on that line to make it get run
-        console.log(disp[line])
         if (disp[line].type == "Empty") {
             updateLine(line, "");
-            return;
         }
 
-        if (disp[line].type == "Static") {
+        else if (disp[line].type == "Static") {
             // if current line, show full thing
             if (getLineNumber() == line) {
                 updateLine(line, Frink.postProcess(disp[line].text));

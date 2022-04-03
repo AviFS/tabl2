@@ -9,10 +9,9 @@ class ngnAPL extends Lang {
 
         if (disp[line].type == "Empty") {
             updateLine(line, "");
-            return;
         }
 
-        if (disp[line].type == "Static") {
+        else if (disp[line].type == "Static") {
             let text = disp[line].text;
 
             if (getLineNumber() == line) {

@@ -1,5 +1,5 @@
 
-#permalink {
+#permalink, #toggle-settings {
 
     float:right;
     margin-right: 6px;
@@ -13,13 +13,13 @@
     /* border-radius: 4px; */
 }
 
-#permalink:hover {
+#permalink:hover, #toggle-settings:hover {
     /* background-color: hsla(224, 19%, 17%, 1); */
     fill: hsla(0, 0%, 80%, .4);
     cursor: pointer;
 }
 
-#permalink:active {
+#permalink:active, #toggle-settings:hover {
     fill: hsla(0, 0%, 100%, .4);
 }
 

@@ -16,6 +16,7 @@ function toggleSettings() {
 function updateSettings() {
     RunBF.n = document.getElementById('n').value;
     RunBF.padding = document.getElementById('padding').value;
+    RunBF.
     lang.updateAllDisp();
 }
 

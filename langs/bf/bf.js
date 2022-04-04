@@ -11,7 +11,15 @@ class Brainfuck extends Lang {
         }
 
         else if (item.type == "BFState") {
-            updateLine(line, RunBF.pprint(item.tape, item.ptr, item.sticky));
+            let pprinted = RunBF.pprint(item.tape, item.ptr, item.sticky);
+
+            // clumsy overflow handling, with arbitrary hardcoded limits to keep it from spilling over
+            if (pprinted.length > 25) {                                // temp
+                updateLine(line, pprinted.slice(0,22) + " ...");       // temp
+                return;                                                // temp
+            }
+
+            updateLine(line, pprinted);
         }
     }
 

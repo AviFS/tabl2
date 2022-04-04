@@ -44,8 +44,9 @@ class RunBF {
     }
 
     static dispEndpointsCentered(ptr, sticky) {
-        let smallHalf = Math.floor(RunBF.n/2);
-        let bigHalf = Math.ceil(RunBF.n/2);
+        let half = (RunBF.n-1)/2;
+        let smallHalf = Math.floor(half)
+        let bigHalf = Math.ceil(half)+1;
         return [ptr-smallHalf, ptr+bigHalf]
     }
 

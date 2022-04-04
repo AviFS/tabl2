@@ -16,6 +16,16 @@ function toggleSettings() {
 function updateSettings() {
     RunBF.n = document.getElementById('n').value;
     RunBF.padding = document.getElementById('padding').value;
+
+    let endpoints = document.getElementById('dispEndpoints').value
+
+    // for now, until sticky tracking is smarter, selecting sticky requires re-running everything
+    switch (endpoints) {
+        case 'fixed': RunBF.dispEndpoints = RunBF.dispEndpointsFixed; break;
+        case 'sticky': RunBF.dispEndpoints = RunBF.dispEndpointsSticky; lang.input(false); break;
+        case 'centered': RunBF.dispEndpoints = RunBF.dispEndpointsCentered; break;
+        case 'elastic': RunBF.dispEndpoints = RunBF.dispEndpointsElastic; break;
+    }
     lang.updateAllDisp();
 }
 

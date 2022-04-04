@@ -241,12 +241,59 @@ background-color: rgb(0,28,28);
     float: left;
     border-right: solid 1px white;
     height: 100%;
-    width: 300px;
+    width: 10rem;
     color: white;
 }
 
 #settings.hide {
     visibility: hidden;
     width: 0px;
+}
+
+#settings-container {
+    color: rgba(243, 240, 234, 0.8);
+    font-size: .9rem;
+}
+
+#settings-container>h3 {
+    margin-top: 0rem;
+    color: rgba(243, 240, 242, 0.8);
+    font-size: 1.3rem;
+    margin-bottom: 2.2rem;
+}
+
+#settings-container>input,select {
+    -webkit-appearance: none;
+    color: rgba(243, 240, 234, 0.8);
+    background-color: hsl(330, 3%, 22%);
+    margin-bottom: 2rem;
+    border: solid 1px hsla(40, 27%, 74%, 0.8);
+    border-radius: 2px;
+}
+
+#settings-container>input:focus,select:focus {
+    /* outline-color: rgba(207, 195, 201, 0.4);
+    outline-offset: 0.1rem; */
+    outline: none;
+}
+
+#settings-container>label {
+    /* display: block; */
+    /* margin-bottom: .2rem; */
+}
+
+#settings-container>select {
+    padding-left: .2rem;
+    padding-right: .2rem;
+    padding-top: .1rem;
+    padding-bottom: .1rem;
+}
+#settings-container>input {
+    width: 3rem;
+}
+
+#settings-container {
+    width: 7rem;
+    padding-left: 1rem;
 }
 /* < /SETTINGS > */

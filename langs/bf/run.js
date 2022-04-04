@@ -5,7 +5,8 @@ class RunBF {
     static n = 5;
     static padding = 4;
     static MAX_ITER = 512;
-    static dispEndpoints = RunBF.dispEndpointsFixed;
+    // static dispEndpoints = RunBF.dispEndpointsFixed;
+    static dispEndpoints = RunBF.dispEndpointsSticky;
 
     static dispMore(items = 7) {
         RunBF.padding = 3;
@@ -17,31 +18,56 @@ class RunBF {
         RunBF.n = items;
     }
 
-    static dispEndpointsFixed(ptr) {
+    static dispEndpointsFixed(ptr, sticky) {
         return [0, RunBF.n];
     }
 
-    static dispEndpointsCentered(ptr) {
+    static dispEndpointsElastic(ptr, sticky) {
+        console.log(ptr)
+        if (ptr > RunBF.n-1) {
+            let diff = ptr - (RunBF.n-1);
+            // return dispEndpointsFixed(ptr).map(x => x+diff);
+            return [diff, RunBF.n+diff]
+        }
+        if (ptr < 0) {
+            let diff = 0 - ptr;
+            // return dispEndpointsFixed(ptr).map(x => x+diff);
+            return [diff, RunBF.n+diff]
+        }
+        // return dispEndpointsFixed(ptr);
+        return [0, RunBF.n];
+    }
+
+    static dispEndpointsSticky(ptr, sticky) {
+        // return dispEndpointsFixed(ptr).map(x => x+sticky);
+        return [sticky, sticky+RunBF.n];
+    }
+
+    static dispEndpointsCentered(ptr, sticky) {
         let smallHalf = Math.floor(RunBF.n/2);
         let bigHalf = Math.ceil(RunBF.n/2);
         return [ptr-smallHalf, ptr+bigHalf]
     }
 
-    static repr(tape, ptr) {
+    static repr(tape, ptr, sticky) {
         // return JSON.stringify({tape: "["+tape.slice(0,4).join(", ")+"]", ptr: ptr});
-        return {tape: tape.slice(0,7), ptr: ptr};
+        return {tape: tape.slice(0,10), ptr: ptr, sticky: sticky};
     }
 
-    static pprint(tape, ptr) {
+    static pprint(tape, ptr, sticky) {
         // return tape.slice(0, n).join(' ')
         let acc = "";
         
-        let [dispStart, dispEnd] = RunBF.dispEndpoints(ptr);
+        let [dispStart, dispEnd] = RunBF.dispEndpoints(ptr, sticky);
         for (let i = dispStart; i<dispEnd; i++) {
             let wrap = (i+256) % 256
             if (tape[wrap] == 0 ) {
                 acc += "_".padStart(RunBF.padding, ' ');
             }
+            // not included above because it's...          // temp
+            else if (tape[wrap] == undefined ) {           // temp
+                acc += "_".padStart(RunBF.padding, ' ');   // temp
+            }                                              // temp
             else {
                 acc += String(tape[wrap]).padStart(RunBF.padding, ' ');
             }
@@ -62,7 +88,7 @@ class RunBF {
         ']': '}',
         '.': 'output += String.fromCharCode(tape[ptr])',
         ',': 'tape[ptr] = input.shift().charCodeAt()',
-        //   '`': 'disp += pprint(tape, ptr)',
+        //   '`': 'disp += pprint(tape, ptr, sticky)',
         //   '~': 'disp += "\\n"',
     }
 
@@ -79,6 +105,7 @@ class RunBF {
 
     static test() {
         let tape = new Array(256).fill(0), ptr = 0, tapeLimit = Infinity, cellLimit = 256, output = "", disp = [[], [], [], []];
+        let sticky = 0;
         let loopCounters = [0];
         RunBF.loopMax = 256;
         tape[ptr] = tape[ptr] ? tape[ptr] - 1 : cellLimit - 1
@@ -87,7 +114,7 @@ class RunBF {
         // tape[ptr] = (tape[ptr] + 1) % cellLimit
         // tape[ptr] = (tape[ptr] + 1) % cellLimit
         // tape[ptr] = (tape[ptr] + 1) % cellLimit
-        disp[0].push(RunBF.pprint(tape, ptr))
+        disp[0].push(RunBF.pprint(tape, ptr, sticky))
         while(tape[ptr]) {
             if (loopCounters[0] > RunBF.loopMax) {
                 console.log(`Exceeded loopMax of ${RunBF.loopMax}. To run anyway, change loopMax in console.`);
@@ -95,12 +122,12 @@ class RunBF {
             }
             loopCounters[0]++;
             // console.log(loopCounters)
-            disp[1].push(RunBF.pprint(tape, ptr))
+            disp[1].push(RunBF.pprint(tape, ptr, sticky))
             // tape[ptr] = tape[ptr] ? tape[ptr] - 1 : cellLimit - 1
-            disp[2].push(RunBF.pprint(tape, ptr))
+            disp[2].push(RunBF.pprint(tape, ptr, sticky))
             // tape[ptr] = 0;
         }
-        disp[3].push(RunBF.pprint(tape, ptr))
+        disp[3].push(RunBF.pprint(tape, ptr, sticky))
         console.log(disp.map(x => x[0]).join(''))
     }
 
@@ -114,10 +141,11 @@ class RunBF {
         code = code.filter((char, i) => !start_indices.includes(i))
 
         let tape = new Array(RunBF.n).fill(0), ptr = 0, tapeLimit = Infinity, cellLimit = 256, output = "", disp = [];
+        let sticky = 0;
     input = [...input];
     let transpiled = RunBF.transpile(code);
     eval(transpiled);
-    disp = RunBF.repr(tape, ptr);
+    disp = RunBF.repr(tape, ptr, sticky);
     //   console.log(transpiled)
         return {"disp": disp, "output": output};
     }
@@ -164,6 +192,7 @@ class RunBF {
 
         let lines = code.split('\n');
         let tape = new Array(256).fill(0), ptr = 0, tapeLimit = Infinity, cellLimit = 256, output = "", disp = RunBF.emptyArray(lines.length);
+        let sticky = 0;
         let loopCounts = new Array(RunBF.count(code, '[')).fill(0);
         let loopCountsInd = 0;
 
@@ -186,9 +215,15 @@ class RunBF {
                     `
                     loopCountsInd++;
                 }
+                if (lines[i][j] == ">") {
+                    transpiled += `\nif (ptr >= sticky + RunBF.n) { sticky++; }\n`;
+                }
+                if (lines[i][j] == "<") {
+                    transpiled += `\nif (ptr < sticky) { sticky--; }\n`;
+                }
                 // transpiled += transpile(lines[i]);
             }
-            transpiled += `\ndisp[${i}].push(RunBF.repr(tape, ptr))\n`;
+            transpiled += `\ndisp[${i}].push(RunBF.repr(tape, ptr, sticky))\n`;
         }
         // console.log(transpiled);
         eval(transpiled);
@@ -203,23 +238,32 @@ class RunBF {
 
     static main() {
 
-        const readline = require('readline').createInterface({
-            input: process.stdin,
-            output: process.stdout
-        })
+        // const readline = require('readline').createInterface({
+        //     input: process.stdin,
+        //     output: process.stdout
+        // })
 
-        var repl = function() {
-        readline.question("", function(answer) {
-            console.log(RunBF.bf(answer));
-            repl();
-        });
-        }
+        // var repl = function() {
+        // readline.question("", function(answer) {
+        //     console.log(RunBF.bf(answer));
+        //     repl();
+        // });
+        // }
 
-        repl();
+        // repl();
     }
 }
 
 // RunBF.main();
+
+// RunBF.dispEndpoints = RunBF.dispEndpointsSticky;
+// let program = `++>+++>++++>++>+
+// >>
+// <
+// `;
+// let state = RunBF.runLines(program).disp;
+// state = state[state.length-1][0];
+// console.log(RunBF.pprint(state.tape, state.ptr, state.sticky));
 
 // console.log(RunBF.bf("++>+"))
 

@@ -17,26 +17,26 @@ class RunBF {
         RunBF.n = items;
     }
 
-    static dispEndpointsFixed(tapeIndex) {
+    static dispEndpointsFixed(ptr) {
         return [0, RunBF.n];
     }
 
-    static dispEndpointsCentered(tapeIndex) {
+    static dispEndpointsCentered(ptr) {
         let smallHalf = Math.floor(RunBF.n/2);
         let bigHalf = Math.ceil(RunBF.n/2);
-        return [tapeIndex-smallHalf, tapeIndex+bigHalf]
+        return [ptr-smallHalf, ptr+bigHalf]
     }
 
-    static repr(tape, tapeIndex) {
-        // return JSON.stringify({tape: "["+tape.slice(0,4).join(", ")+"]", ptr: tapeIndex});
-        return {tape: tape.slice(0,7), ptr: tapeIndex};
+    static repr(tape, ptr) {
+        // return JSON.stringify({tape: "["+tape.slice(0,4).join(", ")+"]", ptr: ptr});
+        return {tape: tape.slice(0,7), ptr: ptr};
     }
 
-    static pprint(tape, tapeIndex) {
+    static pprint(tape, ptr) {
         // return tape.slice(0, n).join(' ')
         let acc = "";
         
-        let [dispStart, dispEnd] = RunBF.dispEndpoints(tapeIndex);
+        let [dispStart, dispEnd] = RunBF.dispEndpoints(ptr);
         for (let i = dispStart; i<dispEnd; i++) {
             let wrap = (i+256) % 256
             if (tape[wrap] == 0 ) {
@@ -45,7 +45,7 @@ class RunBF {
             else {
                 acc += String(tape[wrap]).padStart(RunBF.padding, ' ');
             }
-            acc += wrap==tapeIndex? "* ": "  ";
+            acc += wrap==ptr? "* ": "  ";
         }
         acc += "\n";
         return acc;
@@ -53,16 +53,16 @@ class RunBF {
 
 
     static codeTable = {
-        '+': 'tape[tapeIndex] = (tape[tapeIndex] + 1) % cellLimit',
-        '-': 'tape[tapeIndex] = tape[tapeIndex] ? tape[tapeIndex] - 1 : cellLimit - 1',
-        '>': 'tapeIndex = (tapeIndex + 1) % tapeLimit',
-        // '<': 'tapeIndex = tapeIndex ? tapeIndex - 1 : Number.isFinite(tapeLimit) ? tapeLimit - 1 : tape.unshift(0) && 0',
-        '<': 'tapeIndex = tapeIndex ? tapeIndex - 1 : tapeLimit - 1',
-        '[': 'while(tape[tapeIndex]){',
+        '+': 'tape[ptr] = (tape[ptr] + 1) % cellLimit',
+        '-': 'tape[ptr] = tape[ptr] ? tape[ptr] - 1 : cellLimit - 1',
+        '>': 'ptr = (ptr + 1) % tapeLimit',
+        // '<': 'ptr = ptr ? ptr - 1 : Number.isFinite(tapeLimit) ? tapeLimit - 1 : tape.unshift(0) && 0',
+        '<': 'ptr = ptr ? ptr - 1 : tapeLimit - 1',
+        '[': 'while(tape[ptr]){',
         ']': '}',
-        '.': 'output += String.fromCharCode(tape[tapeIndex])',
-        ',': 'tape[tapeIndex] = input.shift().charCodeAt()',
-        //   '`': 'disp += pprint(tape, tapeIndex)',
+        '.': 'output += String.fromCharCode(tape[ptr])',
+        ',': 'tape[ptr] = input.shift().charCodeAt()',
+        //   '`': 'disp += pprint(tape, ptr)',
         //   '~': 'disp += "\\n"',
     }
 
@@ -78,29 +78,29 @@ class RunBF {
     }
 
     static test() {
-        let tape = new Array(256).fill(0), tapeIndex = 0, tapeLimit = Infinity, cellLimit = 256, output = "", disp = [[], [], [], []];
+        let tape = new Array(256).fill(0), ptr = 0, tapeLimit = Infinity, cellLimit = 256, output = "", disp = [[], [], [], []];
         let loopCounters = [0];
         RunBF.loopMax = 256;
-        tape[tapeIndex] = tape[tapeIndex] ? tape[tapeIndex] - 1 : cellLimit - 1
-        // tape[tapeIndex] = 100;
-        // tape[tapeIndex] = (tape[tapeIndex] + 1) % cellLimit
-        // tape[tapeIndex] = (tape[tapeIndex] + 1) % cellLimit
-        // tape[tapeIndex] = (tape[tapeIndex] + 1) % cellLimit
-        // tape[tapeIndex] = (tape[tapeIndex] + 1) % cellLimit
-        disp[0].push(RunBF.pprint(tape, tapeIndex))
-        while(tape[tapeIndex]) {
+        tape[ptr] = tape[ptr] ? tape[ptr] - 1 : cellLimit - 1
+        // tape[ptr] = 100;
+        // tape[ptr] = (tape[ptr] + 1) % cellLimit
+        // tape[ptr] = (tape[ptr] + 1) % cellLimit
+        // tape[ptr] = (tape[ptr] + 1) % cellLimit
+        // tape[ptr] = (tape[ptr] + 1) % cellLimit
+        disp[0].push(RunBF.pprint(tape, ptr))
+        while(tape[ptr]) {
             if (loopCounters[0] > RunBF.loopMax) {
                 console.log(`Exceeded loopMax of ${RunBF.loopMax}. To run anyway, change loopMax in console.`);
                 break;
             }
             loopCounters[0]++;
             // console.log(loopCounters)
-            disp[1].push(RunBF.pprint(tape, tapeIndex))
-            // tape[tapeIndex] = tape[tapeIndex] ? tape[tapeIndex] - 1 : cellLimit - 1
-            disp[2].push(RunBF.pprint(tape, tapeIndex))
-            // tape[tapeIndex] = 0;
+            disp[1].push(RunBF.pprint(tape, ptr))
+            // tape[ptr] = tape[ptr] ? tape[ptr] - 1 : cellLimit - 1
+            disp[2].push(RunBF.pprint(tape, ptr))
+            // tape[ptr] = 0;
         }
-        disp[3].push(RunBF.pprint(tape, tapeIndex))
+        disp[3].push(RunBF.pprint(tape, ptr))
         console.log(disp.map(x => x[0]).join(''))
     }
 
@@ -113,11 +113,11 @@ class RunBF {
         }
         code = code.filter((char, i) => !start_indices.includes(i))
 
-        let tape = new Array(RunBF.n).fill(0), tapeIndex = 0, tapeLimit = Infinity, cellLimit = 256, output = "", disp = [];
+        let tape = new Array(RunBF.n).fill(0), ptr = 0, tapeLimit = Infinity, cellLimit = 256, output = "", disp = [];
     input = [...input];
     let transpiled = RunBF.transpile(code);
     eval(transpiled);
-    disp = RunBF.repr(tape, tapeIndex);
+    disp = RunBF.repr(tape, ptr);
     //   console.log(transpiled)
         return {"disp": disp, "output": output};
     }
@@ -163,7 +163,7 @@ class RunBF {
         code = RunBF.removeMismatchedBrackets(code);
 
         let lines = code.split('\n');
-        let tape = new Array(256).fill(0), tapeIndex = 0, tapeLimit = Infinity, cellLimit = 256, output = "", disp = RunBF.emptyArray(lines.length);
+        let tape = new Array(256).fill(0), ptr = 0, tapeLimit = Infinity, cellLimit = 256, output = "", disp = RunBF.emptyArray(lines.length);
         let loopCounts = new Array(RunBF.count(code, '[')).fill(0);
         let loopCountsInd = 0;
 
@@ -188,7 +188,7 @@ class RunBF {
                 }
                 // transpiled += transpile(lines[i]);
             }
-            transpiled += `\ndisp[${i}].push(RunBF.repr(tape, tapeIndex))\n`;
+            transpiled += `\ndisp[${i}].push(RunBF.repr(tape, ptr))\n`;
         }
         // console.log(transpiled);
         eval(transpiled);

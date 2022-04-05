@@ -14,8 +14,9 @@ class Brainfuck extends Lang {
             let pprinted = RunBF.pprint(item.tape, item.ptr, item.sticky);
 
             // clumsy overflow handling, with arbitrary hardcoded limits to keep it from spilling over
-            if (pprinted.length > 25) {                                // temp
-                updateLine(line, pprinted.slice(0,22) + " ...");       // temp
+            if (pprinted.length > 35) {                                // temp
+                // updateLine(line, pprinted.slice(0,22) + " ...");       // temp
+                updateLine(line, "...")
                 return;                                                // temp
             }
 

@@ -5,8 +5,7 @@ class RunBF {
     static n = 5;
     static padding = 4;
     static MAX_ITER = 512;
-    // static dispEndpoints = RunBF.dispEndpointsFixed;
-    static dispEndpoints = RunBF.dispEndpointsSticky;
+    static dispEndpoints = RunBF.dispEndpointsFixed;
 
     static dispMore(items = 7) {
         RunBF.padding = 3;

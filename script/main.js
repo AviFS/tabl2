@@ -29,6 +29,18 @@ function updateSettings() {
     lang.updateAllDisp();
 }
 
+function changeLang() {
+    let langID = document.getElementById('lang-select').value
+    url.langID = langID;
+    setLang(langID);
+    // force re-run all lines
+    // necessary for "smart" whichLines() langs like APL and Frink
+    // which will only re-run necessary lines, and as a result not change anything
+
+    // alternatively, could delete all input on lang switch and store it in a cookie for that specific lang
+
+}
+
 document.addEventListener("selectionchange", function () {
     let currLine = getLineNumber();
     if (currLine > document.getElementById('right').children.length-1) {
@@ -79,7 +91,7 @@ function dim(line) {
     document.getElementById('right').children[line].firstElementChild.classList.add('dim');
 }
 
-function setDefaultLang() {
+function logSetDefaultLang() {
     console.log(`Setting lang to ${defaultLang} by default.`);
     return defaultLang;
 }
@@ -87,6 +99,32 @@ function setDefaultLang() {
 function initialRun() {
     lang.init();
     lang.input(true);
+}
+
+function setLang(langID) {
+    opts = {
+        "frink": Frink,
+        "apl": APL,
+        "bf": Brainfuck,
+        "pip": Pip,
+        "ngn-apl": ngnAPL,
+        "joy": Joy,
+    }
+
+    if (!opts.hasOwnProperty(langID)) {langID = logSetDefaultLang(); }
+    lang = opts[langID];
+    document.getElementById('lang-select').value = langID;
+
+
+    document.getElementById('input').addEventListener('input', x => lang.input(code=false));
+    document.getElementById('left').addEventListener('input', x => lang.input(code=true));
+
+    if (lang.getAddress(localhost) != false) {
+        setWebSocket(lang.getAddress(localhost))
+    }
+    else {
+        initialRun();
+    }
 }
 
 function init() {
@@ -98,33 +136,13 @@ function init() {
     // setWebSocket('ws://54.153.39.161:8006/');
     // setWebSocket('ws://127.0.0.1:8008');
 
-    url = parseURL();
-    opts = {
-        "frink": Frink,
-        "apl": APL,
-        "bf": Brainfuck,
-        "pip": Pip,
-        "ngn-apl": ngnAPL,
-        "joy": Joy,
-    }
-    if (!opts.hasOwnProperty(url.langID)) { url.langID = setDefaultLang(); }
-    lang = opts[url.langID];
-
     // temp fix; can be removed later
     document.getElementById('right').innerHTML += "<div class='row-wrapper'><div class='row'></div></div>";
     disp.push({type: "Empty"})
 
+    url = parseURL();
     document.getElementById('left').value = parseTIOLink(url.permalink).code;
-
-    document.getElementById('input').addEventListener('input', x => lang.input(code=false));
-    document.getElementById('left').addEventListener('input', x => lang.input(code=true));
-
-    if (lang.getAddress(localhost) != false) {
-        setWebSocket(lang.getAddress(localhost))
-    }
-    else {
-        initialRun();
-    }
+    setLang(url.langID)
 }
 
 function generatePermalink() {

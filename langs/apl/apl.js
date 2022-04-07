@@ -1,4 +1,7 @@
 class APL extends Lang {
+
+    static name = "APL";
+
     static f() {
         return 324;
     }

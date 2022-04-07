@@ -1,5 +1,8 @@
 class Lang {
 
+    static name = undefined;
+    static settings = undefined;
+    static tablook = undefined;
     static commandPrefix = undefined;
     static getAddress(localhost) {
         console.error("getAddress() must be overwritten.")

@@ -9,6 +9,83 @@ let debug = 0;
 let localhost = false;
 let defaultLang = "ngn-apl";
 
+function toggleSettings() {
+    document.getElementById('settings').classList.toggle('hide');
+    document.getElementById('tablook').classList.add('hide');
+}
+
+function toggleTablook() {
+    document.getElementById('tablook').classList.toggle('hide');
+    document.getElementById('settings').classList.add('hide');
+}
+
+function tablookItemClicked() {
+    url = parseURL();
+    document.getElementById('left').value = parseTIOLink(url.permalink).code;
+    lang.input(true);
+    // setLang(url.langID)
+    // init();
+}
+
+function updateSettings() {
+    RunBF.n = document.getElementById('n').value;
+    RunBF.padding = document.getElementById('padding').value;
+
+    let endpoints = document.getElementById('dispEndpoints').value
+
+    // for now, until sticky tracking is smarter, selecting sticky requires re-running everything
+    switch (endpoints) {
+        case 'fixed': RunBF.dispEndpoints = RunBF.dispEndpointsFixed; break;
+        case 'sticky': RunBF.dispEndpoints = RunBF.dispEndpointsSticky; lang.input(false); break;
+        case 'centered': RunBF.dispEndpoints = RunBF.dispEndpointsCentered; break;
+        case 'elastic': RunBF.dispEndpoints = RunBF.dispEndpointsElastic; break;
+    }
+    lang.updateAllDisp();
+}
+
+function setSettingsSidebar() {
+    document.getElementById('langspecific-name').innerHTML = lang.name;
+    if (lang.settings != undefined) {
+        document.getElementById('langspecific-settings').innerHTML = lang.settings;
+    }
+    else {
+        // document.getElementById('langspecific-settings').innerHTML = `<em>No settings available for this lang yet.</em>`;
+        document.getElementById('langspecific-settings').innerHTML = "";
+    }
+}
+
+function setTablookSidebar() {
+    if (lang.tablook != undefined) {
+        document.getElementById('tablook').innerHTML = `<h3>${lang.name}</h3>` + Tablook.json2html(lang.tablook);
+    }
+    else {
+        // document.getElementById('tablook').innerHTML = `<h3>${lang.name}</h3>` + `<em>No tablook available for ${lang.name} yet.</em>`;
+        document.getElementById('tablook').innerHTML = `<h3>${lang.name}</h3>` + `<em>No tablook available for this lang yet.</em>`;
+    }
+}
+
+function changeLang() {
+    let langID = document.getElementById('lang-select').value
+    url.langID = langID;
+    setLang(langID);
+    // force re-run all lines
+    // necessary for "smart" whichLines() langs like APL and Frink
+    // which will only re-run necessary lines, and as a result not change anything
+
+    // alternatively, could delete all input on lang switch and store it in a cookie for that specific lang
+
+    setTablookSidebar();
+    setSettingsSidebar();
+
+    if (lang.tablook != undefined) {
+        document.getElementById('tablook').innerHTML = `<h3>${lang.name}</h3>` + Tablook.json2html(lang.tablook);
+    }
+    else {
+        // document.getElementById('tablook').innerHTML = `<h3>${lang.name}</h3>` + `<em>No tablook available for ${lang.name} yet.</em>`;
+        document.getElementById('tablook').innerHTML = `<h3>${lang.name}</h3>` + `<em>No tablook available for this lang yet.</em>`;
+    }
+}
+
 document.addEventListener("selectionchange", function () {
     let currLine = getLineNumber();
     if (currLine > document.getElementById('right').children.length-1) {
@@ -59,7 +136,7 @@ function dim(line) {
     document.getElementById('right').children[line].firstElementChild.classList.add('dim');
 }
 
-function setDefaultLang() {
+function logSetDefaultLang() {
     console.log(`Setting lang to ${defaultLang} by default.`);
     return defaultLang;
 }
@@ -69,16 +146,7 @@ function initialRun() {
     lang.input(true);
 }
 
-function init() {
-
-    // Focus input element on load
-    document.getElementById('left').focus();
-
-    lines = [];
-    // setWebSocket('ws://54.153.39.161:8006/');
-    // setWebSocket('ws://127.0.0.1:8008');
-
-    url = parseURL();
+function setLang(langID) {
     opts = {
         "frink": Frink,
         "apl": APL,
@@ -87,17 +155,20 @@ function init() {
         "ngn-apl": ngnAPL,
         "joy": Joy,
     }
-    if (!opts.hasOwnProperty(url.langID)) { url.langID = setDefaultLang(); }
-    lang = opts[url.langID];
 
-    // temp fix; can be removed later
-    document.getElementById('right').innerHTML += "<div class='row-wrapper'><div class='row'></div></div>";
-    disp.push({type: "Empty"})
+    if (!opts.hasOwnProperty(langID)) {langID = logSetDefaultLang(); }
+    lang = opts[langID];
+    document.getElementById('lang-select').value = langID;
 
-    document.getElementById('left').value = parseTIOLink(url.permalink).code;
 
     document.getElementById('input').addEventListener('input', x => lang.input(code=false));
     document.getElementById('left').addEventListener('input', x => lang.input(code=true));
+
+    setTablookSidebar();
+    setSettingsSidebar();
+
+
+
 
     if (lang.getAddress(localhost) != false) {
         setWebSocket(lang.getAddress(localhost))
@@ -105,6 +176,25 @@ function init() {
     else {
         initialRun();
     }
+}
+
+function init() {
+
+
+    // Focus input element on load
+    document.getElementById('left').focus();
+
+    lines = [];
+    // setWebSocket('ws://54.153.39.161:8006/');
+    // setWebSocket('ws://127.0.0.1:8008');
+
+    // temp fix; can be removed later
+    document.getElementById('right').innerHTML += "<div class='row-wrapper'><div class='row'></div></div>";
+    disp.push({type: "Empty"})
+
+    url = parseURL();
+    document.getElementById('left').value = parseTIOLink(url.permalink).code;
+    setLang(url.langID)
 }
 
 function generatePermalink() {

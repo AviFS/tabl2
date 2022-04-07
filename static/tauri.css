@@ -1,5 +1,5 @@
 
-#permalink {
+#permalink, #toggle-settings, #toggle-tablook {
 
     float:right;
     margin-right: 6px;
@@ -13,13 +13,13 @@
     /* border-radius: 4px; */
 }
 
-#permalink:hover {
+#permalink:hover, #toggle-settings:hover, #toggle-tablook:hover {
     /* background-color: hsla(224, 19%, 17%, 1); */
     fill: hsla(0, 0%, 80%, .4);
     cursor: pointer;
 }
 
-#permalink:active {
+#permalink:active, #toggle-settings:active, #toggle-tablook:active {
     fill: hsla(0, 0%, 100%, .4);
 }
 
@@ -234,3 +234,106 @@ background-color: rgb(0,28,28);
     height: 1.8em;
 }
 /* </ MULTILINE > */
+
+
+/* < SETTINGS > */
+#settings {
+    float: left;
+    border-right: solid 1px white;
+    height: 100%;
+    width: 10rem;
+    color: white;
+}
+
+#settings.hide {
+    visibility: hidden;
+    width: 0px;
+}
+
+#settings-container {
+    color: rgba(243, 240, 234, 0.8);
+    font-size: .9rem;
+}
+
+#settings-container>h3 {
+    margin-top: 0rem;
+    color: rgba(243, 240, 242, 0.8);
+    font-size: 1.3rem;
+    margin-bottom: 2.2rem;
+}
+
+#langspecific-settings>input,select {
+    -webkit-appearance: none;
+    color: rgba(243, 240, 234, 0.8);
+    background-color: hsl(330, 3%, 22%);
+    margin-bottom: 2rem;
+    border: solid 1px hsla(40, 27%, 74%, 0.8);
+    border-radius: 2px;
+}
+
+#langspecific-settings>input:focus,select:focus {
+    /* outline-color: rgba(207, 195, 201, 0.4);
+    outline-offset: 0.1rem; */
+    outline: none;
+}
+
+#langspecific-settings>label {
+    /* display: block; */
+    /* margin-bottom: .2rem; */
+}
+
+#settings-container>select, #langspecific-settings>select  {
+    padding-left: .2rem;
+    padding-right: .2rem;
+    padding-top: .1rem;
+    padding-bottom: .1rem;
+}
+
+#langspecific-settings>input {
+    width: 3rem;
+}
+
+#settings-container {
+    width: 7rem;
+    padding-left: 1rem;
+}
+/* < /SETTINGS > */
+
+.hide {
+    visibility: hidden;
+    width: 0px;
+}
+
+#tablook {
+    float: left;
+    border-right: solid 1px white;
+    height: 100%;
+    width: 10rem;
+    color: white;
+}
+
+ul.tablook {
+    list-style-type: none;
+    padding-left: 1em;
+}
+
+li.tablook {
+    margin-bottom: .4em;
+}
+
+a[href].tablook {
+	color: hsl(205, 95%, 45%);
+}
+a[href].tablook:hover {
+	color: hsl(205, 97%, 37%);
+}
+a[href].tablook:active {
+	color: hsl(205, 95%, 45%);
+}
+
+#tablook>h3 {
+    margin-top: 0rem;
+    color: rgba(243, 240, 242, 0.8);
+    font-size: 1.3rem;
+    margin-bottom: 2.2rem;
+}

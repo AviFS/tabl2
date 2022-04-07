@@ -19,7 +19,7 @@
     cursor: pointer;
 }
 
-#permalink:active, #toggle-settings:hover {
+#permalink:active, #toggle-settings:active {
     fill: hsla(0, 0%, 100%, .4);
 }
 

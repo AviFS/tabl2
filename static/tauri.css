@@ -262,7 +262,7 @@ background-color: rgb(0,28,28);
     margin-bottom: 2.2rem;
 }
 
-#settings-container>input,select {
+#langspecific-settings>input,select {
     -webkit-appearance: none;
     color: rgba(243, 240, 234, 0.8);
     background-color: hsl(330, 3%, 22%);
@@ -271,24 +271,25 @@ background-color: rgb(0,28,28);
     border-radius: 2px;
 }
 
-#settings-container>input:focus,select:focus {
+#langspecific-settings>input:focus,select:focus {
     /* outline-color: rgba(207, 195, 201, 0.4);
     outline-offset: 0.1rem; */
     outline: none;
 }
 
-#settings-container>label {
+#langspecific-settings>label {
     /* display: block; */
     /* margin-bottom: .2rem; */
 }
 
-#settings-container>select {
+#settings-container>select, #langspecific-settings>select  {
     padding-left: .2rem;
     padding-right: .2rem;
     padding-top: .1rem;
     padding-bottom: .1rem;
 }
-#settings-container>input {
+
+#langspecific-settings>input {
     width: 3rem;
 }
 

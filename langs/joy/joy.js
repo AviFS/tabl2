@@ -1,5 +1,7 @@
 class Joy extends Lang {
 
+    static name = "Joy";
+
     static getAddress(localhost) {
         if (localhost) {
             return 'ws://127.0.0.1:8004';

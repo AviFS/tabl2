@@ -329,3 +329,10 @@ a[href].tablook:hover {
 a[href].tablook:active {
 	color: hsl(205, 95%, 45%);
 }
+
+#tablook>h3 {
+    margin-top: 0rem;
+    color: rgba(243, 240, 242, 0.8);
+    font-size: 1.3rem;
+    margin-bottom: 2.2rem;
+}

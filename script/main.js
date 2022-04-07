@@ -53,6 +53,12 @@ function changeLang() {
 
     // alternatively, could delete all input on lang switch and store it in a cookie for that specific lang
 
+    if (lang.tablook != undefined) {
+        document.getElementById('tablook').innerHTML = `<h3>${lang.name}</h3>` + Tablook.json2html(lang.tablook);
+    }
+    else {
+        document.getElementById('tablook').innerHTML = `<h3>${lang.name}</h3>` + `<em>No tablook available for ${langID} yet.</em>`;
+    }
 }
 
 document.addEventListener("selectionchange", function () {
@@ -133,6 +139,14 @@ function setLang(langID) {
     document.getElementById('input').addEventListener('input', x => lang.input(code=false));
     document.getElementById('left').addEventListener('input', x => lang.input(code=true));
 
+    if (lang.tablook != undefined) {
+        document.getElementById('tablook').innerHTML = `<h3>${lang.name}</h3>` + Tablook.json2html(lang.tablook);
+    }
+    else {
+        // document.getElementById('tablook').innerHTML = `<h3>${lang.name}</h3>` + `<em>No tablook available for ${lang.name} yet.</em>`;
+        document.getElementById('tablook').innerHTML = `<h3>${lang.name}</h3>` + `<em>No tablook available for this lang yet.</em>`;
+    }
+
     if (lang.getAddress(localhost) != false) {
         setWebSocket(lang.getAddress(localhost))
     }
@@ -143,7 +157,6 @@ function setLang(langID) {
 
 function init() {
 
-    document.getElementById('tablook').innerHTML = Tablook.json2html(Tablook.tablook.frink);
 
     // Focus input element on load
     document.getElementById('left').focus();

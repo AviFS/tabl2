@@ -1,5 +1,7 @@
 class Pip extends Lang {
 
+    static name = "Pip";
+
     static getAddress(localhost) {
         if (localhost) {
             return 'ws://127.0.0.1:8007';

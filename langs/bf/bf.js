@@ -1,5 +1,7 @@
 class Brainfuck extends Lang {
 
+    static name = "brainfuck";
+
     static getAddress(localhost) {
         return false;
     }

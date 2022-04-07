@@ -22,4 +22,4 @@ class Tablook {
     }
 }
 
-console.log(JSON.stringify(Tablook.tablook.frink))
+// console.log(JSON.stringify(Tablook.tablook.frink))

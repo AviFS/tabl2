@@ -1,5 +1,6 @@
 class ngnAPL extends Lang {
 
+    static name = "ngn/APL"
     static getAddress(localhost) {
         return false;
     }

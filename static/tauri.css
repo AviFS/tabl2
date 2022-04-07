@@ -297,3 +297,35 @@ background-color: rgb(0,28,28);
     padding-left: 1rem;
 }
 /* < /SETTINGS > */
+
+.hide {
+    visibility: hidden;
+    width: 0px;
+}
+
+#tablook {
+    float: left;
+    border-right: solid 1px white;
+    height: 100%;
+    width: 10rem;
+    color: white;
+}
+
+ul.tablook {
+    list-style-type: none;
+    padding-left: 1em;
+}
+
+li.tablook {
+    margin-bottom: .4em;
+}
+
+a[href].tablook {
+	color: hsl(205, 95%, 45%);
+}
+a[href].tablook:hover {
+	color: hsl(205, 97%, 37%);
+}
+a[href].tablook:active {
+	color: hsl(205, 95%, 45%);
+}

@@ -11,6 +11,20 @@ let defaultLang = "ngn-apl";
 
 function toggleSettings() {
     document.getElementById('settings').classList.toggle('hide');
+    document.getElementById('tablook').classList.add('hide');
+}
+
+function toggleTablook() {
+    document.getElementById('tablook').classList.toggle('hide');
+    document.getElementById('settings').classList.add('hide');
+}
+
+function tablookItemClicked() {
+    url = parseURL();
+    document.getElementById('left').value = parseTIOLink(url.permalink).code;
+    lang.input(true);
+    // setLang(url.langID)
+    // init();
 }
 
 function updateSettings() {
@@ -128,6 +142,8 @@ function setLang(langID) {
 }
 
 function init() {
+
+    document.getElementById('tablook').innerHTML = Tablook.json2html(Tablook.tablook.frink);
 
     // Focus input element on load
     document.getElementById('left').focus();

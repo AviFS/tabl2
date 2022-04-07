@@ -1,5 +1,5 @@
 
-#permalink, #toggle-settings {
+#permalink, #toggle-settings, #toggle-tablook {
 
     float:right;
     margin-right: 6px;
@@ -13,13 +13,13 @@
     /* border-radius: 4px; */
 }
 
-#permalink:hover, #toggle-settings:hover {
+#permalink:hover, #toggle-settings:hover, #toggle-tablook:hover {
     /* background-color: hsla(224, 19%, 17%, 1); */
     fill: hsla(0, 0%, 80%, .4);
     cursor: pointer;
 }
 
-#permalink:active, #toggle-settings:active {
+#permalink:active, #toggle-settings:active, #toggle-tablook:active {
     fill: hsla(0, 0%, 100%, .4);
 }
 

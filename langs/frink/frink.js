@@ -12,7 +12,7 @@ class Frink extends Lang {
         if (localhost) {
             return 'ws://127.0.0.1:8002';
         }
-        return 'ws://54.153.39.161:8884/';
+        return 'ws://167.71.240.216:8884/';
 
     }
 

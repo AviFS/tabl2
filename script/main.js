@@ -7,7 +7,7 @@ let lastLine = 0;
 
 let debug = 0;
 let localhost = false;
-let defaultLang = "ngn-apl";
+let defaultLang = "Frink";
 
 function toggleSettings() {
     document.getElementById('settings').classList.toggle('hide');
